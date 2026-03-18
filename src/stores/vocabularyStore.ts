@@ -2,6 +2,9 @@ import { create } from 'zustand';
 import type { VocabularyWord } from '@/src/lib/vocabularyData';
 import type { SM2State } from '@/src/lib/sm2Algorithm';
 import { calculateSM2 } from '@/src/lib/sm2Algorithm';
+import { supabase } from '@/src/lib/supabase';
+import { realtimeSyncManager } from '@/src/lib/realtimeSyncManager';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export interface VocabularyProgress {
   wordId: string;
@@ -13,6 +16,10 @@ export interface VocabularyProgress {
 }
 
 interface VocabularyState {
+  // User context
+  userId: string | null;
+  setUserId: (userId: string | null) => void;
+
   // 単語データ
   words: VocabularyWord[];
   setWords: (words: VocabularyWord[]) => void;
@@ -47,14 +54,25 @@ interface VocabularyState {
   masteredCount: number;
   totalCount: number;
   getTodayStats: () => { attempted: number; correct: number; accuracy: number };
+
+  // Sync methods
+  syncToSupabase: () => Promise<void>;
+  loadFromSupabase: () => Promise<void>;
+  initializeSync: (userId: string) => Promise<void>;
 }
 
 export const useVocabularyStore = create<VocabularyState>((set, get) => ({
+  userId: null,
+  setUserId: (userId) => set({ userId }),
+
   words: [],
   setWords: (words) => set({ words, totalCount: words.length }),
 
   progress: {},
-  loadProgress: (data) => set({ progress: data }),
+  loadProgress: (data) => {
+    set({ progress: data });
+    get().syncToSupabase();
+  },
 
   currentStage: 1,
   setCurrentStage: (stage) => set({ currentStage: stage }),
@@ -163,5 +181,108 @@ export const useVocabularyStore = create<VocabularyState>((set, get) => ({
     const accuracy = attempted > 0 ? (correct / attempted) * 100 : 0;
 
     return { attempted, correct, accuracy: Math.round(accuracy) };
+  },
+
+  syncToSupabase: async () => {
+    const { userId, progress, testHistory } = get();
+    if (!userId) return;
+
+    try {
+      // Save progress
+      const progressArray = Object.entries(progress).map(([wordId, prog]) => ({
+        id: `${userId}-${wordId}`,
+        user_id: userId,
+        word_id: wordId,
+        ...prog,
+        updated_at: new Date().toISOString(),
+      }));
+
+      if (progressArray.length > 0) {
+        const { error } = await supabase
+          .from('vocabulary_progress')
+          .upsert(progressArray, { onConflict: 'id' });
+
+        if (error) throw error;
+      }
+
+      // Cache locally
+      await AsyncStorage.setItem(
+        `vocabulary:${userId}`,
+        JSON.stringify({ progress, testHistory })
+      );
+    } catch (error) {
+      console.error('[VocabularyStore] Sync to Supabase failed:', error);
+      realtimeSyncManager.queueChange('vocabulary_progress', 'UPDATE', {
+        user_id: userId,
+        progress,
+      });
+    }
+  },
+
+  loadFromSupabase: async () => {
+    const { userId } = get();
+    if (!userId) return;
+
+    try {
+      const { data, error } = await supabase
+        .from('vocabulary_progress')
+        .select('*')
+        .eq('user_id', userId);
+
+      if (data && data.length > 0) {
+        const progressMap: Record<string, VocabularyProgress> = {};
+        data.forEach((item: any) => {
+          progressMap[item.word_id] = {
+            wordId: item.word_id,
+            correctStreak: item.correct_streak,
+            isMastered: item.is_mastered,
+            nextReviewAt: item.next_review_at ? new Date(item.next_review_at) : null,
+            lastReviewedAt: item.last_reviewed_at ? new Date(item.last_reviewed_at) : null,
+            state: item.state,
+          };
+        });
+        set({ progress: progressMap });
+        return;
+      }
+
+      // Fallback to local cache
+      const cached = await AsyncStorage.getItem(`vocabulary:${userId}`);
+      if (cached) {
+        const parsed = JSON.parse(cached);
+        set(parsed);
+      }
+    } catch (error) {
+      console.error('[VocabularyStore] Load from Supabase failed:', error);
+      const cached = await AsyncStorage.getItem(`vocabulary:${userId}`);
+      if (cached) {
+        const parsed = JSON.parse(cached);
+        set(parsed);
+      }
+    }
+  },
+
+  initializeSync: async (userId: string) => {
+    set({ userId });
+    await get().loadFromSupabase();
+
+    realtimeSyncManager.subscribe({
+      userId,
+      table: 'vocabulary_progress',
+      filter: `user_id=eq.${userId}`,
+      onUpdate: (data) => {
+        if (data) {
+          const { progress } = get();
+          progress[data.word_id] = {
+            wordId: data.word_id,
+            correctStreak: data.correct_streak,
+            isMastered: data.is_mastered,
+            nextReviewAt: data.next_review_at ? new Date(data.next_review_at) : null,
+            lastReviewedAt: data.last_reviewed_at ? new Date(data.last_reviewed_at) : null,
+            state: data.state,
+          };
+          set({ progress: { ...progress } });
+        }
+      },
+    });
   },
 }));

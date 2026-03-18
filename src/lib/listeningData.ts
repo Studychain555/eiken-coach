@@ -17,7 +17,7 @@ export const LISTENING_SAMPLE_DATA: ListeningQuestion[] = [
   {
     id: '1',
     title: '会話問題 1',
-    audioUrl: 'https://example.com/audio/listening_1.mp3',
+    audioUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3',
     script: `
 Woman: Excuse me, do you work here at the bookstore?
 Man: Yes, I do. Can I help you?
@@ -40,7 +40,7 @@ Man: I think we have just the right book for you. Let me check our system.
   {
     id: '2',
     title: '講演文 1',
-    audioUrl: 'https://example.com/audio/listening_2.mp3',
+    audioUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3',
     script: `
 Today, I'd like to discuss the impact of remote work on corporate culture.
 Over the past few years, many companies have shifted to hybrid or fully remote work models.
@@ -63,7 +63,7 @@ The key is to establish clear communication protocols and regular virtual team m
   {
     id: '3',
     title: '日常会話 1',
-    audioUrl: 'https://example.com/audio/listening_3.mp3',
+    audioUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3',
     script: `
 A: Hi! Did you enjoy the concert last night?
 B: Yes, it was amazing! The performance was incredible.
@@ -86,7 +86,7 @@ B: The second half was especially good. The orchestra played beautifully.
   {
     id: '4',
     title: '講演文 2',
-    audioUrl: 'https://example.com/audio/listening_4.mp3',
+    audioUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3',
     script: `
 The digital transformation has revolutionized how businesses operate.
 Cloud computing, artificial intelligence, and data analytics have become essential tools.
@@ -110,7 +110,7 @@ They should also foster a culture that embraces innovation and continuous learni
   {
     id: '5',
     title: '会話問題 2',
-    audioUrl: 'https://example.com/audio/listening_5.mp3',
+    audioUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3',
     script: `
 Student: Professor, I'm having trouble with the assignment. Could I come to your office hours?
 Professor: Of course. I have office hours on Tuesday and Thursday from 2 to 4 PM.

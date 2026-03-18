@@ -1,0 +1,6 @@
+# API Keys and tokens to remove from git history
+sk-ant-api.*
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.*
+EXPO_PUBLIC_CLAUDE_API_KEY=.*
+SUPABASE_SERVICE_ROLE_SECRET=.*
+SENTRY_AUTH_TOKEN=.*

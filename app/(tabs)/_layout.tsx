@@ -1,9 +1,10 @@
 import { Tabs } from 'expo-router';
 import React from 'react';
+import { Platform } from 'react-native';
 
 import { HapticTab } from '@/components/haptic-tab';
 import { IconSymbol } from '@/components/ui/icon-symbol';
-import { Colors } from '@/constants/theme';
+import { Colors, Spacing, Shadows } from '@/constants/theme';
 import { useColorScheme } from '@/hooks/use-color-scheme';
 
 export default function TabLayout() {
@@ -12,13 +13,23 @@ export default function TabLayout() {
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: '#0066cc',
-        tabBarInactiveTintColor: '#999',
+        tabBarActiveTintColor: Colors.light.primary,
+        tabBarInactiveTintColor: Colors.light.textTertiary,
         headerShown: false,
         tabBarButton: HapticTab,
         tabBarStyle: {
-          backgroundColor: '#f9f9f9',
-          borderTopColor: '#ddd',
+          backgroundColor: Colors.light.surfaceCard,
+          borderTopColor: Colors.light.border,
+          borderTopWidth: 1,
+          paddingBottom: Platform.OS === 'ios' ? Spacing.lg : Spacing.md,
+          paddingTop: Spacing.md,
+          height: Platform.OS === 'ios' ? 88 : 70,
+          ...Shadows.md,
+        },
+        tabBarLabelStyle: {
+          fontSize: 11,
+          fontWeight: '600',
+          marginTop: Spacing.xs,
         },
       }}>
       <Tabs.Screen
@@ -47,6 +58,13 @@ export default function TabLayout() {
         options={{
           title: 'ライティング',
           tabBarIcon: ({ color }) => <IconSymbol size={28} name="pencil" color={color} />,
+        }}
+      />
+      <Tabs.Screen
+        name="teacher"
+        options={{
+          title: '講師',
+          tabBarIcon: ({ color }) => <IconSymbol size={28} name="person.fill" color={color} />,
         }}
       />
       <Tabs.Screen

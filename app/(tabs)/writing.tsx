@@ -15,6 +15,9 @@ import { useWritingStore } from '@/src/stores/writingStore';
 import { WRITING_SAMPLE_PROMPTS } from '@/src/lib/writingData';
 import { scoreWritingSubmission } from '@/src/lib/aiScoringService';
 import WritingResultScreen from '@/src/components/WritingResultScreen';
+import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/theme';
+import { OptimizedButton, ButtonGroup } from '@/components/OptimizedButton';
+import { EnhancedProgressBar } from '@/components/EnhancedProgressBar';
 
 type Screen = 'prompt-select' | 'editor' | 'result';
 
@@ -120,6 +123,8 @@ export default function WritingScreen() {
 
   if (screen === 'prompt-select') {
     const stats = getTodayStats();
+    const totalSubmissions = getTotalSubmissions();
+
     return (
       <SafeAreaView style={styles.container}>
         <ScrollView showsVerticalScrollIndicator={false}>
@@ -130,44 +135,78 @@ export default function WritingScreen() {
           </View>
 
           {/* Stats */}
-          <View style={styles.statsContainer}>
-            <View style={styles.statCard}>
-              <Text style={styles.statLabel}>提出済み</Text>
-              <Text style={styles.statValue}>{getTotalSubmissions()}</Text>
+          <View style={styles.section}>
+            <View style={styles.statsRow}>
+              <View style={styles.statBox}>
+                <Text style={styles.statEmoji}>📝</Text>
+                <Text style={styles.statValue}>{totalSubmissions}</Text>
+                <Text style={styles.statLabel}>提出済み</Text>
+              </View>
+              <View style={styles.statBox}>
+                <Text style={styles.statEmoji}>⭐</Text>
+                <Text style={styles.statValue}>{getAverageScore()}</Text>
+                <Text style={styles.statLabel}>平均スコア</Text>
+              </View>
+              <View style={styles.statBox}>
+                <Text style={styles.statEmoji}>🎯</Text>
+                <Text style={styles.statValue}>{stats.attempted}</Text>
+                <Text style={styles.statLabel}>今日</Text>
+              </View>
             </View>
-            <View style={styles.statCard}>
-              <Text style={styles.statLabel}>平均スコア</Text>
-              <Text style={styles.statValue}>{getAverageScore()}/16</Text>
-            </View>
-            <View style={styles.statCard}>
-              <Text style={styles.statLabel}>今日</Text>
-              <Text style={styles.statValue}>{stats.attempted}</Text>
+          </View>
+
+          {/* Scoring Guide */}
+          <View style={styles.section}>
+            <View style={styles.scoringGuide}>
+              <Text style={styles.scoringTitle}>採点基準</Text>
+              <View style={styles.scoringItem}>
+                <Text style={styles.scoringLabel}>内容</Text>
+                <Text style={styles.scoringPoint}>4点</Text>
+              </View>
+              <View style={styles.scoringItem}>
+                <Text style={styles.scoringLabel}>構成</Text>
+                <Text style={styles.scoringPoint}>4点</Text>
+              </View>
+              <View style={styles.scoringItem}>
+                <Text style={styles.scoringLabel}>語彙</Text>
+                <Text style={styles.scoringPoint}>4点</Text>
+              </View>
+              <View style={styles.scoringItem}>
+                <Text style={styles.scoringLabel}>文法</Text>
+                <Text style={styles.scoringPoint}>4点</Text>
+              </View>
             </View>
           </View>
 
           {/* Prompts */}
-          <View style={styles.promptsSection}>
+          <View style={styles.section}>
             <Text style={styles.sectionTitle}>問題を選択</Text>
-            {prompts.map((prompt) => (
+            {prompts.map((prompt, index) => (
               <TouchableOpacity
                 key={prompt.id}
                 style={styles.promptCard}
                 onPress={() => handleStartPrompt(prompt)}
+                activeOpacity={0.7}
               >
-                <View style={styles.promptCardHeader}>
-                  <Text style={styles.promptTopic}>{prompt.topic}</Text>
-                  <Text style={styles.difficulty}>
-                    {DIFFICULTY_LABELS[prompt.difficulty]}
-                  </Text>
+                <View style={styles.promptNumber}>
+                  <Text style={styles.promptNumberText}>{index + 1}</Text>
                 </View>
-                <Text style={styles.promptDescription}>
-                  {prompt.description}
-                </Text>
-                <View style={styles.promptCardFooter}>
-                  <Text style={styles.wordLimit}>
-                    目安: {prompt.wordLimit}語
+                <View style={styles.promptCardContent}>
+                  <View style={styles.promptCardHeader}>
+                    <Text style={styles.promptTopic}>{prompt.topic}</Text>
+                    <Text style={styles.difficulty}>
+                      {DIFFICULTY_LABELS[prompt.difficulty]}
+                    </Text>
+                  </View>
+                  <Text style={styles.promptDescription}>
+                    {prompt.description}
                   </Text>
-                  <Text style={styles.actionText}>開く →</Text>
+                  <View style={styles.promptCardFooter}>
+                    <Text style={styles.wordLimit}>
+                      {prompt.wordLimit}語程度
+                    </Text>
+                    <Text style={styles.actionText}>→</Text>
+                  </View>
                 </View>
               </TouchableOpacity>
             ))}
@@ -292,99 +331,156 @@ export default function WritingScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f5f9ff',
+    backgroundColor: Colors.light.background,
   },
   header: {
-    paddingHorizontal: 24,
-    paddingTop: 16,
-    paddingBottom: 12,
+    paddingHorizontal: Spacing.xl,
+    paddingTop: Spacing.lg,
+    paddingBottom: Spacing.md,
   },
   title: {
     fontSize: 28,
-    fontWeight: 'bold',
-    color: '#333',
-    marginBottom: 4,
+    fontWeight: '800',
+    color: Colors.light.text,
+    marginBottom: Spacing.sm,
   },
   subtitle: {
     fontSize: 14,
-    color: '#999',
+    color: Colors.light.textSecondary,
+    fontWeight: '500',
   },
-  statsContainer: {
+  section: {
+    marginHorizontal: Spacing.xl,
+    marginTop: Spacing.xl,
+    marginBottom: Spacing.lg,
+  },
+  statsRow: {
     flexDirection: 'row',
-    marginHorizontal: 24,
-    marginTop: 16,
-    gap: 12,
+    gap: Spacing.lg,
   },
-  statCard: {
+  statBox: {
     flex: 1,
-    paddingVertical: 12,
-    backgroundColor: '#fff',
-    borderRadius: 8,
+    paddingVertical: Spacing.lg,
+    backgroundColor: Colors.light.surfaceCard,
+    borderRadius: BorderRadius.lg,
     alignItems: 'center',
+    ...Shadows.sm,
+  },
+  statEmoji: {
+    fontSize: 24,
+    marginBottom: Spacing.sm,
+  },
+  statValue: {
+    fontSize: 20,
+    fontWeight: '700',
+    color: Colors.light.primary,
+    marginBottom: Spacing.xs,
   },
   statLabel: {
     fontSize: 12,
-    color: '#999',
-    marginBottom: 4,
+    color: Colors.light.textSecondary,
+    fontWeight: '500',
   },
-  statValue: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: '#0066cc',
+  scoringGuide: {
+    padding: Spacing.lg,
+    backgroundColor: Colors.light.surfaceCard,
+    borderRadius: BorderRadius.lg,
+    ...Shadows.xs,
   },
-  promptsSection: {
-    marginHorizontal: 24,
-    marginTop: 24,
-    marginBottom: 40,
+  scoringTitle: {
+    fontSize: 14,
+    fontWeight: '700',
+    color: Colors.light.text,
+    marginBottom: Spacing.md,
+  },
+  scoringItem: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingVertical: Spacing.sm,
+    borderBottomWidth: 1,
+    borderBottomColor: Colors.light.border,
+  },
+  scoringLabel: {
+    fontSize: 13,
+    color: Colors.light.text,
+    fontWeight: '500',
+  },
+  scoringPoint: {
+    fontSize: 13,
+    color: Colors.light.primary,
+    fontWeight: '700',
   },
   sectionTitle: {
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: '700',
-    color: '#333',
-    marginBottom: 12,
+    color: Colors.light.text,
+    marginBottom: Spacing.lg,
   },
   promptCard: {
-    paddingHorizontal: 16,
-    paddingVertical: 14,
-    backgroundColor: '#fff',
-    borderRadius: 8,
-    marginBottom: 12,
+    flexDirection: 'row',
+    paddingHorizontal: Spacing.lg,
+    paddingVertical: Spacing.lg,
+    backgroundColor: Colors.light.surfaceCard,
+    borderRadius: BorderRadius.lg,
+    marginBottom: Spacing.lg,
+    alignItems: 'flex-start',
+    ...Shadows.xs,
+  },
+  promptNumber: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: Colors.light.primaryLight,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: Spacing.lg,
+  },
+  promptNumberText: {
+    fontSize: 12,
+    fontWeight: '700',
+    color: Colors.light.primary,
+  },
+  promptCardContent: {
+    flex: 1,
   },
   promptCardHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 8,
+    marginBottom: Spacing.sm,
   },
   promptTopic: {
     fontSize: 15,
     fontWeight: '700',
-    color: '#333',
+    color: Colors.light.text,
     flex: 1,
   },
   difficulty: {
     fontSize: 12,
-    color: '#666',
+    color: Colors.light.textSecondary,
+    fontWeight: '500',
   },
   promptDescription: {
     fontSize: 14,
-    color: '#666',
+    color: Colors.light.text,
     lineHeight: 20,
-    marginBottom: 10,
+    marginBottom: Spacing.md,
   },
   promptCardFooter: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+    width: '100%',
   },
   wordLimit: {
     fontSize: 12,
-    color: '#999',
+    color: Colors.light.textSecondary,
+    fontWeight: '500',
   },
   actionText: {
-    fontSize: 12,
-    color: '#0066cc',
-    fontWeight: '600',
+    fontSize: 14,
+    color: Colors.light.primary,
+    fontWeight: '700',
   },
 
   // Editor Screen

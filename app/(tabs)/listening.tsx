@@ -12,6 +12,8 @@ import { useListeningStore } from '@/src/stores/listeningStore';
 import { LISTENING_SAMPLE_DATA } from '@/src/lib/listeningData';
 import ListeningQuestionScreen from '@/src/components/ListeningQuestionScreen';
 import ListeningResultScreen from '@/src/components/ListeningResultScreen';
+import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/theme';
+import { EnhancedProgressBar } from '@/components/EnhancedProgressBar';
 
 type Screen = 'list' | 'question' | 'result';
 
@@ -63,6 +65,9 @@ export default function ListeningScreen() {
   };
 
   if (screen === 'list') {
+    const stats = getTodayStats();
+    const completionRate = (completedCount / totalCount) * 100;
+
     return (
       <SafeAreaView style={styles.container}>
         <ScrollView showsVerticalScrollIndicator={false}>
@@ -72,40 +77,52 @@ export default function ListeningScreen() {
             <Text style={styles.subtitle}>英検準1級形式</Text>
           </View>
 
-          {/* Stats */}
-          <View style={styles.statsContainer}>
-            <View style={styles.statCard}>
-              <Text style={styles.statLabel}>完了</Text>
-              <Text style={styles.statValue}>
-                {completedCount}/{totalCount}
-              </Text>
+          {/* Completion Progress */}
+          <View style={styles.section}>
+            <EnhancedProgressBar
+              percentage={completionRate}
+              label="進捗"
+              showPercentage={true}
+              color={Colors.light.info}
+              style={{ marginBottom: Spacing.xl }}
+            />
+            <Text style={styles.progressLabel}>
+              {completedCount} / {totalCount} 完了
+            </Text>
+          </View>
+
+          {/* Today's Stats */}
+          <View style={styles.section}>
+            <View style={styles.statsRow}>
+              <View style={styles.statBox}>
+                <Text style={styles.statEmoji}>🎯</Text>
+                <Text style={styles.statValue}>{stats.attempted}</Text>
+                <Text style={styles.statLabel}>出題</Text>
+              </View>
+              <View style={styles.statBox}>
+                <Text style={styles.statEmoji}>✅</Text>
+                <Text style={styles.statValue}>{stats.correct}</Text>
+                <Text style={styles.statLabel}>正解</Text>
+              </View>
+              <View style={styles.statBox}>
+                <Text style={styles.statEmoji}>📊</Text>
+                <Text style={[styles.statValue, { color: Colors.light.success }]}>
+                  {stats.accuracy}%
+                </Text>
+                <Text style={styles.statLabel}>正答率</Text>
+              </View>
             </View>
-            {(() => {
-              const stats = getTodayStats();
-              return (
-                <>
-                  <View style={styles.statCard}>
-                    <Text style={styles.statLabel}>今日</Text>
-                    <Text style={styles.statValue}>{stats.attempted}</Text>
-                  </View>
-                  <View style={styles.statCard}>
-                    <Text style={styles.statLabel}>正答率</Text>
-                    <Text style={styles.statValue}>{stats.accuracy}%</Text>
-                  </View>
-                </>
-              );
-            })()}
           </View>
 
           {/* Question List */}
-          <View style={styles.questionsSection}>
+          <View style={styles.section}>
             <Text style={styles.sectionTitle}>問題を選択</Text>
             {questions.length === 0 ? (
               <View style={styles.loadingContainer}>
-                <ActivityIndicator size="large" color="#0066cc" />
+                <ActivityIndicator size="large" color={Colors.light.primary} />
               </View>
             ) : (
-              questions.map((question) => {
+              questions.map((question, index) => {
                 const questionProgress = progress[question.id];
                 const isCompleted = questionProgress?.isCompleted || false;
                 const isCorrect = questionProgress?.isCorrect;
@@ -118,23 +135,33 @@ export default function ListeningScreen() {
                       isCompleted && styles.questionCardCompleted,
                     ]}
                     onPress={() => handleStartQuestion(question.id)}
+                    activeOpacity={0.7}
                   >
-                    <View style={styles.questionCardHeader}>
-                      <Text style={styles.questionTitle}>{question.title}</Text>
-                      {isCompleted && (
-                        <Text style={styles.resultIcon}>
-                          {isCorrect ? '✅' : '❌'}
-                        </Text>
-                      )}
+                    <View style={styles.questionCardNumber}>
+                      <Text style={styles.numberText}>Q{index + 1}</Text>
                     </View>
 
-                    <View style={styles.questionCardFooter}>
-                      <Text style={styles.difficulty}>
-                        {DIFFICULTY_LABELS[question.difficulty]}
-                      </Text>
-                      <Text style={styles.status}>
-                        {isCompleted ? '完了' : '未完了'}
-                      </Text>
+                    <View style={styles.questionCardContent}>
+                      <View style={styles.questionCardHeader}>
+                        <Text style={styles.questionTitle}>{question.title}</Text>
+                        {isCompleted && (
+                          <Text style={styles.resultIcon}>
+                            {isCorrect ? '✅' : '❌'}
+                          </Text>
+                        )}
+                      </View>
+
+                      <View style={styles.questionCardFooter}>
+                        <Text style={styles.difficulty}>
+                          {DIFFICULTY_LABELS[question.difficulty]}
+                        </Text>
+                        <Text style={[
+                          styles.status,
+                          isCompleted && styles.statusCompleted
+                        ]}>
+                          {isCompleted ? '完了' : '未完了'}
+                        </Text>
+                      </View>
                     </View>
                   </TouchableOpacity>
                 );
@@ -166,101 +193,138 @@ export default function ListeningScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f5f9ff',
+    backgroundColor: Colors.light.background,
   },
   header: {
-    paddingHorizontal: 24,
-    paddingTop: 16,
-    paddingBottom: 12,
+    paddingHorizontal: Spacing.xl,
+    paddingTop: Spacing.lg,
+    paddingBottom: Spacing.md,
   },
   title: {
     fontSize: 28,
-    fontWeight: 'bold',
-    color: '#333',
-    marginBottom: 4,
+    fontWeight: '800',
+    color: Colors.light.text,
+    marginBottom: Spacing.sm,
   },
   subtitle: {
     fontSize: 14,
-    color: '#999',
+    color: Colors.light.textSecondary,
+    fontWeight: '500',
   },
-  statsContainer: {
+  section: {
+    marginHorizontal: Spacing.xl,
+    marginTop: Spacing.xl,
+    marginBottom: Spacing.lg,
+  },
+  progressLabel: {
+    fontSize: 13,
+    color: Colors.light.textSecondary,
+    fontWeight: '500',
+    textAlign: 'center',
+  },
+  statsRow: {
     flexDirection: 'row',
-    marginHorizontal: 24,
-    marginTop: 16,
-    gap: 12,
+    gap: Spacing.lg,
   },
-  statCard: {
+  statBox: {
     flex: 1,
-    paddingVertical: 12,
-    backgroundColor: '#fff',
-    borderRadius: 8,
+    paddingVertical: Spacing.lg,
+    backgroundColor: Colors.light.surfaceCard,
+    borderRadius: BorderRadius.lg,
     alignItems: 'center',
+    ...Shadows.sm,
+  },
+  statEmoji: {
+    fontSize: 24,
+    marginBottom: Spacing.sm,
+  },
+  statValue: {
+    fontSize: 20,
+    fontWeight: '700',
+    color: Colors.light.primary,
+    marginBottom: Spacing.xs,
   },
   statLabel: {
     fontSize: 12,
-    color: '#999',
-    marginBottom: 4,
-  },
-  statValue: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: '#0066cc',
-  },
-  questionsSection: {
-    marginHorizontal: 24,
-    marginTop: 24,
-    marginBottom: 40,
+    color: Colors.light.textSecondary,
+    fontWeight: '500',
   },
   sectionTitle: {
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: '700',
-    color: '#333',
-    marginBottom: 12,
+    color: Colors.light.text,
+    marginBottom: Spacing.lg,
   },
   loadingContainer: {
-    paddingVertical: 40,
+    paddingVertical: Spacing.xl,
     justifyContent: 'center',
     alignItems: 'center',
   },
   questionCard: {
-    paddingHorizontal: 16,
-    paddingVertical: 14,
-    backgroundColor: '#fff',
-    borderRadius: 8,
-    marginBottom: 12,
+    flexDirection: 'row',
+    paddingHorizontal: Spacing.lg,
+    paddingVertical: Spacing.lg,
+    backgroundColor: Colors.light.surfaceCard,
+    borderRadius: BorderRadius.lg,
+    marginBottom: Spacing.lg,
     borderLeftWidth: 4,
-    borderLeftColor: '#ddd',
+    borderLeftColor: Colors.light.border,
+    alignItems: 'flex-start',
+    ...Shadows.xs,
   },
   questionCardCompleted: {
-    backgroundColor: '#f0f9ff',
+    backgroundColor: Colors.light.primaryLight,
+    borderLeftColor: Colors.light.success,
+  },
+  questionCardNumber: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: Colors.light.primaryLight,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: Spacing.lg,
+  },
+  numberText: {
+    fontSize: 12,
+    fontWeight: '700',
+    color: Colors.light.primary,
+  },
+  questionCardContent: {
+    flex: 1,
   },
   questionCardHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 8,
+    marginBottom: Spacing.md,
   },
   questionTitle: {
     fontSize: 15,
     fontWeight: '600',
-    color: '#333',
+    color: Colors.light.text,
     flex: 1,
   },
   resultIcon: {
-    fontSize: 18,
-    marginLeft: 8,
+    fontSize: 20,
+    marginLeft: Spacing.lg,
   },
   questionCardFooter: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+    gap: Spacing.lg,
   },
   difficulty: {
     fontSize: 12,
-    color: '#666',
+    color: Colors.light.textSecondary,
+    fontWeight: '500',
   },
   status: {
     fontSize: 12,
-    color: '#0066cc',
-    fontWeight: '500',
+    color: Colors.light.warning,
+    fontWeight: '600',
+  },
+  statusCompleted: {
+    color: Colors.light.success,
   },
 });

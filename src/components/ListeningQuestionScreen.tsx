@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -7,12 +7,16 @@ import {
   TouchableOpacity,
   ScrollView,
   Dimensions,
+  Alert,
 } from 'react-native';
-import { Audio } from 'expo-av';
 import type { ListeningQuestion } from '@/src/lib/listeningData';
 import { useListeningStore } from '@/src/stores/listeningStore';
+import { useAudioPlayer } from '@/hooks/useAudioPlayer';
+import { debugLog, debugError } from '@/src/lib/debugUtils';
+import { handleError } from '@/src/lib/errorHandler';
 
 const { width } = Dimensions.get('window');
+const TAG = 'ListeningQuestionScreen';
 
 interface Props {
   question: ListeningQuestion;
@@ -29,31 +33,53 @@ export default function ListeningQuestionScreen({
 }: Props) {
   const [screen, setScreen] = useState<Screen>('player');
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [playbackRate, setPlaybackRate] = useState(1.0);
-  const soundRef = useRef<Audio.Sound | null>(null);
-
   const { recordAttempt } = useListeningStore();
+
+  // SoundHelix のフォールバックURL
+  const SOUNDHELIX_FALLBACK_URLS = [
+    'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3',
+    'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3',
+    'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3',
+  ];
+
+  const audioPlayer = useAudioPlayer({
+    timeout: 10000,
+    retryAttempts: 2,
+    debugLog: true,
+    onError: (error: string) => {
+      debugError(TAG, 'Audio playback error', error);
+      Alert.alert(
+        '音声エラー',
+        '音声の再生に失敗しました。もう一度お試しください。'
+      );
+    },
+  });
+
+  // 再生速度が変わったときに反映
+  useEffect(() => {
+    try {
+      audioPlayer.setPlaybackRate(audioPlayer.playbackRate);
+    } catch (error) {
+      debugError(TAG, 'Failed to set playback rate', error);
+    }
+  }, []);
 
   const playAudio = async () => {
     try {
-      if (soundRef.current) {
-        await soundRef.current.unloadAsync();
-      }
+      debugLog(TAG, 'Starting audio playback', {
+        url: question.audioUrl,
+        playbackRate: audioPlayer.playbackRate,
+      });
 
-      const { sound } = await Audio.Sound.createAsync(
-        { uri: question.audioUrl },
-        { progressUpdateIntervalMillis: 100 }
-      );
-
-      soundRef.current = sound;
-      await soundRef.current.setRateAsync(playbackRate, true);
-      setIsPlaying(true);
-      await soundRef.current.playAsync();
+      // SoundHelixのフォールバックURLを含める
+      await audioPlayer.play(question.audioUrl, SOUNDHELIX_FALLBACK_URLS);
     } catch (error) {
-      console.error('Audio playback error:', error);
-      // デモ用: エラーを無視して進める
-      setTimeout(() => setScreen('answer'), 3000);
+      const appError = handleError(error, TAG);
+      debugError(TAG, 'Playback error', appError.originalError);
+      Alert.alert(
+        'エラー',
+        '音声の再生に失敗しました。もう一度お試しください。'
+      );
     }
   };
 
@@ -84,13 +110,24 @@ export default function ListeningQuestionScreen({
             <TouchableOpacity
               style={styles.playButton}
               onPress={playAudio}
-              disabled={isPlaying}
+              disabled={audioPlayer.isPlaying || audioPlayer.isLoading}
             >
               <Text style={styles.playButtonIcon}>▶️</Text>
               <Text style={styles.playButtonText}>
-                {isPlaying ? '再生中...' : '再生する'}
+                {audioPlayer.isLoading
+                  ? '読み込み中...'
+                  : audioPlayer.isPlaying
+                    ? '再生中...'
+                    : '再生する'}
               </Text>
             </TouchableOpacity>
+
+            {/* Error Display */}
+            {audioPlayer.error && (
+              <View style={styles.errorBox}>
+                <Text style={styles.errorText}>エラー: {audioPlayer.error}</Text>
+              </View>
+            )}
 
             {/* Playback Speed Controls */}
             <View style={styles.speedControlsContainer}>
@@ -101,14 +138,16 @@ export default function ListeningQuestionScreen({
                     key={rate}
                     style={[
                       styles.speedButton,
-                      playbackRate === rate && styles.speedButtonActive,
+                      audioPlayer.playbackRate === rate && styles.speedButtonActive,
                     ]}
-                    onPress={() => setPlaybackRate(rate)}
+                    onPress={() => {
+                      audioPlayer.setPlaybackRate(rate);
+                    }}
                   >
                     <Text
                       style={[
                         styles.speedButtonText,
-                        playbackRate === rate &&
+                        audioPlayer.playbackRate === rate &&
                           styles.speedButtonTextActive,
                       ]}
                     >
@@ -126,11 +165,20 @@ export default function ListeningQuestionScreen({
                   key={i}
                   style={[
                     styles.waveformBar,
-                    isPlaying && styles.waveformBarAnimated,
+                    audioPlayer.isPlaying && styles.waveformBarAnimated,
                   ]}
                 />
               ))}
             </View>
+
+            {/* Duration Display */}
+            {audioPlayer.duration > 0 && (
+              <View style={styles.durationContainer}>
+                <Text style={styles.durationText}>
+                  {formatTime(audioPlayer.currentTime)} / {formatTime(audioPlayer.duration)}
+                </Text>
+              </View>
+            )}
           </View>
 
           {/* Continue Button */}
@@ -261,7 +309,7 @@ export default function ListeningQuestionScreen({
             style={styles.shadowingButton}
             onPress={() => {
               // シャドーイング画面へ遷移
-              console.log('Shadowing started for question:', question.id);
+              debugLog(TAG, 'Shadowing started for question', { id: question.id });
               // 実装時：ShadowingScreen を render
             }}
           >
@@ -279,6 +327,16 @@ export default function ListeningQuestionScreen({
       </ScrollView>
     </SafeAreaView>
   );
+}
+
+/**
+ * ヘルパー関数：秒をMM:SS形式にフォーマット
+ */
+function formatTime(seconds: number): string {
+  if (!isFinite(seconds)) return '0:00';
+  const minutes = Math.floor(seconds / 60);
+  const secs = Math.floor(seconds % 60);
+  return `${minutes}:${secs.toString().padStart(2, '0')}`;
 }
 
 const styles = StyleSheet.create({
@@ -339,6 +397,20 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     color: '#fff',
   },
+  errorBox: {
+    paddingHorizontal: 12,
+    paddingVertical: 10,
+    marginBottom: 16,
+    backgroundColor: '#ffe6e6',
+    borderLeftWidth: 4,
+    borderLeftColor: '#dc3545',
+    borderRadius: 6,
+  },
+  errorText: {
+    fontSize: 12,
+    color: '#dc3545',
+    fontWeight: '500',
+  },
   speedControlsContainer: {
     marginBottom: 20,
   },
@@ -386,6 +458,15 @@ const styles = StyleSheet.create({
   },
   waveformBarAnimated: {
     backgroundColor: '#0066cc',
+  },
+  durationContainer: {
+    alignItems: 'center',
+    marginBottom: 16,
+  },
+  durationText: {
+    fontSize: 12,
+    color: '#999',
+    fontWeight: '500',
   },
   continueButton: {
     marginHorizontal: 24,

@@ -1,41 +1,114 @@
 /**
- * Below are the colors that are used in the app. The colors are defined in the light and dark mode.
- * There are many other ways to style your app. For example, [Nativewind](https://www.nativewind.dev/), [Tamagui](https://tamagui.dev/), [unistyles](https://reactnativeunistyles.vercel.app), etc.
+ * Educational App Theme System
+ * Optimized for learning experience with eye-friendly colors and typography
  */
 
 import { Platform } from 'react-native';
 
-const tintColorLight = '#0a7ea4';
-const tintColorDark = '#fff';
+// Primary Brand Colors (Educational Blue)
+const primaryBlue = '#2563eb'; // Vibrant, trust-inspiring blue
+const primaryBlueDark = '#1e40af';
+const primaryBlueLight = '#eff6ff';
+
+// Accent Colors (Learning Engagement)
+const accentGreen = '#16a34a'; // Success, achievement
+const accentOrange = '#ea580c'; // Motivation, streak
+const accentPurple = '#7c3aed'; // Learning progress
+const accentPink = '#db2777'; // Challenge achieved
+
+// Semantic Colors
+const successGreen = '#10b981';
+const warningOrange = '#f59e0b';
+const errorRed = '#ef4444';
+const infoBlue = '#0ea5e9';
+
+const tintColorLight = primaryBlue;
+const tintColorDark = '#e0e7ff';
 
 export const Colors = {
   light: {
-    text: '#11181C',
-    background: '#fff',
-    tint: tintColorLight,
-    icon: '#687076',
-    tabIconDefault: '#687076',
-    tabIconSelected: tintColorLight,
+    // Core
+    text: '#1f2937',
+    textSecondary: '#6b7280',
+    textTertiary: '#9ca3af',
+    background: '#f9fafb',
+    backgroundAlt: '#f3f4f6',
+    surfaceCard: '#ffffff',
+
+    // Brand
+    tint: primaryBlue,
+    primary: primaryBlue,
+    primaryDark: primaryBlueDark,
+    primaryLight: primaryBlueLight,
+
+    // Accents
+    accent: accentOrange,
+    success: successGreen,
+    warning: warningOrange,
+    error: errorRed,
+    info: infoBlue,
+
+    // Interactive
+    icon: '#6b7280',
+    tabIconDefault: '#d1d5db',
+    tabIconSelected: primaryBlue,
+
+    // Semantic
+    streak: accentOrange,
+    achievement: accentGreen,
+    progress: accentPurple,
+    challenge: accentPink,
+
+    // Borders & Shadows
+    border: '#e5e7eb',
+    borderLight: '#f3f4f6',
+    shadow: 'rgba(0, 0, 0, 0.05)',
   },
   dark: {
-    text: '#ECEDEE',
-    background: '#151718',
+    // Core
+    text: '#f9fafb',
+    textSecondary: '#d1d5db',
+    textTertiary: '#9ca3af',
+    background: '#111827',
+    backgroundAlt: '#1f2937',
+    surfaceCard: '#374151',
+
+    // Brand
     tint: tintColorDark,
-    icon: '#9BA1A6',
-    tabIconDefault: '#9BA1A6',
-    tabIconSelected: tintColorDark,
+    primary: '#60a5fa',
+    primaryDark: primaryBlue,
+    primaryLight: primaryBlueLight,
+
+    // Accents
+    accent: '#fbbf24',
+    success: '#6ee7b7',
+    warning: '#fcd34d',
+    error: '#f87171',
+    info: '#38bdf8',
+
+    // Interactive
+    icon: '#9ca3af',
+    tabIconDefault: '#6b7280',
+    tabIconSelected: '#60a5fa',
+
+    // Semantic
+    streak: '#fbbf24',
+    achievement: '#6ee7b7',
+    progress: '#c084fc',
+    challenge: '#f472b6',
+
+    // Borders & Shadows
+    border: '#4b5563',
+    borderLight: '#1f2937',
+    shadow: 'rgba(0, 0, 0, 0.3)',
   },
 };
 
 export const Fonts = Platform.select({
   ios: {
-    /** iOS `UIFontDescriptorSystemDesignDefault` */
     sans: 'system-ui',
-    /** iOS `UIFontDescriptorSystemDesignSerif` */
     serif: 'ui-serif',
-    /** iOS `UIFontDescriptorSystemDesignRounded` */
     rounded: 'ui-rounded',
-    /** iOS `UIFontDescriptorSystemDesignMonospaced` */
     mono: 'ui-monospace',
   },
   default: {
@@ -51,3 +124,128 @@ export const Fonts = Platform.select({
     mono: "SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace",
   },
 });
+
+// Typography Scale
+export const Typography = {
+  // Display & Headlines
+  h1: {
+    fontSize: 32,
+    fontWeight: '800',
+    lineHeight: 40,
+  },
+  h2: {
+    fontSize: 28,
+    fontWeight: '700',
+    lineHeight: 36,
+  },
+  h3: {
+    fontSize: 24,
+    fontWeight: '700',
+    lineHeight: 32,
+  },
+  h4: {
+    fontSize: 20,
+    fontWeight: '600',
+    lineHeight: 28,
+  },
+  h5: {
+    fontSize: 18,
+    fontWeight: '600',
+    lineHeight: 24,
+  },
+  h6: {
+    fontSize: 16,
+    fontWeight: '600',
+    lineHeight: 24,
+  },
+
+  // Body Text
+  body: {
+    fontSize: 16,
+    fontWeight: '400',
+    lineHeight: 24,
+  },
+  bodyMedium: {
+    fontSize: 15,
+    fontWeight: '500',
+    lineHeight: 22,
+  },
+  bodySmall: {
+    fontSize: 14,
+    fontWeight: '400',
+    lineHeight: 20,
+  },
+
+  // Captions & Labels
+  label: {
+    fontSize: 12,
+    fontWeight: '600',
+    lineHeight: 16,
+  },
+  labelSmall: {
+    fontSize: 11,
+    fontWeight: '600',
+    lineHeight: 16,
+  },
+  caption: {
+    fontSize: 12,
+    fontWeight: '400',
+    lineHeight: 16,
+  },
+  captionSmall: {
+    fontSize: 11,
+    fontWeight: '400',
+    lineHeight: 14,
+  },
+};
+
+// Spacing System
+export const Spacing = {
+  xs: 4,
+  sm: 8,
+  md: 12,
+  lg: 16,
+  xl: 24,
+  xxl: 32,
+};
+
+// Border Radius
+export const BorderRadius = {
+  sm: 4,
+  md: 8,
+  lg: 12,
+  xl: 16,
+  full: 9999,
+};
+
+// Shadow System (Education-friendly, subtle)
+export const Shadows = {
+  xs: {
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.05,
+    shadowRadius: 2,
+    elevation: 1,
+  },
+  sm: {
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.08,
+    shadowRadius: 4,
+    elevation: 2,
+  },
+  md: {
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.12,
+    shadowRadius: 8,
+    elevation: 3,
+  },
+  lg: {
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 6 },
+    shadowOpacity: 0.15,
+    shadowRadius: 12,
+    elevation: 4,
+  },
+};

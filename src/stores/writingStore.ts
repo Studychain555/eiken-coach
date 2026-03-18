@@ -1,5 +1,8 @@
 import { create } from 'zustand';
 import type { WritingPrompt, WritingScore } from '@/src/lib/writingData';
+import { supabase } from '@/src/lib/supabase';
+import { realtimeSyncManager } from '@/src/lib/realtimeSyncManager';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export interface WritingSubmission {
   id: string;
@@ -11,6 +14,10 @@ export interface WritingSubmission {
 }
 
 interface WritingState {
+  // User context
+  userId: string | null;
+  setUserId: (userId: string | null) => void;
+
   // 問題データ
   prompts: WritingPrompt[];
   setPrompts: (prompts: WritingPrompt[]) => void;
@@ -34,9 +41,17 @@ interface WritingState {
   getTotalSubmissions: () => number;
   getAverageScore: () => number;
   getTodayStats: () => { attempted: number; averageScore: number };
+
+  // Sync methods
+  syncToSupabase: () => Promise<void>;
+  loadFromSupabase: () => Promise<void>;
+  initializeSync: (userId: string) => Promise<void>;
 }
 
 export const useWritingStore = create<WritingState>((set, get) => ({
+  userId: null,
+  setUserId: (userId) => set({ userId }),
+
   prompts: [],
   setPrompts: (prompts) => set({ prompts }),
 
@@ -55,6 +70,7 @@ export const useWritingStore = create<WritingState>((set, get) => ({
     set((state) => ({
       submissions: [...state.submissions, submission],
     }));
+    get().syncToSupabase();
   },
 
   getSubmissionsByPrompt: (promptId) => {
@@ -106,5 +122,103 @@ export const useWritingStore = create<WritingState>((set, get) => ({
       attempted: todaySubmissions.length,
       averageScore,
     };
+  },
+
+  syncToSupabase: async () => {
+    const { userId, submissions } = get();
+    if (!userId) return;
+
+    try {
+      const submissionsToSave = submissions.map((sub) => ({
+        id: sub.id,
+        user_id: userId,
+        prompt_id: sub.promptId,
+        content: sub.content,
+        image_url: sub.imageUrl,
+        score: sub.score,
+        submitted_at: sub.submittedAt.toISOString(),
+      }));
+
+      if (submissionsToSave.length > 0) {
+        await supabase.from('writing_submissions').upsert(submissionsToSave, {
+          onConflict: 'id',
+        });
+      }
+
+      await AsyncStorage.setItem(
+        `writing:${userId}`,
+        JSON.stringify({ submissions })
+      );
+    } catch (error) {
+      console.error('[WritingStore] Sync to Supabase failed:', error);
+      realtimeSyncManager.queueChange('writing_submissions', 'INSERT', {
+        user_id: userId,
+        submissions,
+      });
+    }
+  },
+
+  loadFromSupabase: async () => {
+    const { userId } = get();
+    if (!userId) return;
+
+    try {
+      const { data } = await supabase
+        .from('writing_submissions')
+        .select('*')
+        .eq('user_id', userId)
+        .order('submitted_at', { ascending: false });
+
+      if (data && data.length > 0) {
+        const submissions: WritingSubmission[] = data.map((item: any) => ({
+          id: item.id,
+          promptId: item.prompt_id,
+          content: item.content,
+          imageUrl: item.image_url,
+          score: item.score,
+          submittedAt: new Date(item.submitted_at),
+        }));
+        set({ submissions });
+        return;
+      }
+
+      const cached = await AsyncStorage.getItem(`writing:${userId}`);
+      if (cached) {
+        const parsed = JSON.parse(cached);
+        set(parsed);
+      }
+    } catch (error) {
+      console.error('[WritingStore] Load from Supabase failed:', error);
+      const cached = await AsyncStorage.getItem(`writing:${userId}`);
+      if (cached) {
+        const parsed = JSON.parse(cached);
+        set(parsed);
+      }
+    }
+  },
+
+  initializeSync: async (userId: string) => {
+    set({ userId });
+    await get().loadFromSupabase();
+
+    realtimeSyncManager.subscribe({
+      userId,
+      table: 'writing_submissions',
+      filter: `user_id=eq.${userId}`,
+      onUpdate: (data) => {
+        if (data) {
+          const { submissions } = get();
+          const newSubmission: WritingSubmission = {
+            id: data.id,
+            promptId: data.prompt_id,
+            content: data.content,
+            imageUrl: data.image_url,
+            score: data.score,
+            submittedAt: new Date(data.submitted_at),
+          };
+          set({ submissions: [newSubmission, ...submissions] });
+        }
+      },
+    });
   },
 }));

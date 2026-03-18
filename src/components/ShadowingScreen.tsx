@@ -14,6 +14,8 @@ import * as FileSystem from 'expo-file-system';
 import { useShadowingStore } from '@/src/stores/shadowingStore';
 import { scoreShaddowingRecording } from '@/src/lib/aiScoringService';
 import ShadowingResultScreen from './ShadowingResultScreen';
+import { debugLog, debugError } from '@/src/lib/debugUtils';
+import { handleError } from '@/src/lib/errorHandler';
 
 interface Props {
   questionId: string;
@@ -25,6 +27,8 @@ interface Props {
 }
 
 type Screen = 'recording' | 'result';
+
+const TAG = 'ShadowingScreen';
 
 export default function ShadowingScreen({
   questionId,
@@ -79,8 +83,14 @@ export default function ShadowingScreen({
 
   const playOriginalAudio = async () => {
     try {
+      debugLog(TAG, 'Playing original audio', { audioUrl });
+
       if (soundRef.current) {
-        await soundRef.current.unloadAsync();
+        try {
+          await soundRef.current.unloadAsync();
+        } catch (err) {
+          debugError(TAG, 'Error unloading previous sound', err);
+        }
       }
 
       const { sound } = await Audio.Sound.createAsync({ uri: audioUrl });
@@ -89,18 +99,25 @@ export default function ShadowingScreen({
       await sound.playAsync();
 
       sound.setOnPlaybackStatusUpdate((status) => {
-        if (status.isLoaded && !status.isPlaying) {
-          setIsPlaying(false);
+        try {
+          if (status.isLoaded && !status.isPlaying) {
+            setIsPlaying(false);
+          }
+        } catch (err) {
+          debugError(TAG, 'Error in playback status update', err);
         }
       });
     } catch (error) {
-      console.error('Audio playback error:', error);
+      const appError = handleError(error, TAG, { audioUrl });
+      debugError(TAG, 'Audio playback error', appError.originalError);
       Alert.alert('エラー', '音声の再生に失敗しました');
     }
   };
 
   const startRecording = async () => {
     try {
+      debugLog(TAG, 'Requesting microphone permissions');
+
       const permission = await Audio.requestPermissionsAsync();
       if (!permission.granted) {
         Alert.alert('エラー', 'マイクへのアクセスが許可されていません');
@@ -120,21 +137,30 @@ export default function ShadowingScreen({
 
       recordingRef.current = recording;
       setIsRecording(true);
+      debugLog(TAG, 'Recording started');
     } catch (error) {
-      console.error('Recording error:', error);
+      const appError = handleError(error, TAG);
+      debugError(TAG, 'Recording error', appError.originalError);
       Alert.alert('エラー', '録音の開始に失敗しました');
     }
   };
 
   const stopRecording = async () => {
     try {
-      if (!recordingRef.current) return;
+      if (!recordingRef.current) {
+        debugError(TAG, 'No recording in progress');
+        return;
+      }
+
+      debugLog(TAG, 'Stopping recording', { round: currentRound });
 
       setIsRecording(false);
       await recordingRef.current.stopAsync();
 
       const uri = recordingRef.current.getURI();
-      if (!uri) return;
+      if (!uri) {
+        throw new Error('Failed to get recording URI');
+      }
 
       // ダミー文字起こし（実際はWhisper APIを使用）
       const dummyTranscript = script
@@ -145,6 +171,9 @@ export default function ShadowingScreen({
       // 音読を評価
       setIsScoringRound(currentRound);
       const apiKey = process.env.EXPO_PUBLIC_CLAUDE_API_KEY;
+
+      debugLog(TAG, 'Scoring recording', { round: currentRound });
+
       const result = await scoreShaddowingRecording(
         script,
         dummyTranscript,
@@ -177,8 +206,10 @@ export default function ShadowingScreen({
       }
 
       recordingRef.current = null;
+      debugLog(TAG, 'Recording completed successfully', { round: currentRound });
     } catch (error) {
-      console.error('Stop recording error:', error);
+      const appError = handleError(error, TAG, { round: currentRound });
+      debugError(TAG, 'Stop recording error', appError.originalError);
       Alert.alert('エラー', '録音の停止に失敗しました');
       setIsScoringRound(null);
     }

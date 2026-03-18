@@ -11,6 +11,9 @@ import {
 import { useRouter } from 'expo-router';
 import { useVocabularyStore } from '@/src/stores/vocabularyStore';
 import { VOCABULARY_SAMPLE_DATA } from '@/src/lib/vocabularyData';
+import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/theme';
+import { EnhancedProgressBar, StepProgress, Milestone } from '@/components/EnhancedProgressBar';
+import { OptimizedButton } from '@/components/OptimizedButton';
 
 const { width } = Dimensions.get('window');
 
@@ -49,6 +52,8 @@ export default function VocabularyScreen() {
   };
 
   if (screen === 'stage-select') {
+    const stats = getTodayStats();
+
     return (
       <SafeAreaView style={styles.container}>
         <ScrollView showsVerticalScrollIndicator={false}>
@@ -58,74 +63,102 @@ export default function VocabularyScreen() {
             <Text style={styles.subtitle}>英検準1級 頻出単語</Text>
           </View>
 
-          {/* Stats */}
-          <View style={styles.statsCard}>
-            <View style={styles.statRow}>
-              <Text style={styles.statLabel}>修得単語</Text>
-              <Text style={styles.statValue}>{masteredCount} / 2,000</Text>
-            </View>
-            <View style={styles.progressBar}>
-              <View
-                style={[
-                  styles.progressFill,
-                  { width: `${(masteredCount / 2000) * 100}%` },
-                ]}
-              />
-            </View>
+          {/* Overall Progress */}
+          <View style={styles.section}>
+            <Milestone
+              milestone={2000}
+              current={masteredCount}
+              unit="単語"
+              icon="📚"
+              color={Colors.light.primary}
+            />
           </View>
 
           {/* Today's Stats */}
-          <View style={styles.todayStatsContainer}>
-            {(() => {
-              const stats = getTodayStats();
-              return (
-                <>
-                  <View style={styles.todayStatItem}>
-                    <Text style={styles.todayStatValue}>{stats.attempted}</Text>
-                    <Text style={styles.todayStatLabel}>出題</Text>
-                  </View>
-                  <View style={styles.todayStatItem}>
-                    <Text style={styles.todayStatValue}>{stats.correct}</Text>
-                    <Text style={styles.todayStatLabel}>正解</Text>
-                  </View>
-                  <View style={styles.todayStatItem}>
-                    <Text style={styles.todayStatValue}>{stats.accuracy}%</Text>
-                    <Text style={styles.todayStatLabel}>正答率</Text>
-                  </View>
-                </>
-              );
-            })()}
+          <View style={styles.section}>
+            <View style={styles.statsRow}>
+              <View style={styles.statBox}>
+                <Text style={styles.statBoxEmoji}>🎯</Text>
+                <Text style={styles.statBoxValue}>{stats.attempted}</Text>
+                <Text style={styles.statBoxLabel}>出題</Text>
+              </View>
+              <View style={styles.statBox}>
+                <Text style={styles.statBoxEmoji}>✅</Text>
+                <Text style={styles.statBoxValue}>{stats.correct}</Text>
+                <Text style={styles.statBoxLabel}>正解</Text>
+              </View>
+              <View style={styles.statBox}>
+                <Text style={styles.statBoxEmoji}>📊</Text>
+                <Text style={[styles.statBoxValue, { color: Colors.light.success }]}>
+                  {stats.accuracy}%
+                </Text>
+                <Text style={styles.statBoxLabel}>正答率</Text>
+              </View>
+            </View>
+          </View>
+
+          {/* Difficulty Guide */}
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>難易度ガイド</Text>
+            <View style={styles.difficultyGuide}>
+              <View style={styles.difficultyItem}>
+                <Text style={styles.difficultyEmoji}>⭐</Text>
+                <Text style={styles.difficultyLabel}>初級</Text>
+              </View>
+              <View style={styles.difficultyItem}>
+                <Text style={styles.difficultyEmoji}>⭐⭐⭐</Text>
+                <Text style={styles.difficultyLabel}>中級</Text>
+              </View>
+              <View style={styles.difficultyItem}>
+                <Text style={styles.difficultyEmoji}>⭐⭐⭐⭐⭐</Text>
+                <Text style={styles.difficultyLabel}>上級</Text>
+              </View>
+            </View>
           </View>
 
           {/* Stages */}
-          <View style={styles.stagesSection}>
+          <View style={styles.section}>
             <Text style={styles.sectionTitle}>ステージを選択</Text>
             <View style={styles.stageGrid}>
               {Array.from({ length: stagesCount }, (_, i) => i + 1).map(
-                (stage) => (
-                  <TouchableOpacity
-                    key={stage}
-                    style={[
-                      styles.stageButton,
-                      stage <= 3 && styles.stageButtonActive,
-                    ]}
-                    onPress={() => handleStartStage(stage)}
-                    disabled={stage > 3}
-                  >
-                    <Text style={styles.stageButtonNumber}>{stage}</Text>
-                    {stage > 3 && (
-                      <Text style={styles.stageLock}>🔒</Text>
-                    )}
-                  </TouchableOpacity>
-                )
+                (stage) => {
+                  const isLocked = stage > 3;
+                  const isCompleted = stage <= 1;
+
+                  return (
+                    <TouchableOpacity
+                      key={stage}
+                      style={[
+                        styles.stageButton,
+                        isLocked && styles.stageButtonDisabled,
+                        isCompleted && styles.stageButtonCompleted,
+                      ]}
+                      onPress={() => handleStartStage(stage)}
+                      disabled={isLocked}
+                      activeOpacity={0.7}
+                    >
+                      {isCompleted && (
+                        <Text style={styles.stageBadge}>✓</Text>
+                      )}
+                      <Text style={styles.stageButtonNumber}>{stage}</Text>
+                      {isLocked && (
+                        <Text style={styles.stageLock}>🔒</Text>
+                      )}
+                    </TouchableOpacity>
+                  );
+                }
               )}
             </View>
           </View>
 
-          <View style={styles.infoBox}>
-            <Text style={styles.infoText}>
-              💡 1ステージ = 100語。同じ単語を3回連続正解で「修得」になります。
-            </Text>
+          {/* Tips Box */}
+          <View style={styles.section}>
+            <View style={styles.tipsBox}>
+              <Text style={styles.tipsEmoji}>💡</Text>
+              <Text style={styles.tipsText}>
+                1ステージ = 100語。同じ単語を3回連続正解で「修得」になります。
+              </Text>
+            </View>
           </View>
         </ScrollView>
       </SafeAreaView>
@@ -347,144 +380,151 @@ function VocabularyResultScreen({ onBack }: { onBack: () => void }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f5f9ff',
+    backgroundColor: Colors.light.background,
   },
   header: {
-    paddingHorizontal: 24,
-    paddingTop: 16,
-    paddingBottom: 12,
+    paddingHorizontal: Spacing.xl,
+    paddingTop: Spacing.lg,
+    paddingBottom: Spacing.md,
   },
   title: {
     fontSize: 28,
-    fontWeight: 'bold',
-    color: '#333',
-    marginBottom: 4,
+    fontWeight: '800',
+    color: Colors.light.text,
+    marginBottom: Spacing.sm,
   },
   subtitle: {
     fontSize: 14,
-    color: '#999',
+    color: Colors.light.textSecondary,
+    fontWeight: '500',
   },
-  statsCard: {
-    marginHorizontal: 24,
-    marginTop: 16,
-    paddingHorizontal: 16,
-    paddingVertical: 16,
-    backgroundColor: '#fff',
-    borderRadius: 12,
-  },
-  statRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginBottom: 12,
-  },
-  statLabel: {
-    fontSize: 14,
-    color: '#666',
-  },
-  statValue: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: '#0066cc',
-  },
-  progressBar: {
-    height: 8,
-    backgroundColor: '#eee',
-    borderRadius: 4,
-    overflow: 'hidden',
-  },
-  progressFill: {
-    height: '100%',
-    backgroundColor: '#0066cc',
-  },
-  todayStatsContainer: {
-    flexDirection: 'row',
-    marginHorizontal: 24,
-    marginTop: 12,
-    gap: 12,
-  },
-  todayStatItem: {
-    flex: 1,
-    paddingVertical: 12,
-    backgroundColor: '#fff',
-    borderRadius: 8,
-    alignItems: 'center',
-  },
-  todayStatValue: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: '#0066cc',
-  },
-  todayStatLabel: {
-    fontSize: 12,
-    color: '#999',
-    marginTop: 4,
-  },
-  stagesSection: {
-    marginHorizontal: 24,
-    marginTop: 24,
+  section: {
+    marginHorizontal: Spacing.xl,
+    marginTop: Spacing.xl,
   },
   sectionTitle: {
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: '700',
-    color: '#333',
-    marginBottom: 12,
+    color: Colors.light.text,
+    marginBottom: Spacing.lg,
+  },
+  statsRow: {
+    flexDirection: 'row',
+    gap: Spacing.lg,
+  },
+  statBox: {
+    flex: 1,
+    paddingVertical: Spacing.lg,
+    backgroundColor: Colors.light.surfaceCard,
+    borderRadius: BorderRadius.lg,
+    alignItems: 'center',
+    ...Shadows.sm,
+  },
+  statBoxEmoji: {
+    fontSize: 24,
+    marginBottom: Spacing.sm,
+  },
+  statBoxValue: {
+    fontSize: 20,
+    fontWeight: '700',
+    color: Colors.light.primary,
+    marginBottom: Spacing.xs,
+  },
+  statBoxLabel: {
+    fontSize: 12,
+    color: Colors.light.textSecondary,
+    fontWeight: '500',
+  },
+  difficultyGuide: {
+    flexDirection: 'row',
+    gap: Spacing.lg,
+  },
+  difficultyItem: {
+    flex: 1,
+    paddingHorizontal: Spacing.md,
+    paddingVertical: Spacing.lg,
+    backgroundColor: Colors.light.surfaceCard,
+    borderRadius: BorderRadius.lg,
+    alignItems: 'center',
+    ...Shadows.xs,
+  },
+  difficultyEmoji: {
+    fontSize: 18,
+    marginBottom: Spacing.sm,
+  },
+  difficultyLabel: {
+    fontSize: 12,
+    color: Colors.light.text,
+    fontWeight: '600',
+    textAlign: 'center',
   },
   stageGrid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    gap: 12,
+    gap: Spacing.lg,
   },
   stageButton: {
     width: (width - 72) / 4,
     aspectRatio: 1,
-    backgroundColor: '#e8f4ff',
-    borderRadius: 12,
+    backgroundColor: Colors.light.primaryLight,
+    borderRadius: BorderRadius.lg,
     justifyContent: 'center',
     alignItems: 'center',
-    borderWidth: 1,
-    borderColor: '#b3d9ff',
+    borderWidth: 2,
+    borderColor: Colors.light.primary,
+    ...Shadows.xs,
   },
-  stageButtonActive: {
-    backgroundColor: '#0066cc',
-    borderColor: '#0052a3',
+  stageButtonDisabled: {
+    backgroundColor: Colors.light.backgroundAlt,
+    borderColor: Colors.light.border,
+    opacity: 0.6,
+  },
+  stageButtonCompleted: {
+    backgroundColor: Colors.light.success,
+    borderColor: Colors.light.success,
+  },
+  stageBadge: {
+    position: 'absolute',
+    top: -8,
+    right: -8,
+    backgroundColor: Colors.light.success,
+    color: '#fff',
+    fontSize: 12,
+    fontWeight: '700',
+    width: 24,
+    height: 24,
+    borderRadius: 12,
+    textAlign: 'center',
+    lineHeight: 24,
   },
   stageButtonNumber: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#0066cc',
-  },
-  stageButtonActive: {
-    backgroundColor: '#0066cc',
-    borderColor: '#0052a3',
-  },
-  stageButtonNumber: {
-    fontSize: 18,
-    fontWeight: '700',
-    color: '#0066cc',
-  },
-  stageButtonActive: {
-    backgroundColor: '#0066cc',
-    borderColor: '#0052a3',
+    color: Colors.light.primary,
   },
   stageLock: {
-    fontSize: 16,
-    marginTop: 4,
+    fontSize: 14,
+    marginTop: Spacing.sm,
   },
-  infoBox: {
-    marginHorizontal: 24,
-    marginTop: 24,
-    marginBottom: 40,
-    paddingHorizontal: 16,
-    paddingVertical: 12,
-    backgroundColor: '#fff8f0',
+  tipsBox: {
+    flexDirection: 'row',
+    padding: Spacing.lg,
+    backgroundColor: Colors.light.primaryLight,
     borderLeftWidth: 4,
-    borderLeftColor: '#ff9500',
-    borderRadius: 8,
+    borderLeftColor: Colors.light.warning,
+    borderRadius: BorderRadius.lg,
+    marginBottom: Spacing.xl,
   },
-  infoText: {
+  tipsEmoji: {
+    fontSize: 24,
+    marginRight: Spacing.lg,
+  },
+  tipsText: {
+    flex: 1,
     fontSize: 13,
-    color: '#666',
+    color: Colors.light.text,
     lineHeight: 20,
+    fontWeight: '500',
   },
 
   // Test Screen
@@ -492,136 +532,153 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: Colors.light.background,
   },
   loadingText: {
     fontSize: 16,
-    color: '#666',
+    color: Colors.light.textSecondary,
+    fontWeight: '500',
   },
   testHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingHorizontal: 24,
-    paddingTop: 16,
-    paddingBottom: 12,
+    paddingHorizontal: Spacing.xl,
+    paddingTop: Spacing.lg,
+    paddingBottom: Spacing.md,
+    backgroundColor: Colors.light.surfaceCard,
+    borderBottomWidth: 1,
+    borderBottomColor: Colors.light.border,
   },
   backButton: {
     fontSize: 14,
-    color: '#0066cc',
+    color: Colors.light.primary,
     fontWeight: '600',
   },
   stageTitle: {
     fontSize: 18,
-    fontWeight: 'bold',
-    color: '#333',
+    fontWeight: '700',
+    color: Colors.light.text,
   },
   progressText: {
     fontSize: 13,
-    color: '#999',
+    color: Colors.light.textSecondary,
   },
   progressBarContainer: {
-    marginHorizontal: 24,
-    marginBottom: 24,
+    marginHorizontal: Spacing.xl,
+    marginBottom: Spacing.xl,
+    marginTop: Spacing.lg,
   },
   questionContainer: {
-    marginHorizontal: 24,
-    marginBottom: 24,
-    paddingHorizontal: 16,
-    paddingVertical: 24,
-    backgroundColor: '#fff',
-    borderRadius: 12,
+    marginHorizontal: Spacing.xl,
+    marginBottom: Spacing.xl,
+    paddingHorizontal: Spacing.lg,
+    paddingVertical: Spacing.xl,
+    backgroundColor: Colors.light.surfaceCard,
+    borderRadius: BorderRadius.lg,
     alignItems: 'center',
+    ...Shadows.sm,
   },
   questionLabel: {
     fontSize: 14,
-    color: '#999',
-    marginBottom: 12,
+    color: Colors.light.textSecondary,
+    marginBottom: Spacing.lg,
+    fontWeight: '500',
   },
   word: {
-    fontSize: 32,
-    fontWeight: 'bold',
-    color: '#333',
-    marginBottom: 4,
+    fontSize: 36,
+    fontWeight: '800',
+    color: Colors.light.primary,
+    marginBottom: Spacing.sm,
   },
   wordReading: {
-    fontSize: 14,
-    color: '#666',
+    fontSize: 15,
+    color: Colors.light.text,
+    fontWeight: '500',
   },
   optionsContainer: {
-    marginHorizontal: 24,
-    marginBottom: 24,
-    gap: 12,
+    marginHorizontal: Spacing.xl,
+    marginBottom: Spacing.xl,
+    gap: Spacing.lg,
   },
   optionButton: {
-    paddingHorizontal: 16,
-    paddingVertical: 14,
-    backgroundColor: '#fff',
-    borderRadius: 8,
-    borderWidth: 1,
-    borderColor: '#ddd',
+    minHeight: 56,
+    paddingHorizontal: Spacing.lg,
+    paddingVertical: Spacing.lg,
+    backgroundColor: Colors.light.surfaceCard,
+    borderRadius: BorderRadius.lg,
+    borderWidth: 2,
+    borderColor: Colors.light.border,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+    ...Shadows.xs,
   },
   optionButtonSelected: {
-    borderColor: '#0066cc',
-    backgroundColor: '#e6f4ff',
+    borderColor: Colors.light.primary,
+    backgroundColor: Colors.light.primaryLight,
   },
   optionButtonCorrect: {
-    backgroundColor: '#d4edda',
-    borderColor: '#28a745',
+    backgroundColor: '#dcfce7',
+    borderColor: Colors.light.success,
   },
   optionButtonWrong: {
-    backgroundColor: '#f8d7da',
-    borderColor: '#dc3545',
+    backgroundColor: '#fee2e2',
+    borderColor: Colors.light.error,
   },
   optionText: {
     fontSize: 15,
-    color: '#333',
+    color: Colors.light.text,
     fontWeight: '500',
   },
   optionTextSelected: {
-    color: '#0066cc',
+    color: Colors.light.primary,
+    fontWeight: '600',
   },
   resultEmoji: {
-    fontSize: 18,
+    fontSize: 20,
   },
   feedbackContainer: {
-    marginHorizontal: 24,
-    marginBottom: 24,
-    paddingHorizontal: 16,
-    paddingVertical: 14,
-    backgroundColor: '#fff8f0',
-    borderRadius: 8,
+    marginHorizontal: Spacing.xl,
+    marginBottom: Spacing.xl,
+    paddingHorizontal: Spacing.lg,
+    paddingVertical: Spacing.lg,
+    backgroundColor: Colors.light.primaryLight,
+    borderLeftWidth: 4,
+    borderLeftColor: Colors.light.warning,
+    borderRadius: BorderRadius.lg,
   },
   feedbackLabel: {
     fontSize: 12,
-    color: '#999',
-    marginBottom: 8,
+    color: Colors.light.textSecondary,
+    marginBottom: Spacing.md,
+    fontWeight: '600',
   },
   exampleSentence: {
-    fontSize: 14,
-    color: '#333',
+    fontSize: 15,
+    color: Colors.light.text,
     fontWeight: '500',
-    lineHeight: 20,
-    marginBottom: 8,
+    lineHeight: 22,
+    marginBottom: Spacing.md,
   },
   exampleTranslation: {
-    fontSize: 13,
-    color: '#666',
-    lineHeight: 18,
+    fontSize: 14,
+    color: Colors.light.textSecondary,
+    lineHeight: 20,
   },
   nextButton: {
-    marginHorizontal: 24,
-    marginBottom: 40,
-    paddingVertical: 12,
-    backgroundColor: '#0066cc',
-    borderRadius: 8,
+    marginHorizontal: Spacing.xl,
+    marginBottom: Spacing.xl,
+    minHeight: 48,
+    backgroundColor: Colors.light.primary,
+    borderRadius: BorderRadius.lg,
+    justifyContent: 'center',
     alignItems: 'center',
+    ...Shadows.md,
   },
   nextButtonText: {
     fontSize: 16,
-    fontWeight: '600',
+    fontWeight: '700',
     color: '#fff',
   },
 
@@ -630,46 +687,53 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    paddingHorizontal: 24,
+    paddingHorizontal: Spacing.xl,
+    backgroundColor: Colors.light.background,
   },
   resultTitle: {
-    fontSize: 32,
-    fontWeight: 'bold',
-    color: '#333',
-    marginBottom: 24,
+    fontSize: 36,
+    fontWeight: '800',
+    color: Colors.light.text,
+    marginBottom: Spacing.xl,
+    textAlign: 'center',
   },
   resultStats: {
     flexDirection: 'row',
-    gap: 16,
-    marginBottom: 32,
+    gap: Spacing.lg,
+    marginBottom: Spacing.xl,
+    width: '100%',
   },
   resultStatItem: {
     flex: 1,
-    paddingVertical: 20,
-    backgroundColor: '#fff',
-    borderRadius: 12,
+    paddingVertical: Spacing.xl,
+    backgroundColor: Colors.light.surfaceCard,
+    borderRadius: BorderRadius.lg,
     alignItems: 'center',
+    ...Shadows.sm,
   },
   resultStatValue: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: '#0066cc',
-    marginBottom: 4,
+    fontSize: 28,
+    fontWeight: '800',
+    color: Colors.light.primary,
+    marginBottom: Spacing.sm,
   },
   resultStatLabel: {
     fontSize: 12,
-    color: '#999',
+    color: Colors.light.textSecondary,
+    fontWeight: '600',
   },
   resultButton: {
     width: '100%',
-    paddingVertical: 12,
-    backgroundColor: '#0066cc',
-    borderRadius: 8,
+    minHeight: 48,
+    backgroundColor: Colors.light.primary,
+    borderRadius: BorderRadius.lg,
+    justifyContent: 'center',
     alignItems: 'center',
+    ...Shadows.md,
   },
   resultButtonText: {
     fontSize: 16,
-    fontWeight: '600',
+    fontWeight: '700',
     color: '#fff',
   },
 });

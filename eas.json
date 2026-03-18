@@ -1,0 +1,73 @@
+{
+  "cli": {
+    "version": ">= 2.0.0",
+    "promptToConfigurePushNotifications": false,
+    "requireCommitMessage": true
+  },
+  "build": {
+    "development": {
+      "developmentClient": true,
+      "distribution": "internal",
+      "channel": "development",
+      "env": {
+        "EXPO_PUBLIC_ENV": "development",
+        "NODE_ENV": "development"
+      },
+      "ios": {
+        "resourceClass": "m1"
+      },
+      "android": {
+        "buildType": "apk",
+        "resourceClass": "medium"
+      }
+    },
+    "preview": {
+      "distribution": "internal",
+      "channel": "staging",
+      "env": {
+        "EXPO_PUBLIC_ENV": "staging",
+        "NODE_ENV": "production"
+      },
+      "ios": {
+        "resourceClass": "m1",
+        "simulator": false
+      },
+      "android": {
+        "buildType": "aab",
+        "resourceClass": "medium"
+      }
+    },
+    "production": {
+      "distribution": "store",
+      "channel": "production",
+      "env": {
+        "EXPO_PUBLIC_ENV": "production",
+        "NODE_ENV": "production"
+      },
+      "ios": {
+        "resourceClass": "m1",
+        "simulator": false
+      },
+      "android": {
+        "buildType": "aab",
+        "resourceClass": "medium"
+      }
+    }
+  },
+  "submit": {
+    "production": {
+      "ios": {
+        "ascAppId": "6739265486",
+        "appleId": "$APPLE_ID",
+        "applePassword": "$APPLE_PASSWORD",
+        "appleTeamId": "$APPLE_TEAM_ID",
+        "bundleIdentifier": "com.eigomaster.app"
+      },
+      "android": {
+        "androidPackage": "com.eigomaster.app",
+        "serviceAccountJson": "$GOOGLE_PLAY_API_KEY",
+        "track": "internal"
+      }
+    }
+  }
+}

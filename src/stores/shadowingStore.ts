@@ -1,4 +1,7 @@
 import { create } from 'zustand';
+import { supabase } from '@/src/lib/supabase';
+import { realtimeSyncManager } from '@/src/lib/realtimeSyncManager';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export interface ShadowingRecord {
   id: string;
@@ -24,6 +27,10 @@ export interface ShadowingSession {
 }
 
 interface ShadowingState {
+  // User context
+  userId: string | null;
+  setUserId: (userId: string | null) => void;
+
   // 現在のセッション
   currentSession: ShadowingSession | null;
   startSession: (attemptId: string, questionId: string, script: string) => void;
@@ -51,9 +58,17 @@ interface ShadowingState {
     overall: number;
   };
   getImprovement: () => number; // ラウンド1から7への改善率
+
+  // Sync methods
+  syncToSupabase: () => Promise<void>;
+  loadFromSupabase: () => Promise<void>;
+  initializeSync: (userId: string) => Promise<void>;
 }
 
 export const useShadowingStore = create<ShadowingState>((set, get) => ({
+  userId: null,
+  setUserId: (userId) => set({ userId }),
+
   currentSession: null,
   startSession: (attemptId, questionId, script) => {
     set({
@@ -82,6 +97,7 @@ export const useShadowingStore = create<ShadowingState>((set, get) => ({
           completedAt: new Date(),
         },
       });
+      get().syncToSupabase();
     }
   },
 
@@ -155,5 +171,140 @@ export const useShadowingStore = create<ShadowingState>((set, get) => ({
     }
 
     return Math.max(0, last.accuracyScore - first.accuracyScore);
+  },
+
+  syncToSupabase: async () => {
+    const { userId, currentSession } = get();
+    if (!userId || !currentSession) return;
+
+    try {
+      const recordsToSave = currentSession.records.map((record) => ({
+        id: record.id,
+        user_id: userId,
+        attempt_id: record.attemptId,
+        round_number: record.roundNumber,
+        audio_url: record.audioUrl,
+        transcript: record.transcript,
+        accuracy_score: record.accuracyScore,
+        rhythm_score: record.rhythmScore,
+        pronunciation_score: record.pronunciationScore,
+        feedback: record.feedback,
+        created_at: record.createdAt.toISOString(),
+      }));
+
+      if (recordsToSave.length > 0) {
+        await supabase.from('shadowing_records').upsert(recordsToSave, {
+          onConflict: 'id',
+        });
+      }
+
+      await AsyncStorage.setItem(
+        `shadowing:${userId}`,
+        JSON.stringify({ currentSession })
+      );
+    } catch (error) {
+      console.error('[ShadowingStore] Sync to Supabase failed:', error);
+      realtimeSyncManager.queueChange('shadowing_records', 'INSERT', {
+        user_id: userId,
+        attempt_id: currentSession.attemptId,
+        records: currentSession.records,
+      });
+    }
+  },
+
+  loadFromSupabase: async () => {
+    const { userId } = get();
+    if (!userId) return;
+
+    try {
+      const { data } = await supabase
+        .from('shadowing_records')
+        .select('*')
+        .eq('user_id', userId)
+        .order('created_at', { ascending: true });
+
+      if (data && data.length > 0) {
+        const records: ShadowingRecord[] = data.map((item: any) => ({
+          id: item.id,
+          attemptId: item.attempt_id,
+          roundNumber: item.round_number,
+          audioUrl: item.audio_url,
+          transcript: item.transcript,
+          accuracyScore: item.accuracy_score,
+          rhythmScore: item.rhythm_score,
+          pronunciationScore: item.pronunciation_score,
+          feedback: item.feedback,
+          createdAt: new Date(item.created_at),
+        }));
+
+        if (records.length > 0) {
+          const lastAttemptId = records[records.length - 1].attemptId;
+          const lastRecords = records.filter((r) => r.attemptId === lastAttemptId);
+
+          set({
+            currentSession: {
+              attemptId: lastAttemptId,
+              questionId: data[data.length - 1].question_id || '',
+              script: '',
+              records: lastRecords,
+              isCompleted: true,
+              startedAt: new Date(lastRecords[0].createdAt),
+              completedAt: new Date(lastRecords[lastRecords.length - 1].createdAt),
+            },
+          });
+        }
+        return;
+      }
+
+      const cached = await AsyncStorage.getItem(`shadowing:${userId}`);
+      if (cached) {
+        const parsed = JSON.parse(cached);
+        set(parsed);
+      }
+    } catch (error) {
+      console.error('[ShadowingStore] Load from Supabase failed:', error);
+      const cached = await AsyncStorage.getItem(`shadowing:${userId}`);
+      if (cached) {
+        const parsed = JSON.parse(cached);
+        set(parsed);
+      }
+    }
+  },
+
+  initializeSync: async (userId: string) => {
+    set({ userId });
+    await get().loadFromSupabase();
+
+    realtimeSyncManager.subscribe({
+      userId,
+      table: 'shadowing_records',
+      filter: `user_id=eq.${userId}`,
+      onUpdate: (data) => {
+        if (data) {
+          const { currentSession } = get();
+          const newRecord: ShadowingRecord = {
+            id: data.id,
+            attemptId: data.attempt_id,
+            roundNumber: data.round_number,
+            audioUrl: data.audio_url,
+            transcript: data.transcript,
+            accuracyScore: data.accuracy_score,
+            rhythmScore: data.rhythm_score,
+            pronunciationScore: data.pronunciation_score,
+            feedback: data.feedback,
+            createdAt: new Date(data.created_at),
+          };
+
+          if (currentSession && currentSession.attemptId === data.attempt_id) {
+            set({
+              currentSession: {
+                ...currentSession,
+                records: [...currentSession.records, newRecord],
+              },
+            });
+          }
+        }
+      },
+    });
   },
 }));

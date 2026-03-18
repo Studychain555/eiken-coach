@@ -1,7 +1,16 @@
 /**
  * AI スコアリング・添削サービス
  * Claude API を使用
+ * エラーハンドリング・リトライ機能付き
  */
+
+import { debugError, debugLog } from './debugUtils';
+import {
+  handleError,
+  safeJsonParse,
+  withRetry,
+  ErrorType,
+} from './errorHandler';
 
 export interface ScoringResult {
   accuracyScore: number; // 0-10
@@ -15,8 +24,12 @@ export interface ScoringResult {
   }>;
 }
 
+const TAG = 'AIScoringService';
+const API_TIMEOUT = 15000; // 15秒
+
 /**
  * Whisper で文字起こしした音読を Claude で評価
+ * リトライとフォールバック付き
  */
 export async function scoreShaddowingRecording(
   originalScript: string,
@@ -26,11 +39,44 @@ export async function scoreShaddowingRecording(
 ): Promise<ScoringResult> {
   // API キーがない場合はダミースコアを返す
   if (!apiKey) {
+    debugLog(TAG, 'No API key provided, returning dummy score');
     return generateDummyScore(originalScript, transcript, roundNumber);
   }
 
   try {
-    const prompt = `
+    return await withRetry(
+      () =>
+        callClaudeAPI(
+          originalScript,
+          transcript,
+          roundNumber,
+          apiKey
+        ),
+      {
+        maxAttempts: 2,
+        delayMs: 1000,
+        tag: TAG,
+      }
+    );
+  } catch (error) {
+    debugError(TAG, 'Failed to score shadowing recording', {
+      error: error instanceof Error ? error.message : error,
+      roundNumber,
+    });
+    return generateDummyScore(originalScript, transcript, roundNumber);
+  }
+}
+
+/**
+ * Claude API への実際の呼び出し
+ */
+async function callClaudeAPI(
+  originalScript: string,
+  transcript: string,
+  roundNumber: number,
+  apiKey: string
+): Promise<ScoringResult> {
+  const prompt = `
 You are an English pronunciation and listening expert. Evaluate the following shadowing (repetition) exercise.
 
 Original Script:
@@ -62,7 +108,16 @@ Provide your response in JSON format:
 }
 `;
 
-    // Claude API に送信
+  debugLog(TAG, 'Calling Claude API', {
+    roundNumber,
+    scriptLength: originalScript.length,
+  });
+
+  // API 呼び出しをタイムアウト付きで実行
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), API_TIMEOUT);
+
+  try {
     const response = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
       headers: {
@@ -80,38 +135,77 @@ Provide your response in JSON format:
           },
         ],
       }),
+      signal: controller.signal,
     });
 
     if (!response.ok) {
-      console.error('Claude API error:', response.statusText);
-      return generateDummyScore(originalScript, transcript, roundNumber);
+      const errorText = await response.text();
+      const error = handleError(
+        `Claude API error: ${response.status} ${response.statusText}`,
+        TAG,
+        { errorText, roundNumber }
+      );
+      throw new Error(error.message);
     }
 
-    const data = await response.json();
+    let data: any;
+    try {
+      data = await response.json();
+    } catch (parseError) {
+      handleError(
+        `Failed to parse Claude API response`,
+        TAG,
+        { parseError }
+      );
+      throw parseError;
+    }
+
+    // レスポンスの検証
+    if (!data.content || !Array.isArray(data.content) || data.content.length === 0) {
+      throw new Error('Invalid Claude API response format');
+    }
+
     const content = data.content[0].text;
+    if (!content || typeof content !== 'string') {
+      throw new Error('Claude API returned empty content');
+    }
 
     // JSON を抽出
     const jsonMatch = content.match(/\{[\s\S]*\}/);
     if (!jsonMatch) {
-      return generateDummyScore(originalScript, transcript, roundNumber);
+      debugError(TAG, 'Failed to extract JSON from Claude response', {
+        content: content.substring(0, 200),
+      });
+      throw new Error('Could not extract JSON from response');
     }
 
-    const result = JSON.parse(jsonMatch[0]);
-    return {
-      accuracyScore: Math.min(10, Math.max(0, result.accuracyScore || 5)),
-      rhythmScore: Math.min(10, Math.max(0, result.rhythmScore || 5)),
-      pronunciationScore: Math.min(10, Math.max(0, result.pronunciationScore || 5)),
-      feedback: result.feedback || 'フィードバックが生成されませんでした',
-      corrections: result.corrections || [],
+    // JSON をパース
+    const result = safeJsonParse(jsonMatch[0], null, TAG);
+    if (!result) {
+      throw new Error('Invalid JSON in Claude response');
+    }
+
+    // スコアの検証と正規化
+    const normalizeScore = (score: any, max: number = 10): number => {
+      const num = typeof score === 'number' ? score : 5;
+      return Math.min(max, Math.max(0, num));
     };
-  } catch (error) {
-    console.error('Error calling Claude API:', error);
-    return generateDummyScore(originalScript, transcript, roundNumber);
+
+    return {
+      accuracyScore: normalizeScore(result.accuracyScore),
+      rhythmScore: normalizeScore(result.rhythmScore),
+      pronunciationScore: normalizeScore(result.pronunciationScore),
+      feedback: result.feedback || 'フィードバックが生成されませんでした',
+      corrections: Array.isArray(result.corrections) ? result.corrections : [],
+    };
+  } finally {
+    clearTimeout(timeoutId);
   }
 }
 
 /**
  * ライティング提出を採点・添削
+ * エラーハンドリング・リトライ機能付き
  */
 export async function scoreWritingSubmission(
   topic: string,
@@ -132,11 +226,50 @@ export async function scoreWritingSubmission(
   modelAnswer: string;
 }> {
   if (!apiKey) {
+    debugLog(TAG, 'No API key provided, returning dummy writing score');
     return generateDummyWritingScore(topic, studentEssay);
   }
 
   try {
-    const prompt = `
+    return await withRetry(
+      () => callWritingEvaluationAPI(topic, studentEssay, apiKey),
+      {
+        maxAttempts: 2,
+        delayMs: 1000,
+        tag: TAG,
+      }
+    );
+  } catch (error) {
+    debugError(TAG, 'Failed to score writing submission', {
+      error: error instanceof Error ? error.message : error,
+      essayLength: studentEssay.length,
+    });
+    return generateDummyWritingScore(topic, studentEssay);
+  }
+}
+
+/**
+ * ライティング評価 API の実際の呼び出し
+ */
+async function callWritingEvaluationAPI(
+  topic: string,
+  studentEssay: string,
+  apiKey: string
+): Promise<{
+  contentScore: number;
+  structureScore: number;
+  vocabularyScore: number;
+  grammarScore: number;
+  totalScore: number;
+  feedback: string;
+  corrections: Array<{
+    original: string;
+    corrected: string;
+    explanation: string;
+  }>;
+  modelAnswer: string;
+}> {
+  const prompt = `
 You are an English writing teacher specialized in EIKEN Pre-1 (英検準1級) level essays.
 
 Essay Topic:
@@ -170,6 +303,15 @@ Provide response in JSON:
 }
 `;
 
+  debugLog(TAG, 'Calling writing evaluation API', {
+    topicLength: topic.length,
+    essayLength: studentEssay.length,
+  });
+
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), API_TIMEOUT);
+
+  try {
     const response = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
       headers: {
@@ -187,38 +329,74 @@ Provide response in JSON:
           },
         ],
       }),
+      signal: controller.signal,
     });
 
     if (!response.ok) {
-      return generateDummyWritingScore(topic, studentEssay);
+      const errorText = await response.text();
+      const error = handleError(
+        `Writing evaluation API error: ${response.status}`,
+        TAG,
+        { errorText }
+      );
+      throw new Error(error.message);
     }
 
-    const data = await response.json();
+    let data: any;
+    try {
+      data = await response.json();
+    } catch (parseError) {
+      handleError('Failed to parse writing evaluation response', TAG, {
+        parseError,
+      });
+      throw parseError;
+    }
+
+    if (!data.content || !Array.isArray(data.content) || data.content.length === 0) {
+      throw new Error('Invalid response format from writing evaluation API');
+    }
+
     const content = data.content[0].text;
+    if (!content || typeof content !== 'string') {
+      throw new Error('Writing evaluation API returned empty content');
+    }
 
     const jsonMatch = content.match(/\{[\s\S]*\}/);
     if (!jsonMatch) {
-      return generateDummyWritingScore(topic, studentEssay);
+      debugError(TAG, 'Failed to extract JSON from writing evaluation', {
+        content: content.substring(0, 200),
+      });
+      throw new Error('Could not extract JSON from writing evaluation');
     }
 
-    const result = JSON.parse(jsonMatch[0]);
+    const result = safeJsonParse(jsonMatch[0], null, TAG);
+    if (!result) {
+      throw new Error('Invalid JSON in writing evaluation response');
+    }
+
+    // スコアの検証と正規化
+    const normalizeWritingScore = (score: any, max: number): number => {
+      const num = typeof score === 'number' ? score : 2;
+      return Math.min(max, Math.max(0, num));
+    };
+
+    const contentScore = normalizeWritingScore(result.contentScore, 4);
+    const structureScore = normalizeWritingScore(result.structureScore, 4);
+    const vocabularyScore = normalizeWritingScore(result.vocabularyScore, 4);
+    const grammarScore = normalizeWritingScore(result.grammarScore, 4);
+
     return {
-      contentScore: Math.min(4, Math.max(0, result.contentScore || 2)),
-      structureScore: Math.min(4, Math.max(0, result.structureScore || 2)),
-      vocabularyScore: Math.min(4, Math.max(0, result.vocabularyScore || 2)),
-      grammarScore: Math.min(4, Math.max(0, result.grammarScore || 2)),
-      totalScore:
-        Math.min(4, Math.max(0, result.contentScore || 2)) +
-        Math.min(4, Math.max(0, result.structureScore || 2)) +
-        Math.min(4, Math.max(0, result.vocabularyScore || 2)) +
-        Math.min(4, Math.max(0, result.grammarScore || 2)),
+      contentScore,
+      structureScore,
+      vocabularyScore,
+      grammarScore,
+      totalScore: contentScore + structureScore + vocabularyScore + grammarScore,
       feedback: result.feedback || 'フィードバックがありません',
-      corrections: result.corrections || [],
+      corrections: Array.isArray(result.corrections) ? result.corrections : [],
       modelAnswer: result.modelAnswer || '',
     };
-  } catch (error) {
-    console.error('Error calling Claude API:', error);
-    return generateDummyWritingScore(topic, studentEssay);
+  } finally {
+    clearTimeout(timeoutId);
   }
 }
 

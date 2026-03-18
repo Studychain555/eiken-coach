@@ -1,5 +1,8 @@
 import { create } from 'zustand';
 import type { ListeningQuestion } from '@/src/lib/listeningData';
+import { supabase } from '@/src/lib/supabase';
+import { realtimeSyncManager } from '@/src/lib/realtimeSyncManager';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export interface ListeningAttempt {
   id: string;
@@ -18,6 +21,10 @@ export interface ListeningProgress {
 }
 
 interface ListeningState {
+  // User context
+  userId: string | null;
+  setUserId: (userId: string | null) => void;
+
   // 問題データ
   questions: ListeningQuestion[];
   setQuestions: (questions: ListeningQuestion[]) => void;
@@ -55,9 +62,17 @@ interface ListeningState {
   correctCount: number;
   getAccuracy: () => number;
   getTodayStats: () => { attempted: number; correct: number; accuracy: number };
+
+  // Sync methods
+  syncToSupabase: () => Promise<void>;
+  loadFromSupabase: () => Promise<void>;
+  initializeSync: (userId: string) => Promise<void>;
 }
 
 export const useListeningStore = create<ListeningState>((set, get) => ({
+  userId: null,
+  setUserId: (userId) => set({ userId }),
+
   questions: [],
   setQuestions: (questions) =>
     set({
@@ -71,7 +86,10 @@ export const useListeningStore = create<ListeningState>((set, get) => ({
   currentAttempt: null,
 
   progress: {},
-  loadProgress: (data) => set({ progress: data }),
+  loadProgress: (data) => {
+    set({ progress: data });
+    get().syncToSupabase();
+  },
 
   attempts: [],
 
@@ -169,5 +187,103 @@ export const useListeningStore = create<ListeningState>((set, get) => ({
       correct,
       accuracy: Math.round(accuracy),
     };
+  },
+
+  syncToSupabase: async () => {
+    const { userId, attempts, progress } = get();
+    if (!userId) return;
+
+    try {
+      // Save attempts
+      const attemptsToSave = attempts.map((attempt) => ({
+        id: attempt.id,
+        user_id: userId,
+        question_id: attempt.questionId,
+        selected_answer: attempt.selectedAnswer,
+        is_correct: attempt.isCorrect,
+        created_at: attempt.createdAt.toISOString(),
+      }));
+
+      if (attemptsToSave.length > 0) {
+        await supabase.from('listening_attempts').upsert(attemptsToSave, {
+          onConflict: 'id',
+        });
+      }
+
+      // Cache locally
+      await AsyncStorage.setItem(
+        `listening:${userId}`,
+        JSON.stringify({ attempts, progress })
+      );
+    } catch (error) {
+      console.error('[ListeningStore] Sync to Supabase failed:', error);
+      realtimeSyncManager.queueChange('listening_attempts', 'INSERT', {
+        user_id: userId,
+        attempts,
+      });
+    }
+  },
+
+  loadFromSupabase: async () => {
+    const { userId } = get();
+    if (!userId) return;
+
+    try {
+      const { data } = await supabase
+        .from('listening_attempts')
+        .select('*')
+        .eq('user_id', userId)
+        .order('created_at', { ascending: false })
+        .limit(100);
+
+      if (data && data.length > 0) {
+        const attempts: ListeningAttempt[] = data.map((item: any) => ({
+          id: item.id,
+          questionId: item.question_id,
+          selectedAnswer: item.selected_answer,
+          isCorrect: item.is_correct,
+          createdAt: new Date(item.created_at),
+        }));
+        set({ attempts });
+        return;
+      }
+
+      const cached = await AsyncStorage.getItem(`listening:${userId}`);
+      if (cached) {
+        const parsed = JSON.parse(cached);
+        set(parsed);
+      }
+    } catch (error) {
+      console.error('[ListeningStore] Load from Supabase failed:', error);
+      const cached = await AsyncStorage.getItem(`listening:${userId}`);
+      if (cached) {
+        const parsed = JSON.parse(cached);
+        set(parsed);
+      }
+    }
+  },
+
+  initializeSync: async (userId: string) => {
+    set({ userId });
+    await get().loadFromSupabase();
+
+    realtimeSyncManager.subscribe({
+      userId,
+      table: 'listening_attempts',
+      filter: `user_id=eq.${userId}`,
+      onUpdate: (data) => {
+        if (data) {
+          const { attempts } = get();
+          const newAttempt: ListeningAttempt = {
+            id: data.id,
+            questionId: data.question_id,
+            selectedAnswer: data.selected_answer,
+            isCorrect: data.is_correct,
+            createdAt: new Date(data.created_at),
+          };
+          set({ attempts: [newAttempt, ...attempts] });
+        }
+      },
+    });
   },
 }));
