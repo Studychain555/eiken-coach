@@ -12,7 +12,18 @@
     "test": "jest",
     "test:security": "jest src/lib/__tests__/securityManager.test.ts",
     "audit": "npm audit",
-    "audit:fix": "npm audit fix"
+    "audit:fix": "npm audit fix",
+    "build": "eas build --platform all --profile production",
+    "build:web": "expo export --platform web",
+    "build:ios": "eas build --platform ios --profile production",
+    "build:android": "eas build --platform android --profile production",
+    "submit": "eas submit --platform all --profile production",
+    "submit:ios": "eas submit --platform ios --profile production",
+    "submit:android": "eas submit --platform android --profile production",
+    "deploy": "bash ./scripts/deploy.sh",
+    "rollback": "bash ./scripts/rollback.sh",
+    "ci:test": "npm ci && npm run test && npm run lint",
+    "ci:build": "npm ci && npm run build"
   },
   "dependencies": {
     "@expo/vector-icons": "^15.0.3",
