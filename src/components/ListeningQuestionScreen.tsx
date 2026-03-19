@@ -35,11 +35,11 @@ export default function ListeningQuestionScreen({
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
   const { recordAttempt } = useListeningStore();
 
-  // SoundHelix のフォールバックURL
+  // Mixkit のフォールバックURL (CORS対応)
   const SOUNDHELIX_FALLBACK_URLS = [
-    'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3',
-    'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3',
-    'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3',
+    'https://assets.mixkit.co/active_storage/sfx/2874/2874-preview.mp3',
+    'https://assets.mixkit.co/active_storage/sfx/2875/2875-preview.mp3',
+    'https://assets.mixkit.co/active_storage/sfx/2876/2876-preview.mp3',
   ];
 
   const audioPlayer = useAudioPlayer({
