@@ -59,6 +59,16 @@ export const Colors = {
     progress: accentPurple,
     challenge: accentPink,
 
+    // Teacher Dashboard (新規)
+    sidebar: '#2E5090',
+    sidebarText: '#FFFFFF',
+    sidebarActive: '#4CAF50',
+    sidebarHover: 'rgba(76, 175, 80, 0.2)',
+    statsBackground: '#F5F9FF',
+    tableHeaderBg: '#E8EEF7',
+    accentGreen: '#4CAF50',
+    accentPink: '#E91E63',
+
     // Borders & Shadows
     border: '#e5e7eb',
     borderLight: '#f3f4f6',
