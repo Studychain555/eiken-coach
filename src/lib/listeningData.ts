@@ -17,7 +17,7 @@ export const LISTENING_SAMPLE_DATA: ListeningQuestion[] = [
   {
     id: '1',
     title: '会話問題 1',
-    audioUrl: 'data:audio/mpeg;base64,ID3BAAAAAAAjVGFnAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//7kGAAAB9AAAAAA//7kGAAAB9AAAAAA',
+    audioUrl: 'https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3',
     script: `
 Woman: Excuse me, do you work here at the bookstore?
 Man: Yes, I do. Can I help you?
