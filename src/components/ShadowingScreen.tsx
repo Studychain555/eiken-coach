@@ -253,9 +253,11 @@ export default function ShadowingScreen({
         </View>
 
         {/* Script */}
-        <View style={styles.scriptContainer}>
-          <Text style={styles.scriptLabel}>スクリプト</Text>
-          <Text style={styles.scriptText}>{script}</Text>
+        <View style={[styles.scriptContainer, isRecording && styles.scriptContainerExpanded]}>
+          {!isRecording && <Text style={styles.scriptLabel}>スクリプト</Text>}
+          <Text style={[styles.scriptText, isRecording && styles.scriptTextExpanded]}>
+            {script}
+          </Text>
         </View>
 
         {/* Audio Controls */}
@@ -411,6 +413,23 @@ const styles = StyleSheet.create({
     fontSize: 15,
     color: '#333',
     lineHeight: 22,
+  },
+  scriptContainerExpanded: {
+    flex: 1,
+    marginHorizontal: 16,
+    marginVertical: 24,
+    paddingHorizontal: 20,
+    paddingVertical: 28,
+    backgroundColor: '#f9f9f9',
+    borderRadius: 12,
+    borderWidth: 2,
+    borderColor: '#0099ff',
+  },
+  scriptTextExpanded: {
+    fontSize: 24,
+    fontWeight: '500',
+    color: '#111',
+    lineHeight: 36,
   },
   audioControlsContainer: {
     marginHorizontal: 24,
