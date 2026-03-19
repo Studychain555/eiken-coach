@@ -88,7 +88,7 @@ export default function WritingScreenRedesign() {
                 }}
               >
                 <View style={styles.promptHeader}>
-                  <Text style={styles.promptTitle}>{prompt.title}</Text>
+                  <Text style={styles.promptTitle}>{prompt.topic}</Text>
                   <Text style={styles.promptXp}>+{50 + idx * 10} XP</Text>
                 </View>
                 <View style={styles.promptFooter}>
@@ -125,8 +125,8 @@ export default function WritingScreenRedesign() {
 
         {/* プロンプト */}
         <View style={styles.promptBox}>
-          <Text style={styles.promptQuestion}>{prompt.title}</Text>
-          <Text style={styles.promptInstruction}>150-200単語で答えてください</Text>
+          <Text style={styles.promptQuestion}>{prompt.description}</Text>
+          <Text style={styles.promptInstruction}>{prompt.instructions}</Text>
         </View>
 
         {/* 入力エリア */}

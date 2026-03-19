@@ -36,12 +36,28 @@ export default function VocabularyScreenRedesign() {
   const [currentWordIdx, setCurrentWordIdx] = useState(0);
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const [showResult, setShowResult] = useState(false);
+  const [testOptions, setTestOptions] = useState<string[]>([]);
+
+  // Generate multiple choice options for vocabulary test
+  const generateTestOptions = (targetIdx: number) => {
+    const correctMeaning = words[targetIdx].meaning;
+    const shuffledWords = [...words].sort(() => Math.random() - 0.5);
+    const incorrectMeanings = shuffledWords
+      .filter((_, idx) => idx !== targetIdx)
+      .slice(0, 3)
+      .map(w => w.meaning);
+
+    const allOptions = [correctMeaning, ...incorrectMeanings].sort(() => Math.random() - 0.5);
+    setTestOptions(allOptions);
+  };
 
   useEffect(() => {
     if (words.length === 0) {
       setWords(VOCABULARY_SAMPLE_DATA.slice(0, 20));
+    } else if (screen === 'test') {
+      generateTestOptions(currentWordIdx);
     }
-  }, []);
+  }, [currentWordIdx, screen]);
 
   if (screen === 'stage') {
     return (
@@ -126,8 +142,8 @@ export default function VocabularyScreenRedesign() {
         {/* 中央：単語 */}
         <View style={styles.wordContainer}>
           <View style={styles.wordBox}>
-            <Text style={styles.word}>{word.english}</Text>
-            <Text style={styles.pronunciation}>{word.pronunciation}</Text>
+            <Text style={styles.word}>{word.word}</Text>
+            <Text style={styles.pronunciation}>{word.reading}</Text>
           </View>
 
           {/* 結果フィードバック */}
@@ -150,38 +166,42 @@ export default function VocabularyScreenRedesign() {
 
         {/* 下部：選択肢 */}
         <View style={styles.optionsContainer}>
-          {word.options?.map((option, idx) => (
-            <TouchableOpacity
-              key={idx}
-              style={[
-                styles.optionBtn,
-                selectedIndex === idx && showResult
-                  ? {
-                      backgroundColor: idx === 0 ? DuolingoColors.success : DuolingoColors.error,
-                      borderColor: idx === 0 ? DuolingoColors.success : DuolingoColors.error,
+          {testOptions?.map((option: string, idx: number) => {
+            const isCorrectAnswer = option === word.meaning;
+            const isSelected = selectedIndex === idx && showResult;
+            return (
+              <TouchableOpacity
+                key={idx}
+                style={[
+                  styles.optionBtn,
+                  isSelected
+                    ? {
+                        backgroundColor: isCorrectAnswer ? DuolingoColors.success : DuolingoColors.error,
+                        borderColor: isCorrectAnswer ? DuolingoColors.success : DuolingoColors.error,
+                      }
+                    : {},
+                ]}
+                onPress={() => {
+                  setSelectedIndex(idx);
+                  setShowResult(true);
+                  setTimeout(() => {
+                    if (currentWordIdx < words.length - 1) {
+                      setCurrentWordIdx(currentWordIdx + 1);
+                      setSelectedIndex(null);
+                      setShowResult(false);
+                    } else {
+                      setScreen('result');
                     }
-                  : {},
-              ]}
-              onPress={() => {
-                setSelectedIndex(idx);
-                setShowResult(true);
-                setTimeout(() => {
-                  if (currentWordIdx < words.length - 1) {
-                    setCurrentWordIdx(currentWordIdx + 1);
-                    setSelectedIndex(null);
-                    setShowResult(false);
-                  } else {
-                    setScreen('result');
-                  }
-                }, 1500);
-              }}
-              disabled={showResult}
-            >
-              <Text style={[styles.optionText, selectedIndex === idx && showResult && { color: '#fff' }]}>
-                {option}
-              </Text>
-            </TouchableOpacity>
-          ))}
+                  }, 1500);
+                }}
+                disabled={showResult}
+              >
+                <Text style={[styles.optionText, isSelected && { color: '#fff' }]}>
+                  {option}
+                </Text>
+              </TouchableOpacity>
+            );
+          })}
         </View>
 
         {/* ナビゲーション */}

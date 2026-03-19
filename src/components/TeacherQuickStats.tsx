@@ -142,7 +142,6 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     color: Colors.light.text,
     marginBottom: Spacing.md,
-    paddingBottomWidth: 1,
     paddingBottom: Spacing.md,
   },
   summaryItem: {

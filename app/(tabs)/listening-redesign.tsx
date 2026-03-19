@@ -173,9 +173,9 @@ export default function ListeningScreenRedesign() {
 
           {/* Answer Options with Visual Feedback */}
           <View style={styles.optionsSection}>
-            {question.options?.map((option, idx) => {
+            {question.choices?.map((option: string, idx: number) => {
               const isSelected = selectedIndex === idx && showResult;
-              const isCorrect = idx === 0;
+              const isCorrect = idx === question.correctAnswer;
 
               return (
                 <TouchableOpacity

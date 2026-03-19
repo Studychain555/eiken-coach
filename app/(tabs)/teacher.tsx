@@ -45,7 +45,7 @@ export default function TeacherDashboard() {
   const [assignmentForm, setAssignmentForm] = useState({
     title: '',
     description: '',
-    type: 'listening' as const,
+    type: 'listening' as 'listening' | 'vocabulary' | 'writing',
     dueDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
   });
 
@@ -296,7 +296,7 @@ export default function TeacherDashboard() {
                     <View
                       style={[
                         styles.progressBarFill,
-                        { width: student.progressRate + '%' },
+                        { width: `${student.progressRate}%` },
                       ]}
                     />
                   </View>
@@ -839,8 +839,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     borderTopWidth: 1,
     borderTopColor: '#f0f0f0',
-    paddingTopWidth: 1,
-    paddingTopColor: '#f0f0f0',
+    paddingTop: 12,
   },
   dueDate: {
     fontSize: 11,

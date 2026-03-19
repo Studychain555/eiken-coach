@@ -108,7 +108,7 @@ export default function ShadowingTutorial() {
   };
 
   const handleRegister = () => {
-    router.push('/(auth)/signup');
+    router.push('/(auth)/register');
   };
 
   return (
