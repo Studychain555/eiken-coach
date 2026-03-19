@@ -14,7 +14,7 @@ import ListeningQuestionScreen from '@/src/components/ListeningQuestionScreen';
 import ListeningResultScreen from '@/src/components/ListeningResultScreen';
 import ShadowingScreen from '@/src/components/ShadowingScreen';
 import type { ListeningQuestion } from '@/src/lib/listeningData';
-import { Colors, Spacing, BorderRadius, Shadows, Typography, DuolingoColors } from '@/constants/theme';
+import { Colors, Spacing, BorderRadius, Shadows, Typography, DuolingoColors, NaturalColors } from '@/constants/theme';
 import { EnhancedProgressBar } from '@/components/EnhancedProgressBar';
 import { XPRewardSystem } from '@/src/components/XPRewardSystem';
 import { DailyGoal } from '@/src/components/DailyGoal';
@@ -282,7 +282,7 @@ export default function ListeningScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.light.background,
+    backgroundColor: NaturalColors.background,
   },
   header: {
     paddingHorizontal: Spacing.xl,
@@ -291,14 +291,16 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 28,
-    fontWeight: '800',
-    color: Colors.light.text,
+    fontWeight: '700',
+    color: NaturalColors.textDark,
     marginBottom: Spacing.sm,
+    letterSpacing: 0.3,
   },
   subtitle: {
     fontSize: 14,
-    color: Colors.light.textSecondary,
+    color: NaturalColors.textMedium,
     fontWeight: '500',
+    lineHeight: 20,
   },
   section: {
     marginHorizontal: Spacing.xl,
@@ -318,10 +320,17 @@ const styles = StyleSheet.create({
   statBox: {
     flex: 1,
     paddingVertical: Spacing.lg,
-    backgroundColor: Colors.light.surfaceCard,
+    paddingHorizontal: Spacing.md,
+    backgroundColor: NaturalColors.cardBg,
     borderRadius: BorderRadius.lg,
+    borderWidth: 1,
+    borderColor: '#E8E6E1',
     alignItems: 'center',
-    ...Shadows.sm,
+    shadowColor: NaturalColors.shadowMedium,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.6,
+    shadowRadius: 8,
+    elevation: 2,
   },
   statEmoji: {
     fontSize: 24,
@@ -330,13 +339,14 @@ const styles = StyleSheet.create({
   statValue: {
     fontSize: 20,
     fontWeight: '700',
-    color: Colors.light.primary,
+    color: NaturalColors.primary,
     marginBottom: Spacing.xs,
   },
   statLabel: {
     fontSize: 12,
-    color: Colors.light.textSecondary,
+    color: NaturalColors.textLight,
     fontWeight: '500',
+    letterSpacing: 0.2,
   },
   sectionTitle: {
     fontSize: 18,
@@ -353,23 +363,29 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     paddingHorizontal: Spacing.lg,
     paddingVertical: Spacing.lg,
-    backgroundColor: Colors.light.surfaceCard,
+    backgroundColor: NaturalColors.cardBg,
     borderRadius: BorderRadius.lg,
     marginBottom: Spacing.lg,
-    borderLeftWidth: 4,
-    borderLeftColor: Colors.light.border,
+    borderWidth: 1,
+    borderColor: '#E8E6E1',
     alignItems: 'flex-start',
-    ...Shadows.xs,
+    shadowColor: NaturalColors.shadowLight,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.8,
+    shadowRadius: 6,
+    elevation: 1,
   },
   questionCardCompleted: {
-    backgroundColor: Colors.light.primaryLight,
-    borderLeftColor: Colors.light.success,
+    backgroundColor: '#F0F7F5',
+    borderColor: NaturalColors.success,
   },
   questionCardNumber: {
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: Colors.light.primaryLight,
+    backgroundColor: '#E8F4F4',
+    borderWidth: 2,
+    borderColor: NaturalColors.primary,
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: Spacing.lg,
@@ -377,7 +393,7 @@ const styles = StyleSheet.create({
   numberText: {
     fontSize: 12,
     fontWeight: '700',
-    color: Colors.light.primary,
+    color: NaturalColors.primary,
   },
   questionCardContent: {
     flex: 1,
@@ -391,8 +407,9 @@ const styles = StyleSheet.create({
   questionTitle: {
     fontSize: 15,
     fontWeight: '600',
-    color: Colors.light.text,
+    color: NaturalColors.textDark,
     flex: 1,
+    lineHeight: 20,
   },
   resultIcon: {
     fontSize: 20,

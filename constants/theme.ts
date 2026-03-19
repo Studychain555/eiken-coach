@@ -359,3 +359,35 @@ export const AnimationTimings = {
     easing: 'linear',
   },
 };
+
+// ==========================================
+// Natural, Warm Color Palette (AI感を消す)
+// ==========================================
+export const NaturalColors = {
+  // Primary & Secondary
+  primary: '#1B9BA4',           // Teal (calm, trustworthy)
+  secondary: '#E8DCC8',         // Warm beige (gentle, warm)
+  accent: '#7A9B8E',            // Sage green (natural, relax)
+
+  // Backgrounds
+  background: '#FAFBF9',        // Warm white (eye-friendly)
+  cardBg: '#FFFFFF',            // Pure white for cards
+  lightBg: '#F5F3EE',           // Warm light background
+
+  // Text
+  textDark: '#2D3436',          // Natural dark gray
+  textMedium: '#5A6B7A',        // Medium gray
+  textLight: '#8B95A5',         // Light gray
+  textHint: '#B8BFCA',          // Hint color
+
+  // Semantic
+  success: '#52A876',           // Warm green
+  warning: '#D4A574',           // Warm orange
+  error: '#C85C5C',             // Muted red
+  info: '#5A92A5',              // Calm blue
+
+  // Shadows (soft, natural)
+  shadowLight: 'rgba(0, 0, 0, 0.03)',
+  shadowMedium: 'rgba(0, 0, 0, 0.06)',
+  shadowDark: 'rgba(0, 0, 0, 0.10)',
+};
