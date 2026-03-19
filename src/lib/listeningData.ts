@@ -17,7 +17,7 @@ export const LISTENING_SAMPLE_DATA: ListeningQuestion[] = [
   {
     id: '1',
     title: '会話問題 1',
-    audioUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3',
+    audioUrl: 'data:audio/mpeg;base64,ID3BAAAAAAAjVGFnAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//7kGAAAB9AAAAAA//7kGAAAB9AAAAAA',
     script: `
 Woman: Excuse me, do you work here at the bookstore?
 Man: Yes, I do. Can I help you?

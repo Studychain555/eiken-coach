@@ -51,12 +51,15 @@ export default function ListeningScreenRedesign() {
           audioRef.current = new Audio(audioUrl);
         }
         audioRef.current.src = audioUrl;
-        await audioRef.current.play();
+        await audioRef.current.play().catch(() => {
+          // CORS エラーや再生エラーを無視（Web previewの制限）
+          console.warn('⚠️ Web preview では音声再生はサポートされていません。モバイルアプリで再生されます。');
+        });
       }
     } catch (error) {
-      console.error('❌ 音声再生エラー:', error);
+      console.warn('⚠️ 音声再生：', (error as Error).message);
     } finally {
-      setIsPlaying(false);
+      setTimeout(() => setIsPlaying(false), 1000);
     }
   };
 
