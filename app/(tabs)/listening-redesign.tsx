@@ -447,8 +447,8 @@ const styles = StyleSheet.create({
 
   timeBonusBar: {
     flex: 1,
-    height: 4,
-    backgroundColor: 'rgba(255, 255, 255, 0.3)',
+    height: 6,
+    backgroundColor: 'rgba(0, 0, 0, 0.15)',
     borderRadius: BorderRadius.full,
     overflow: 'hidden',
   },
@@ -456,13 +456,15 @@ const styles = StyleSheet.create({
   timeBonusFill: {
     height: '100%',
     backgroundColor: ShadotenColors.timeBonus,
+    borderRadius: BorderRadius.full,
   },
 
   timeBonusText: {
     fontSize: 12,
     fontWeight: '600',
     color: '#FFFFFF',
-    minWidth: 32,
+    minWidth: 35,
+    textAlign: 'right',
   },
 
   headerRight: {
@@ -572,12 +574,17 @@ const styles = StyleSheet.create({
   optionBtn: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: ShadotenColors.contentBg,
-    borderRadius: BorderRadius.md,
-    paddingHorizontal: Spacing.md,
-    paddingVertical: Spacing.md,
+    backgroundColor: '#FFFFFF',
+    borderRadius: BorderRadius.lg,
+    paddingHorizontal: Spacing.lg,
+    paddingVertical: Spacing.lg,
     borderWidth: 2,
-    borderColor: ShadotenColors.textLight,
+    borderColor: 'rgba(0, 0, 0, 0.08)',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.05,
+    shadowRadius: 2,
+    elevation: 1,
   },
 
   optionBtnCorrect: {
