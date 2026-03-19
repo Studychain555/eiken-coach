@@ -1,0 +1,11 @@
+id,word,reading,part_of_speech,meaning_jp,example_sentence,example_translation,difficulty,frequency,choice1_meaning,choice1_is_correct,choice2_meaning,choice2_is_correct,choice3_meaning,choice3_is_correct,choice4_meaning,choice4_is_correct,eiken_level
+132724fd-2588-40e9-98eb-c35c05becbaa,abolish,əˈbɑlɪʃ,verb,廃止する,The government abolished the old law.,政府は古い法律を廃止しました。,2,2,廃止する,True,減らす,False,忘れる,False,否定する,False,2nd
+bcfba965-d8f6-4971-90c1-45af2824b72c,abroad,əˈbrɔd,adverb,海外に,She lived abroad for five years.,彼女は5年間海外に住んでいました。,1,3,海外に,True,外側に,False,広く,False,公然と,False,2nd
+6a5535b0-a98d-4f70-8f10-1c4fc30de509,absence,ˈæbsəns,noun,欠席,His absence from the meeting was noticed.,彼の会議への欠席が気づかれました。,2,3,欠席,True,無視,False,延期,False,拒否,False,2nd
+0042285d-d46b-42f5-baa2-e04be73ae95e,abundance,əˈbʌndəns,noun,豊富,The abundance of resources in the region is remarkable.,その地域の豊富なリソースは注目に値します。,2,3,豊富,True,増加,False,富,False,存在,False,2nd
+f0dd0884-3cb8-41c1-9ac3-0fccbef1a595,abstract,ˈæbstrækt,adjective,抽象的な,Mathematics deals with abstract concepts.,数学は抽象的な概念を扱っています。,2,3,抽象的な,True,漠然とした,False,難しい,False,簡潔な,False,2nd
+f64275f7-66c9-458e-a9c3-a0bc0b3fee47,accelerate,ækˈseləreɪt,verb,加速する,The car accelerated on the highway.,車は高速道路で加速しました。,2,3,加速する,True,上昇する,False,始まる,False,完了する,False,2nd
+c1a02951-7924-407b-8c30-7d2207be4595,accent,ˈæksent,noun,口音,She speaks with a French accent.,彼女はフランス口音で話します。,1,2,口音,True,強調,False,違い,False,標識,False,2nd
+d06dacb8-9ee3-4898-815b-4a400f02f7a1,accept,əkˈsept,verb,受け入れる,I accept your offer.,あなたのオファーを受け入れます。,1,5,受け入れる,True,拒否する,False,延期する,False,検討する,False,2nd
+29ae6106-3b57-47cb-9603-3996ab6db476,access,ˈækses,noun,アクセス,Everyone has access to the library.,誰もが図書館にアクセスできます。,1,4,アクセス,True,到着,False,許可,False,機会,False,2nd
+fd8b4b53-0091-46dd-a5b2-776ca94f2688,accident,ˈæksɪdənt,noun,事故,The accident caused traffic delays.,事故は交通遅延を引き起こしました。,1,4,事故,True,計画,False,方法,False,原因,False,2nd

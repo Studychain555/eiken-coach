@@ -12,11 +12,13 @@ import {
   TouchableOpacity,
   Dimensions,
 } from 'react-native';
-import { Colors, Spacing, BorderRadius, DuolingoColors } from '@/constants/theme';
+import { Colors, Spacing, BorderRadius, DuolingoColors, NaturalColors } from '@/constants/theme';
+import { useAuthStore } from '@/src/stores/authStore';
 
 const { width, height } = Dimensions.get('window');
 
 export default function DemoScreen() {
+  const [selectedRole, setSelectedRole] = useState<'student' | 'teacher' | null>(null);
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [hearts, setHearts] = useState(3);
   const [xp, setXp] = useState(0);
@@ -24,6 +26,12 @@ export default function DemoScreen() {
   const [streak, setStreak] = useState(7);
   const [combo, setCombo] = useState(0);
   const [showResult, setShowResult] = useState<'correct' | 'incorrect' | null>(null);
+
+  // ロール選択ハンドラ
+  const handleSelectRole = (role: 'student' | 'teacher') => {
+    useAuthStore.setState({ role });
+    setSelectedRole(role);
+  };
 
   const questions = [
     { word: 'FLOURISH', meaning: '繁栄する', options: ['花を咲かせる', '繁栄する', '衰える', '枯れる'], correct: 1 },
@@ -80,6 +88,59 @@ export default function DemoScreen() {
     setShowResult(null);
   };
 
+  // ロール選択画面
+  if (!selectedRole) {
+    return (
+      <SafeAreaView style={styles.roleSelectContainer}>
+        <View style={styles.roleSelectContent}>
+          {/* ヘッダー */}
+          <Text style={styles.roleSelectTitle}>🧪 デモモード</Text>
+          <Text style={styles.roleSelectSubtitle}>
+            どのロールでテストしますか？
+          </Text>
+
+          {/* Student ボタン */}
+          <TouchableOpacity
+            style={[styles.roleButton, styles.studentButton]}
+            onPress={() => handleSelectRole('student')}
+          >
+            <Text style={styles.roleButtonEmoji}>🎓</Text>
+            <View style={styles.roleButtonContent}>
+              <Text style={styles.roleButtonTitle}>生徒として開始</Text>
+              <Text style={styles.roleButtonDesc}>
+                リスニング、単語、ライティング学習
+              </Text>
+            </View>
+            <Text style={styles.roleButtonArrow}>→</Text>
+          </TouchableOpacity>
+
+          {/* Teacher ボタン */}
+          <TouchableOpacity
+            style={[styles.roleButton, styles.teacherButton]}
+            onPress={() => handleSelectRole('teacher')}
+          >
+            <Text style={styles.roleButtonEmoji}>👨‍🏫</Text>
+            <View style={styles.roleButtonContent}>
+              <Text style={styles.roleButtonTitle}>講師として開始</Text>
+              <Text style={styles.roleButtonDesc}>
+                学生管理、成績分析ダッシュボード
+              </Text>
+            </View>
+            <Text style={styles.roleButtonArrow}>→</Text>
+          </TouchableOpacity>
+
+          {/* 説明 */}
+          <View style={styles.infoBox}>
+            <Text style={styles.infoText}>
+              💡 切り替えたい場合は、画面を再読込してください
+            </Text>
+          </View>
+        </View>
+      </SafeAreaView>
+    );
+  }
+
+  // デモゲーム画面
   return (
     <SafeAreaView style={[styles.container, showResult === 'correct' && { backgroundColor: DuolingoColors.success + '15' }, showResult === 'incorrect' && { backgroundColor: DuolingoColors.error + '15' }]}>
       {/* ===== 上部：ゲーミフィケーション情報 ===== */}
@@ -218,6 +279,106 @@ export default function DemoScreen() {
 }
 
 const styles = StyleSheet.create({
+  // ===== ロール選択画面 =====
+  roleSelectContainer: {
+    flex: 1,
+    backgroundColor: NaturalColors.background,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+
+  roleSelectContent: {
+    width: '100%',
+    maxWidth: 400,
+    paddingHorizontal: Spacing.xl,
+  },
+
+  roleSelectTitle: {
+    fontSize: 32,
+    fontWeight: '800',
+    color: NaturalColors.textDark,
+    textAlign: 'center',
+    marginBottom: Spacing.sm,
+  },
+
+  roleSelectSubtitle: {
+    fontSize: 16,
+    color: NaturalColors.textMedium,
+    textAlign: 'center',
+    marginBottom: Spacing.xl,
+    fontWeight: '500',
+  },
+
+  roleButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: Spacing.lg,
+    paddingVertical: Spacing.xl,
+    borderRadius: BorderRadius.lg,
+    marginBottom: Spacing.lg,
+    borderWidth: 2,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+    elevation: 3,
+  },
+
+  studentButton: {
+    backgroundColor: 'rgba(82, 168, 118, 0.1)',
+    borderColor: '#52A876',
+  },
+
+  teacherButton: {
+    backgroundColor: 'rgba(27, 155, 164, 0.1)',
+    borderColor: NaturalColors.primary,
+  },
+
+  roleButtonEmoji: {
+    fontSize: 40,
+    marginRight: Spacing.lg,
+  },
+
+  roleButtonContent: {
+    flex: 1,
+  },
+
+  roleButtonTitle: {
+    fontSize: 18,
+    fontWeight: '700',
+    color: NaturalColors.textDark,
+    marginBottom: Spacing.xs,
+  },
+
+  roleButtonDesc: {
+    fontSize: 13,
+    color: NaturalColors.textMedium,
+    fontWeight: '500',
+  },
+
+  roleButtonArrow: {
+    fontSize: 24,
+    color: NaturalColors.textMedium,
+    marginLeft: Spacing.md,
+  },
+
+  infoBox: {
+    backgroundColor: 'rgba(90, 146, 165, 0.1)',
+    borderLeftWidth: 4,
+    borderLeftColor: '#5A92A5',
+    paddingHorizontal: Spacing.lg,
+    paddingVertical: Spacing.md,
+    borderRadius: BorderRadius.md,
+    marginTop: Spacing.xl,
+  },
+
+  infoText: {
+    fontSize: 13,
+    color: '#5A92A5',
+    fontWeight: '500',
+  },
+
+  // ===== デモゲーム画面 =====
   container: {
     flex: 1,
     backgroundColor: '#FFFFFF',

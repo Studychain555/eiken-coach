@@ -18,10 +18,13 @@ import { XPRewardSystem } from '@/src/components/XPRewardSystem';
 import { DailyGoal } from '@/src/components/DailyGoal';
 import { StreakBanner } from '@/src/components/StreakBanner';
 import { ComboCounter } from '@/src/components/ComboCounter';
+import { EIKENLevelSelector } from '@/src/components/EIKENLevelSelector';
+import { useEIKENVocabStore } from '@/src/stores/eikenVocabularyStore';
+import { EIKENLevel, EIKENLevelLabels } from '@/src/lib/eiken-vocabulary-schema';
 
 const { width } = Dimensions.get('window');
 
-type Screen = 'stage-select' | 'test' | 'result';
+type Screen = 'level-select' | 'stage-select' | 'test' | 'result';
 
 export default function VocabularyScreen() {
   const router = useRouter();
@@ -43,7 +46,8 @@ export default function VocabularyScreen() {
     comboCount,
   } = useVocabularyStore();
 
-  const [screen, setScreen] = useState<Screen>('stage-select');
+  const { selectedLevel, setSelectedLevel, loadWordsForLevel } = useEIKENVocabStore();
+  const [screen, setScreen] = useState<Screen>('level-select');
 
   useEffect(() => {
     // 初期化：単語データをロード
@@ -55,6 +59,12 @@ export default function VocabularyScreen() {
   const stagesCount = 20;
   const wordsPerStage = 100;
 
+  const handleSelectLevel = (level: EIKENLevel) => {
+    setSelectedLevel(level);
+    loadWordsForLevel(level);
+    setScreen('stage-select');
+  };
+
   const handleStartStage = (stage: number) => {
     setCurrentStage(stage);
     setScreen('test');
@@ -63,6 +73,22 @@ export default function VocabularyScreen() {
   const handleBackToStageSelect = () => {
     setScreen('stage-select');
   };
+
+  const handleBackToLevelSelect = () => {
+    setScreen('level-select');
+  };
+
+  // Level Selection Screen
+  if (screen === 'level-select') {
+    return (
+      <SafeAreaView style={styles.container}>
+        <EIKENLevelSelector
+          selectedLevel={selectedLevel}
+          onLevelSelect={handleSelectLevel}
+        />
+      </SafeAreaView>
+    );
+  }
 
   if (screen === 'stage-select') {
     const stats = getTodayStats();
@@ -82,8 +108,18 @@ export default function VocabularyScreen() {
         <ScrollView showsVerticalScrollIndicator={false}>
           {/* Header */}
           <View style={styles.header}>
-            <Text style={styles.title}>📚 英単語マスター</Text>
-            <Text style={styles.subtitle}>英検準1級 頻出単語</Text>
+            <View style={styles.headerTop}>
+              <View>
+                <Text style={styles.title}>📚 英単語マスター</Text>
+                <Text style={styles.subtitle}>{EIKENLevelLabels[selectedLevel]}</Text>
+              </View>
+              <TouchableOpacity
+                style={styles.changeLevelButton}
+                onPress={handleBackToLevelSelect}
+              >
+                <Text style={styles.changeLevelButtonText}>レベル変更</Text>
+              </TouchableOpacity>
+            </View>
           </View>
 
           {/* Daily Goal Banner */}
@@ -791,6 +827,26 @@ const styles = StyleSheet.create({
   resultButtonText: {
     fontSize: 16,
     fontWeight: '700',
+    color: '#fff',
+  },
+
+  // Header enhancements for level selection
+  headerTop: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
+  },
+  changeLevelButton: {
+    paddingHorizontal: Spacing.md,
+    paddingVertical: Spacing.sm,
+    backgroundColor: Colors.light.primary,
+    borderRadius: BorderRadius.full,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  changeLevelButtonText: {
+    fontSize: 12,
+    fontWeight: '600',
     color: '#fff',
   },
 });

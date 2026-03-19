@@ -408,29 +408,180 @@ function generateDummyScore(
   transcript: string,
   roundNumber: number
 ): ScoringResult {
-  // ラウンドが進むにつれてスコアが上がる
-  const baseScore = 4 + roundNumber;
-  const variance = Math.random() * 2 - 1;
+  // スクリプトと転写内容を比較して具体的なフィードバックを生成
+  const scriptWords = script.toLowerCase().split(/\s+/);
+  const transcriptWords = transcript.toLowerCase().split(/\s+/);
+
+  // 一致率を計算（簡易版）
+  let matchCount = 0;
+  for (let i = 0; i < Math.min(scriptWords.length, transcriptWords.length); i++) {
+    if (scriptWords[i] === transcriptWords[i]) {
+      matchCount++;
+    }
+  }
+
+  const accuracyRate = scriptWords.length > 0
+    ? (matchCount / scriptWords.length) * 100
+    : 0;
+
+  // ラウンドが進むにつれてスコアが上がる（精度も反映）
+  const baseScore = 3 + roundNumber + (accuracyRate / 20);
+  const variance = Math.random() * 1.5 - 0.75;
+
+  const accuracyScore = Math.min(10, Math.max(0, baseScore + variance));
+  const rhythmScore = Math.min(10, Math.max(0, baseScore + variance * 0.8));
+  const pronunciationScore = Math.min(10, Math.max(0, baseScore + variance * 0.7));
+
+  // スクリプトと異なる単語を見つける
+  const corrections = findDifferences(script, transcript);
+
+  // スコアに基づいた具体的なフィードバックを生成
+  const feedback = generateSpecificFeedback(
+    accuracyScore,
+    rhythmScore,
+    pronunciationScore,
+    roundNumber,
+    scriptWords.length,
+    transcriptWords.length,
+    corrections
+  );
 
   return {
-    accuracyScore: Math.min(10, Math.max(0, baseScore + variance)),
-    rhythmScore: Math.min(10, Math.max(0, baseScore + variance)),
-    pronunciationScore: Math.min(10, Math.max(0, baseScore + variance)),
-    feedback: `ラウンド${roundNumber}の音読評価です。${
-      roundNumber < 4
-        ? 'もっと正確に話しましょう。'
-        : roundNumber < 7
-        ? 'だいぶ良くなってきました！'
-        : '素晴らしい進歩です！'
-    }`,
-    corrections: [
-      {
-        original: script.split(' ')[0] || 'word',
-        corrected: transcript.split(' ')[0] || 'word',
-        explanation: '発音に注意しましょう',
-      },
-    ],
+    accuracyScore,
+    rhythmScore,
+    pronunciationScore,
+    feedback,
+    corrections,
   };
+}
+
+/**
+ * スクリプトと転写の違いを見つけて、修正提案を生成
+ */
+function findDifferences(
+  script: string,
+  transcript: string
+): Array<{ original: string; corrected: string; explanation: string }> {
+  const scriptWords = script.split(/\s+/).filter(w => w);
+  const transcriptWords = transcript.split(/\s+/).filter(w => w);
+  const corrections: Array<{ original: string; corrected: string; explanation: string }> = [];
+
+  // 最初の3つの異なる単語を見つける
+  let diffCount = 0;
+  for (let i = 0; i < Math.min(scriptWords.length, transcriptWords.length) && diffCount < 3; i++) {
+    if (scriptWords[i].toLowerCase() !== transcriptWords[i].toLowerCase()) {
+      corrections.push({
+        original: scriptWords[i],
+        corrected: transcriptWords[i],
+        explanation: `"${scriptWords[i]}" の発音をもう一度確認してください。`,
+      });
+      diffCount++;
+    }
+  }
+
+  // 長さが大きく異なる場合は注意
+  if (Math.abs(scriptWords.length - transcriptWords.length) > 2) {
+    const reason = scriptWords.length > transcriptWords.length
+      ? 'いくつかの単語を抜かしてしまいました'
+      : '追加の単語が含まれています';
+    if (corrections.length > 0) {
+      corrections[0].explanation += `。また、${reason}。`;
+    } else {
+      corrections.push({
+        original: '全体',
+        corrected: '確認要',
+        explanation: reason,
+      });
+    }
+  }
+
+  // フォールバック
+  if (corrections.length === 0) {
+    corrections.push({
+      original: scriptWords[0] || 'word',
+      corrected: transcriptWords[0] || 'word',
+      explanation: 'より自然な流暢さを心がけてください。',
+    });
+  }
+
+  return corrections;
+}
+
+/**
+ * スコアに基づいた具体的なフィードバックを生成
+ */
+function generateSpecificFeedback(
+  accuracyScore: number,
+  rhythmScore: number,
+  pronunciationScore: number,
+  roundNumber: number,
+  scriptWordCount: number,
+  transcriptWordCount: number,
+  corrections: Array<{ original: string; corrected: string; explanation: string }>
+): string {
+  const overallScore = (accuracyScore + rhythmScore + pronunciationScore) / 3;
+  const feedbackParts: string[] = [];
+
+  // ラウンド番号による進捗メッセージ
+  feedbackParts.push(`【ラウンド${roundNumber}の詳細評価】\n`);
+
+  // 正確性に関するフィードバック
+  if (accuracyScore >= 8) {
+    feedbackParts.push('✅ 正確性: スクリプトにほぼ完全に一致しています。素晴らしい！');
+  } else if (accuracyScore >= 6) {
+    feedbackParts.push(`✓ 正確性: ${Math.round(accuracyScore * 10)}% の正確さです。もう少し細部に注意を払いましょう。`);
+    if (corrections.length > 0) {
+      feedbackParts.push(`特に「${corrections[0].original}」の部分を確認してください。`);
+    }
+  } else if (accuracyScore >= 4) {
+    feedbackParts.push(`△ 正確性: ${Math.round(accuracyScore * 10)}% の正確さです。いくつかの単語の発音に改善の余地があります。`);
+  } else {
+    feedbackParts.push(`✗ 正確性: スクリプトとの一致度が低いです。もう一度ゆっくり聞いて、丁寧に繰り返してください。`);
+  }
+
+  // リズムに関するフィードバック
+  if (rhythmScore >= 7) {
+    feedbackParts.push('🎵 リズム: 流暢で自然なリズムです。');
+  } else if (rhythmScore >= 5) {
+    feedbackParts.push('🎵 リズム: リズムはまあまあです。もう少し速度を調整するといいでしょう。');
+  } else {
+    feedbackParts.push('🎵 リズム: リズムが不安定です。スクリプトの音声を何度も聞いて、パターンを学びましょう。');
+  }
+
+  // 発音に関するフィードバック
+  if (pronunciationScore >= 7) {
+    feedbackParts.push('🗣️ 発音: 個々の単語の発音が正確です。');
+  } else if (pronunciationScore >= 5) {
+    feedbackParts.push('🗣️ 発音: 大体の発音は正しいですが、いくつかの音が不正確です。');
+  } else {
+    feedbackParts.push('🗣️ 発音: 発音を改善する余地があります。各単語を個別に練習してみてください。');
+  }
+
+  // 単語数の不一致に関するフィードバック
+  if (Math.abs(scriptWordCount - transcriptWordCount) > 3) {
+    feedbackParts.push(`\n⚠️ 注意: スクリプトは${scriptWordCount}語ですが、発話は${transcriptWordCount}語です。スクリプト全体を発話するように心がけてください。`);
+  }
+
+  // 全体的なアドバイス
+  feedbackParts.push('\n💡 アドバイス: ');
+  if (overallScore >= 7.5) {
+    feedbackParts.push('素晴らしい進歩です！このままのペースで続けてください。');
+  } else if (overallScore >= 5.5) {
+    feedbackParts.push('着実に上達しています。もう少し練習を重ねると、もっと良くなるでしょう。');
+  } else {
+    feedbackParts.push('基礎の定着に時間をかけることをお勧めします。ゆっくりでいいので、正確な発音を心がけましょう。');
+  }
+
+  // ラウンド進行に応じた励まし
+  if (roundNumber <= 3) {
+    feedbackParts.push('ラウンド3までは基本を固める段階です。焦らず丁寧に。');
+  } else if (roundNumber <= 5) {
+    feedbackParts.push('後半に向けて速度を上げていく準備ができてきましたね。');
+  } else {
+    feedbackParts.push('最後のラウンドに向けて、流暢さを意識してみてください。');
+  }
+
+  return feedbackParts.join('\n');
 }
 
 async function generateDummyWritingScore(

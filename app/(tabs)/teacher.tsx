@@ -12,6 +12,7 @@ import {
   Alert,
 } from 'react-native';
 import { useAuthStore } from '@/src/stores/authStore';
+import TeacherAccessGuard from '@/src/components/TeacherAccessGuard';
 import { useTeacherStore } from '@/src/stores/teacherStore';
 import { TeacherAnalytics } from '@/src/components/TeacherAnalytics';
 import { TeacherLayout, type TabType } from '@/src/components/TeacherLayout';

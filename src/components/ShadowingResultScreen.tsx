@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   View,
   Text,
@@ -10,6 +10,8 @@ import {
 } from 'react-native';
 import { useShadowingStore } from '@/src/stores/shadowingStore';
 import { LineChart } from 'react-native-chart-kit';
+import DetailedShadowingFeedback from './DetailedShadowingFeedback';
+import { NaturalColors, Spacing, BorderRadius } from '@/constants/theme';
 
 interface Props {
   onBack: () => void;
@@ -21,6 +23,7 @@ const { width } = Dimensions.get('window');
 export default function ShadowingResultScreen({ onBack, onComplete }: Props) {
   const { currentSession, getAverageScores, getRecords, getImprovement } =
     useShadowingStore();
+  const [expandedRound, setExpandedRound] = useState<number | null>(null);
 
   if (!currentSession) {
     return (
@@ -133,33 +136,71 @@ export default function ShadowingResultScreen({ onBack, onComplete }: Props) {
           </View>
         )}
 
-        {/* Round Details */}
+        {/* Round Details - Summary View */}
         <View style={styles.detailsContainer}>
-          <Text style={styles.detailsTitle}>各ラウンドの評価</Text>
+          <Text style={styles.detailsTitle}>📊 各ラウンドの評価</Text>
           {records.map((record) => (
-            <View key={record.id} style={styles.roundDetail}>
+            <TouchableOpacity
+              key={record.id}
+              style={[
+                styles.roundDetail,
+                expandedRound === record.roundNumber && styles.roundDetailExpanded,
+              ]}
+              onPress={() =>
+                setExpandedRound(
+                  expandedRound === record.roundNumber ? null : record.roundNumber
+                )
+              }
+            >
               <View style={styles.roundDetailHeader}>
-                <Text style={styles.roundDetailRound}>
-                  Round {record.roundNumber}
-                </Text>
-                <Text style={styles.roundDetailScore}>
-                  正確性: {record.accuracyScore}/10
-                </Text>
+                <View>
+                  <Text style={styles.roundDetailRound}>
+                    ラウンド {record.roundNumber}
+                  </Text>
+                  <View style={styles.roundDetailScoresRow}>
+                    <Text style={styles.detailScore}>
+                      正確性: <Text style={{ color: '#52A876', fontWeight: '700' }}>
+                        {(record.accuracyScore ?? 0).toFixed(1)}
+                      </Text>
+                    </Text>
+                    <Text style={styles.detailScore}>
+                      リズム: <Text style={{ color: '#D4A574', fontWeight: '700' }}>
+                        {(record.rhythmScore ?? 0).toFixed(1)}
+                      </Text>
+                    </Text>
+                  </View>
+                </View>
+                <View style={styles.expandIcon}>
+                  <Text style={styles.expandIconText}>
+                    {expandedRound === record.roundNumber ? '▼' : '▶'}
+                  </Text>
+                </View>
               </View>
-              <View style={styles.roundDetailScores}>
-                <Text style={styles.detailScore}>
-                  🎵 リズム: {record.rhythmScore}/10
-                </Text>
-                <Text style={styles.detailScore}>
-                  🗣️ 発音: {record.pronunciationScore}/10
-                </Text>
-              </View>
-              {record.feedback && (
-                <Text style={styles.roundDetailFeedback}>
-                  {record.feedback}
-                </Text>
+
+              {expandedRound === record.roundNumber && (
+                <View style={styles.expandedContent}>
+                  {record.feedback && (
+                    <View style={styles.feedbackBox}>
+                      <Text style={styles.feedbackBoxTitle}>💡 詳細コメント</Text>
+                      <Text style={styles.feedbackBoxText}>
+                        {record.feedback}
+                      </Text>
+                    </View>
+                  )}
+                  <TouchableOpacity
+                    style={styles.detailedButton}
+                    onPress={() => {
+                      // Note: DetailedShadowingFeedback component can be integrated here
+                      // For now, this button shows the detailed feedback in the feedback text above
+                    }}
+                  >
+                    <Text style={styles.detailedButtonText}>
+                      📝 詳細な分析を見る
+                    </Text>
+                  </TouchableOpacity>
+                </View>
               )}
-            </View>
+            </TouchableOpacity>
           ))}
         </View>
 
@@ -186,74 +227,78 @@ export default function ShadowingResultScreen({ onBack, onComplete }: Props) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f5f9ff',
+    backgroundColor: NaturalColors.background,
   },
   errorText: {
     fontSize: 16,
-    color: '#666',
+    color: NaturalColors.textMedium,
     textAlign: 'center',
     marginTop: 40,
   },
   header: {
-    paddingHorizontal: 24,
-    paddingTop: 16,
-    paddingBottom: 12,
+    paddingHorizontal: Spacing.xl,
+    paddingTop: Spacing.lg,
+    paddingBottom: Spacing.md,
   },
   title: {
     fontSize: 28,
     fontWeight: 'bold',
-    color: '#333',
+    color: NaturalColors.textDark,
   },
   scoresContainer: {
     flexDirection: 'row',
-    marginHorizontal: 24,
-    marginTop: 16,
-    gap: 12,
+    marginHorizontal: Spacing.xl,
+    marginTop: Spacing.lg,
+    gap: Spacing.md,
   },
   scoreCard: {
     flex: 1,
-    paddingVertical: 16,
-    backgroundColor: '#fff',
-    borderRadius: 8,
+    paddingVertical: Spacing.lg,
+    backgroundColor: NaturalColors.cardBg,
+    borderRadius: BorderRadius.lg,
     alignItems: 'center',
+    borderWidth: 1,
+    borderColor: '#E8E6E1',
   },
   scoreLabel: {
     fontSize: 12,
-    color: '#999',
-    marginBottom: 8,
+    color: NaturalColors.textMedium,
+    marginBottom: Spacing.sm,
   },
   scoreValue: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: '#0066cc',
+    color: NaturalColors.primary,
   },
   overallScoreContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginHorizontal: 24,
-    marginTop: 16,
-    paddingHorizontal: 16,
-    paddingVertical: 20,
-    backgroundColor: '#fff',
-    borderRadius: 12,
-    gap: 16,
+    marginHorizontal: Spacing.xl,
+    marginTop: Spacing.lg,
+    paddingHorizontal: Spacing.lg,
+    paddingVertical: Spacing.xl,
+    backgroundColor: NaturalColors.cardBg,
+    borderRadius: BorderRadius.lg,
+    gap: Spacing.lg,
+    borderWidth: 1,
+    borderColor: '#E8E6E1',
   },
   overallScoreCircle: {
     width: 100,
     height: 100,
     borderRadius: 50,
-    backgroundColor: '#e6f4ff',
+    backgroundColor: 'rgba(27, 155, 164, 0.1)',
     justifyContent: 'center',
     alignItems: 'center',
   },
   overallScoreValue: {
     fontSize: 36,
     fontWeight: 'bold',
-    color: '#0066cc',
+    color: NaturalColors.primary,
   },
   overallScoreLabel: {
     fontSize: 14,
-    color: '#666',
+    color: NaturalColors.textMedium,
   },
   overallScoreInfo: {
     flex: 1,
@@ -261,84 +306,147 @@ const styles = StyleSheet.create({
   improvementText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#333',
-    marginBottom: 8,
+    color: NaturalColors.textDark,
+    marginBottom: Spacing.sm,
   },
   feedbackText: {
     fontSize: 13,
-    color: '#666',
+    color: NaturalColors.textMedium,
   },
   chartContainer: {
-    marginHorizontal: 24,
-    marginTop: 24,
-    paddingHorizontal: 12,
-    paddingVertical: 16,
-    backgroundColor: '#fff',
-    borderRadius: 8,
+    marginHorizontal: Spacing.xl,
+    marginTop: Spacing.xl,
+    paddingHorizontal: Spacing.md,
+    paddingVertical: Spacing.lg,
+    backgroundColor: NaturalColors.cardBg,
+    borderRadius: BorderRadius.lg,
+    borderWidth: 1,
+    borderColor: '#E8E6E1',
   },
   chartTitle: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#333',
-    marginBottom: 12,
+    color: NaturalColors.textDark,
+    marginBottom: Spacing.lg,
   },
   detailsContainer: {
-    marginHorizontal: 24,
-    marginTop: 24,
+    marginHorizontal: Spacing.xl,
+    marginTop: Spacing.xl,
+    marginBottom: Spacing.xl,
   },
   detailsTitle: {
-    fontSize: 14,
+    fontSize: 16,
     fontWeight: '700',
-    color: '#333',
-    marginBottom: 12,
+    color: NaturalColors.textDark,
+    marginBottom: Spacing.lg,
   },
   roundDetail: {
     paddingHorizontal: 14,
     paddingVertical: 12,
-    backgroundColor: '#fff',
-    borderRadius: 8,
+    backgroundColor: NaturalColors.cardBg,
+    borderRadius: BorderRadius.lg,
     marginBottom: 10,
+    borderWidth: 1,
+    borderColor: '#E8E6E1',
+  },
+  roundDetailExpanded: {
+    backgroundColor: 'rgba(27, 155, 164, 0.05)',
+    borderColor: NaturalColors.primary,
   },
   roundDetailHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 8,
+    marginBottom: 0,
   },
   roundDetailRound: {
-    fontSize: 13,
-    fontWeight: '600',
-    color: '#333',
+    fontSize: 15,
+    fontWeight: '700',
+    color: NaturalColors.textDark,
+    marginBottom: Spacing.sm,
+  },
+  roundDetailScoresRow: {
+    flexDirection: 'row',
+    gap: Spacing.lg,
   },
   roundDetailScore: {
-    fontSize: 12,
-    color: '#0066cc',
-    fontWeight: '500',
+    fontSize: 13,
+    color: NaturalColors.primary,
+    fontWeight: '600',
   },
   roundDetailScores: {
     gap: 4,
     marginBottom: 8,
   },
   detailScore: {
-    fontSize: 12,
-    color: '#666',
+    fontSize: 13,
+    color: NaturalColors.textMedium,
+    fontWeight: '500',
   },
   roundDetailFeedback: {
     fontSize: 12,
-    color: '#333',
+    color: NaturalColors.textDark,
     lineHeight: 16,
-    fontStyle: 'italic',
+    marginTop: Spacing.md,
+  },
+  expandIcon: {
+    width: 30,
+    height: 30,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  expandIconText: {
+    fontSize: 14,
+    color: NaturalColors.textMedium,
+    fontWeight: '600',
+  },
+  expandedContent: {
+    marginTop: Spacing.lg,
+    paddingTop: Spacing.lg,
+    borderTopWidth: 1,
+    borderTopColor: '#E8E6E1',
+  },
+  feedbackBox: {
+    padding: Spacing.lg,
+    backgroundColor: 'rgba(82, 168, 118, 0.08)',
+    borderRadius: BorderRadius.lg,
+    marginBottom: Spacing.md,
+    borderLeftWidth: 4,
+    borderLeftColor: '#52A876',
+  },
+  feedbackBoxTitle: {
+    fontSize: 12,
+    fontWeight: '700',
+    color: NaturalColors.textMedium,
+    marginBottom: Spacing.sm,
+  },
+  feedbackBoxText: {
+    fontSize: 13,
+    color: NaturalColors.textDark,
+    lineHeight: 18,
+  },
+  detailedButton: {
+    paddingVertical: Spacing.md,
+    paddingHorizontal: Spacing.lg,
+    backgroundColor: NaturalColors.primary,
+    borderRadius: BorderRadius.lg,
+    alignItems: 'center',
+  },
+  detailedButtonText: {
+    fontSize: 13,
+    fontWeight: '600',
+    color: '#FFFFFF',
   },
   buttonContainer: {
-    marginHorizontal: 24,
-    marginTop: 32,
+    marginHorizontal: Spacing.xl,
+    marginTop: Spacing.xxl,
     marginBottom: 40,
-    gap: 12,
+    gap: Spacing.md,
   },
   primaryButton: {
-    paddingVertical: 12,
-    backgroundColor: '#0066cc',
-    borderRadius: 8,
+    paddingVertical: Spacing.lg,
+    backgroundColor: NaturalColors.primary,
+    borderRadius: BorderRadius.lg,
     alignItems: 'center',
   },
   primaryButtonText: {
@@ -347,14 +455,16 @@ const styles = StyleSheet.create({
     color: '#fff',
   },
   secondaryButton: {
-    paddingVertical: 12,
-    backgroundColor: '#f0f0f0',
-    borderRadius: 8,
+    paddingVertical: Spacing.lg,
+    backgroundColor: NaturalColors.lightBg,
+    borderRadius: BorderRadius.lg,
     alignItems: 'center',
+    borderWidth: 1,
+    borderColor: '#E8E6E1',
   },
   secondaryButtonText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#333',
+    color: NaturalColors.textDark,
   },
 });

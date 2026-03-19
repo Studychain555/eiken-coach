@@ -1,0 +1,11 @@
+id,word,reading,part_of_speech,meaning_jp,example_sentence,example_translation,difficulty,frequency,choice1_meaning,choice1_is_correct,choice2_meaning,choice2_is_correct,choice3_meaning,choice3_is_correct,choice4_meaning,choice4_is_correct,eiken_level
+bfff24b7-e52a-4f99-8583-e27920ef82ce,abjure,əbˈdʒʊr,verb,誓って放棄する,He abjured his former political beliefs.,彼は以前の政治的信念を誓って放棄しました。,4,1,誓って放棄する,True,非難する,False,隔離する,False,縮小する,False,1st
+4ca4a099-fc78-453d-b57b-9fa417f489ec,abnegation,ˌæbnɪˈɡeɪʃən,noun,放棄,His abnegation of personal comfort was admirable.,彼の個人的な快適さの放棄は称賛に値します。,4,1,放棄,True,拒否,False,矛盾,False,欠陥,False,1st
+898506e4-f73f-4fc3-aa99-dc25dd0f5bbd,abstruse,æbˈstrus,adjective,難解な,The philosophical text is quite abstruse.,その哲学的なテキストは非常に難解です。,4,2,難解な,True,抽象的な,False,複雑な,False,曖昧な,False,1st
+e59db2b3-6383-4565-83a1-a247fb639bc3,acculturation,əˌkʌltʃəˈreɪʃən,noun,文化適応,Acculturation helps immigrants integrate into society.,文化適応は移民が社会に統合するのに役立ちます。,4,2,文化適応,True,文化的進化,False,文化遺産,False,文化的差異,False,1st
+6e7ab8d3-4f65-4926-80fd-4ac7fc5bd249,acerbic,əˈsɜrbɪk,adjective,厳しい,His acerbic wit made everyone laugh and cringe.,彼の厳しい機知は誰もが笑い、しり込みさせました。,4,1,厳しい,True,優しい,False,複雑な,False,不明確な,False,1st
+656e7c1c-63ef-4183-84d4-b6192b279ce5,acquiescence,ˌækwiˈesəns,noun,同意,His silent acquiescence suggested agreement.,彼の沈黙の同意は同意を示唆しました。,4,2,同意,True,拒否,False,質問,False,怒り,False,1st
+5cf7f105-796e-4da0-923e-b05a07eb9843,acrimony,ˈækrɪmoʊni,noun,怨念,The discussion ended with acrimony and bitterness.,議論は怨念と苦々しさで終わりました。,4,2,怨念,True,優しさ,False,理解,False,友情,False,1st
+cc76c722-2528-4143-abc7-bae6d511ef13,actuate,ˈæktʃueɪt,verb,駆動する,His ambition actuated all his decisions.,彼の野心は彼のすべての決定を駆動しました。,4,1,駆動する,True,制限する,False,防ぐ,False,遅延させる,False,1st
+3a58b66f-804c-46ca-8475-8d6e5ee3abb0,acumen,ˈækjumən,noun,洞察力,Her business acumen was legendary.,彼女のビジネス洞察力は伝説的でした。,4,2,洞察力,True,知識,False,経験,False,才能,False,1st
+d3231784-f756-47ca-a396-cbfdeedb626c,adamant,ˈædəmənt,adjective,断固とした,He was adamant that the decision was correct.,彼は決定が正しいことに断固としていました。,3,2,断固とした,True,関心がない,False,不確実な,False,柔軟な,False,1st
