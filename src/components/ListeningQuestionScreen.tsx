@@ -22,6 +22,7 @@ interface Props {
   question: ListeningQuestion;
   onComplete: () => void;
   onBack: () => void;
+  onShadowingStart?: (question: ListeningQuestion) => void;
 }
 
 type Screen = 'player' | 'answer' | 'result';
@@ -30,6 +31,7 @@ export default function ListeningQuestionScreen({
   question,
   onComplete,
   onBack,
+  onShadowingStart,
 }: Props) {
   const [screen, setScreen] = useState<Screen>('player');
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
@@ -310,7 +312,9 @@ export default function ListeningQuestionScreen({
             onPress={() => {
               // シャドーイング画面へ遷移
               debugLog(TAG, 'Shadowing started for question', { id: question.id });
-              // 実装時：ShadowingScreen を render
+              if (onShadowingStart) {
+                onShadowingStart(question);
+              }
             }}
           >
             <Text style={styles.shadowingButtonIcon}>🎤</Text>

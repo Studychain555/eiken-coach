@@ -12,6 +12,8 @@ import { useListeningStore } from '@/src/stores/listeningStore';
 import { LISTENING_SAMPLE_DATA } from '@/src/lib/listeningData';
 import ListeningQuestionScreen from '@/src/components/ListeningQuestionScreen';
 import ListeningResultScreen from '@/src/components/ListeningResultScreen';
+import ShadowingScreen from '@/src/components/ShadowingScreen';
+import type { ListeningQuestion } from '@/src/lib/listeningData';
 import { Colors, Spacing, BorderRadius, Shadows, Typography, DuolingoColors } from '@/constants/theme';
 import { EnhancedProgressBar } from '@/components/EnhancedProgressBar';
 import { XPRewardSystem } from '@/src/components/XPRewardSystem';
@@ -19,7 +21,7 @@ import { DailyGoal } from '@/src/components/DailyGoal';
 import { StreakBanner } from '@/src/components/StreakBanner';
 import { ComboCounter } from '@/src/components/ComboCounter';
 
-type Screen = 'list' | 'question' | 'result';
+type Screen = 'list' | 'question' | 'result' | 'shadowing';
 
 const DIFFICULTY_LABELS: Record<number, string> = {
   1: '★☆☆☆☆',
@@ -52,6 +54,7 @@ export default function ListeningScreen() {
   } = useListeningStore();
 
   const [screen, setScreen] = useState<Screen>('list');
+  const [shadowingQuestion, setShadowingQuestion] = useState<ListeningQuestion | null>(null);
 
   useEffect(() => {
     if (questions.length === 0) {
@@ -83,6 +86,16 @@ export default function ListeningScreen() {
   const handleQuestionComplete = () => {
     resetCurrentQuestion();
     setScreen('result');
+  };
+
+  const handleShadowingStart = (question: ListeningQuestion) => {
+    setShadowingQuestion(question);
+    setScreen('shadowing');
+  };
+
+  const handleShadowingComplete = () => {
+    setShadowingQuestion(null);
+    setScreen('list');
   };
 
   const handleBackToList = () => {
@@ -238,6 +251,23 @@ export default function ListeningScreen() {
         question={currentQuestion}
         onComplete={handleQuestionComplete}
         onBack={handleBackToList}
+        onShadowingStart={handleShadowingStart}
+      />
+    );
+  }
+
+  if (screen === 'shadowing' && shadowingQuestion) {
+    return (
+      <ShadowingScreen
+        questionId={shadowingQuestion.id}
+        attemptId={`attempt_${shadowingQuestion.id}_${Date.now()}`}
+        script={shadowingQuestion.script}
+        audioUrl={shadowingQuestion.audioUrl}
+        onComplete={handleShadowingComplete}
+        onBack={() => {
+          setShadowingQuestion(null);
+          setScreen('result');
+        }}
       />
     );
   }
