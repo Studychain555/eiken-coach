@@ -15,7 +15,7 @@ import { useWritingStore } from '@/src/stores/writingStore';
 import { WRITING_SAMPLE_PROMPTS } from '@/src/lib/writingData';
 import { scoreWritingSubmission } from '@/src/lib/aiScoringService';
 import WritingResultScreen from '@/src/components/WritingResultScreen';
-import { Colors, Spacing, BorderRadius, Shadows, Typography, DuolingoColors } from '@/constants/theme';
+import { Colors, Spacing, BorderRadius, Shadows, Typography, DuolingoColors, NaturalColors } from '@/constants/theme';
 import { OptimizedButton, ButtonGroup } from '@/components/OptimizedButton';
 import { EnhancedProgressBar } from '@/components/EnhancedProgressBar';
 import { XPRewardSystem } from '@/src/components/XPRewardSystem';
@@ -368,7 +368,7 @@ export default function WritingScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.light.background,
+    backgroundColor: NaturalColors.background,
   },
   header: {
     paddingHorizontal: Spacing.xl,

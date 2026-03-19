@@ -11,7 +11,7 @@ import {
 import { useRouter } from 'expo-router';
 import { useVocabularyStore } from '@/src/stores/vocabularyStore';
 import { VOCABULARY_SAMPLE_DATA } from '@/src/lib/vocabularyData';
-import { Colors, Spacing, BorderRadius, Shadows, Typography, DuolingoColors } from '@/constants/theme';
+import { Colors, Spacing, BorderRadius, Shadows, Typography, DuolingoColors, NaturalColors } from '@/constants/theme';
 import { EnhancedProgressBar, StepProgress, Milestone } from '@/components/EnhancedProgressBar';
 import { OptimizedButton } from '@/components/OptimizedButton';
 import { XPRewardSystem } from '@/src/components/XPRewardSystem';
@@ -426,7 +426,7 @@ function VocabularyResultScreen({ onBack }: { onBack: () => void }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.light.background,
+    backgroundColor: NaturalColors.background,
   },
   header: {
     paddingHorizontal: Spacing.xl,
@@ -578,7 +578,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: Colors.light.background,
+    backgroundColor: NaturalColors.background,
   },
   loadingText: {
     fontSize: 16,
@@ -745,7 +745,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     paddingHorizontal: Spacing.xl,
-    backgroundColor: Colors.light.background,
+    backgroundColor: NaturalColors.background,
   },
   resultTitle: {
     fontSize: 36,
