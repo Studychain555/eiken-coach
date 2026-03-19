@@ -16,6 +16,7 @@ import {
 import { useVocabularyStore } from '@/src/stores/vocabularyStore';
 import { VOCABULARY_SAMPLE_DATA } from '@/src/lib/vocabularyData';
 import { Colors, Spacing, BorderRadius, DuolingoColors, ShadotenColors } from '@/constants/theme';
+import { CelebrationAnimation } from '@/src/components/CelebrationAnimation';
 
 type Screen = 'stage' | 'test' | 'result';
 

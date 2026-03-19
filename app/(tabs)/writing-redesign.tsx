@@ -17,6 +17,7 @@ import {
 import { useWritingStore } from '@/src/stores/writingStore';
 import { WRITING_SAMPLE_PROMPTS } from '@/src/lib/writingData';
 import { Colors, Spacing, BorderRadius, DuolingoColors, ShadotenColors } from '@/constants/theme';
+import { CelebrationAnimation } from '@/src/components/CelebrationAnimation';
 
 type Screen = 'select' | 'edit' | 'result';
 

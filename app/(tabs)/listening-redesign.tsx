@@ -12,10 +12,12 @@ import {
   StyleSheet,
   TouchableOpacity,
   ScrollView,
+  Animated,
 } from 'react-native';
 import { useListeningStore } from '@/src/stores/listeningStore';
 import { LISTENING_SAMPLE_DATA } from '@/src/lib/listeningData';
 import { Colors, Spacing, BorderRadius, DuolingoColors, ShadotenColors, Typography } from '@/constants/theme';
+import { CelebrationAnimation } from '@/src/components/CelebrationAnimation';
 
 type Screen = 'list' | 'question' | 'result';
 
@@ -35,6 +37,8 @@ export default function ListeningScreenRedesign() {
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const [showResult, setShowResult] = useState(false);
   const [timeBonus, setTimeBonus] = useState(100);
+  const [triggerCelebration, setTriggerCelebration] = useState(false);
+  const [celebrationType, setCelebrationType] = useState<'confetti' | 'correct'>('confetti');
 
   useEffect(() => {
     if (questions.length === 0) {
@@ -104,9 +108,20 @@ export default function ListeningScreenRedesign() {
   if (screen === 'question' && questions.length > 0) {
     const question = questions[0];
     const progress = 10; // 1/10 questions
+    const isCorrect = selectedIndex === 0;
 
     return (
       <SafeAreaView style={styles.container}>
+        {/* Celebration Animation */}
+        {showResult && isCorrect && (
+          <CelebrationAnimation
+            type="confetti"
+            trigger={showResult && isCorrect}
+            onComplete={() => {
+              setTimeout(() => setScreen('result'), 500);
+            }}
+          />
+        )}
         {/* Shadoten-style Teal Header with Time Bonus */}
         <View style={styles.tealHeader}>
           <View style={styles.headerLeft}>
@@ -251,8 +266,15 @@ export default function ListeningScreenRedesign() {
 
   return (
     <SafeAreaView style={styles.container}>
+      {/* Celebration Animation on Result Screen */}
+      <CelebrationAnimation
+        type="confetti"
+        trigger={true}
+        onComplete={() => {}}
+      />
+
       <View style={styles.resultContainer}>
-        <Text style={styles.resultTitle}>✅ お疲れ様!</Text>
+        <Text style={styles.resultTitle}>✨ 完了!</Text>
         <View style={styles.resultStats}>
           <Text style={styles.resultStat}>正解: 7/10</Text>
           <Text style={styles.resultStat}>+70 XP 獲得</Text>
