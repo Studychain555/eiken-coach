@@ -25,8 +25,9 @@ export default function RootLayout() {
     if (loading) return;
 
     const inAuthGroup = segments[0] === '(auth)';
+    const isDemoRoute = segments[0] === 'demo'; // デモルートは認証をスキップ
 
-    if (!session && !inAuthGroup) {
+    if (!session && !inAuthGroup && !isDemoRoute) {
       router.replace('/(auth)/login');
     } else if (session && inAuthGroup) {
       router.replace('/(tabs)');
@@ -38,6 +39,7 @@ export default function RootLayout() {
       <Stack>
         <Stack.Screen name="(auth)" options={{ headerShown: false }} />
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+        <Stack.Screen name="demo" options={{ headerShown: false }} />
       </Stack>
       <StatusBar style="auto" />
     </ThemeProvider>

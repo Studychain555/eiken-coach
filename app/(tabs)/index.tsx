@@ -155,7 +155,7 @@ export default function HomeScreen() {
                 </Text>
               </View>
               <EnhancedProgressBar
-                percentage={parseInt(writingProgress.averageScore)}
+                percentage={Math.round((parseFloat(String(writingProgress.averageScore)) / 16) * 100)}
                 color={Colors.light.success}
                 backgroundColor={Colors.light.border}
                 height={6}

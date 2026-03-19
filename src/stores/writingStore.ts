@@ -42,11 +42,44 @@ interface WritingState {
   getAverageScore: () => number;
   getTodayStats: () => { attempted: number; averageScore: number };
 
+  // ==========================================
+  // Duolingo-Style Gamification
+  // ==========================================
+  dailyGoal: {
+    target: number;
+    completed: number;
+  };
+  setDailyGoal: (target: number) => void;
+  incrementDailyGoal: () => void;
+
+  xpToday: number;
+  totalXP: number;
+  addXP: (amount: number) => void;
+
+  currentLevel: number;
+  xpForNextLevel: number;
+  calculateLevel: (totalXP: number) => { level: number; xpToNext: number };
+
+  hearts: number;
+  maxHearts: number;
+  addHeart: () => void;
+  reduceHeart: () => void;
+
+  streakDays: number;
+  lastStudyDate: Date | null;
+  updateStreak: () => void;
+
+  comboCount: number;
+  resetCombo: () => void;
+
   // Sync methods
   syncToSupabase: () => Promise<void>;
   loadFromSupabase: () => Promise<void>;
   initializeSync: (userId: string) => Promise<void>;
 }
+
+// XP thresholds for levels (writing)
+const XP_THRESHOLDS = [0, 100, 250, 450, 700, 1000, 1350, 1750, 2200, 2700, 3250];
 
 export const useWritingStore = create<WritingState>((set, get) => ({
   userId: null,
@@ -67,9 +100,20 @@ export const useWritingStore = create<WritingState>((set, get) => ({
   submissions: [],
 
   addSubmission: (submission) => {
+    const { dailyGoal } = get();
+    const xpGain = submission.score?.totalScore ? Math.round(submission.score.totalScore * 5) : 50;
+    const newDailyCompleted = Math.min(dailyGoal.completed + 1, dailyGoal.target);
+
     set((state) => ({
       submissions: [...state.submissions, submission],
+      dailyGoal: {
+        ...state.dailyGoal,
+        completed: newDailyCompleted,
+      },
+      xpToday: state.xpToday + xpGain,
     }));
+    get().addXP(xpGain);
+    get().updateStreak();
     get().syncToSupabase();
   },
 
@@ -124,8 +168,99 @@ export const useWritingStore = create<WritingState>((set, get) => ({
     };
   },
 
+  // ==========================================
+  // Duolingo-Style Gamification Implementation
+  // ==========================================
+  dailyGoal: { target: 3, completed: 0 },
+  setDailyGoal: (target) =>
+    set((state) => ({
+      dailyGoal: {
+        ...state.dailyGoal,
+        target,
+      },
+    })),
+  incrementDailyGoal: () =>
+    set((state) => ({
+      dailyGoal: {
+        ...state.dailyGoal,
+        completed: Math.min(state.dailyGoal.completed + 1, state.dailyGoal.target),
+      },
+    })),
+
+  xpToday: 0,
+  totalXP: 0,
+  addXP: (amount: number) => {
+    set((state) => {
+      const newTotalXP = state.totalXP + amount;
+      const { level: newLevel } = get().calculateLevel(newTotalXP);
+      return {
+        xpToday: state.xpToday + amount,
+        totalXP: newTotalXP,
+        currentLevel: newLevel,
+      };
+    });
+  },
+
+  currentLevel: 1,
+  xpForNextLevel: 100,
+  calculateLevel: (totalXP: number) => {
+    let level = 1;
+    for (let i = 0; i < XP_THRESHOLDS.length; i++) {
+      if (totalXP >= XP_THRESHOLDS[i]) {
+        level = i + 1;
+      } else {
+        break;
+      }
+    }
+    const currentThreshold = XP_THRESHOLDS[level - 1] || 0;
+    const nextThreshold = XP_THRESHOLDS[level] || XP_THRESHOLDS[XP_THRESHOLDS.length - 1] + 500;
+    const xpToNext = nextThreshold - totalXP;
+    return { level, xpToNext };
+  },
+
+  hearts: 3,
+  maxHearts: 3,
+  addHeart: () =>
+    set((state) => ({
+      hearts: Math.min(state.hearts + 1, state.maxHearts),
+    })),
+  reduceHeart: () =>
+    set((state) => ({
+      hearts: Math.max(state.hearts - 1, 0),
+    })),
+
+  streakDays: 0,
+  lastStudyDate: null,
+  updateStreak: () => {
+    const { streakDays, lastStudyDate } = get();
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    if (!lastStudyDate) {
+      set({ streakDays: 1, lastStudyDate: today });
+      return;
+    }
+
+    const last = new Date(lastStudyDate);
+    last.setHours(0, 0, 0, 0);
+
+    const timeDiff = today.getTime() - last.getTime();
+    const daysDiff = timeDiff / (1000 * 3600 * 24);
+
+    if (daysDiff === 1) {
+      set({ streakDays: streakDays + 1, lastStudyDate: today });
+    } else if (daysDiff === 0) {
+      return;
+    } else {
+      set({ streakDays: 1, lastStudyDate: today });
+    }
+  },
+
+  comboCount: 0,
+  resetCombo: () => set({ comboCount: 0 }),
+
   syncToSupabase: async () => {
-    const { userId, submissions } = get();
+    const { userId, submissions, totalXP, currentLevel, streakDays, hearts } = get();
     if (!userId) return;
 
     try {
@@ -147,7 +282,13 @@ export const useWritingStore = create<WritingState>((set, get) => ({
 
       await AsyncStorage.setItem(
         `writing:${userId}`,
-        JSON.stringify({ submissions })
+        JSON.stringify({
+          submissions,
+          totalXP,
+          currentLevel,
+          streakDays,
+          hearts,
+        })
       );
     } catch (error) {
       console.error('[WritingStore] Sync to Supabase failed:', error);

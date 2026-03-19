@@ -66,26 +66,31 @@ export function OptimizedButton({
     primary: {
       background: Colors.light.primary,
       text: '#ffffff',
+      border: Colors.light.primary,
       shadow: Shadows.md,
     },
     secondary: {
       background: Colors.light.backgroundAlt,
       text: Colors.light.primary,
+      border: Colors.light.border,
       shadow: Shadows.sm,
     },
     success: {
       background: Colors.light.success,
       text: '#ffffff',
+      border: Colors.light.success,
       shadow: Shadows.md,
     },
     warning: {
       background: Colors.light.warning,
       text: '#ffffff',
+      border: Colors.light.warning,
       shadow: Shadows.md,
     },
     danger: {
       background: Colors.light.error,
       text: '#ffffff',
+      border: Colors.light.error,
       shadow: Shadows.md,
     },
     outline: {

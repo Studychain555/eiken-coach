@@ -80,15 +80,12 @@ export const TeacherAnalytics: React.FC<TeacherAnalyticsProps> = ({
   const skillComparisonData = useMemo(() => {
     return {
       labels: ['リスニング', '単語', 'ライティング'],
-      datasets: [
-        {
-          data: [
-            analytics.listeningAvg / 100,
-            analytics.vocabularyAvg / 100,
-            analytics.writingAvg / 100,
-          ],
-        },
+      data: [
+        analytics.listeningAvg / 100,
+        analytics.vocabularyAvg / 100,
+        analytics.writingAvg / 100,
       ],
+      colors: ['#2563eb', '#16a34a', '#ea580c'],
     };
   }, [analytics]);
 
@@ -239,7 +236,7 @@ export const TeacherAnalytics: React.FC<TeacherAnalyticsProps> = ({
                 style={[
                   styles.scoreBar,
                   {
-                    width: (student.score / 100) * 100 + '%',
+                    width: ((student.score / 100) * 100 + '%') as any,
                     backgroundColor: student.score >= 80 ? '#4CAF50' : '#FFC107',
                   },
                 ]}
@@ -292,7 +289,7 @@ export const TeacherAnalytics: React.FC<TeacherAnalyticsProps> = ({
               <View
                 style={[
                   styles.distributionFill,
-                  { width: dist.percentage + '%' },
+                  { width: (dist.percentage + '%') as any },
                 ]}
               />
             </View>

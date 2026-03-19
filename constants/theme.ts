@@ -259,3 +259,103 @@ export const Shadows = {
     elevation: 4,
   },
 };
+
+// ==========================================
+// Duolingo-Style Gamification Colors
+// ==========================================
+export const DuolingoColors = {
+  primary: '#3498DB',           // Bright, friendly blue
+  success: '#52C41A',           // Fresh, satisfying green
+  warning: '#FAAD14',           // Gold (hearts, level-up)
+  error: '#F5222D',             // Clear red (incorrect)
+  accent: '#FA541C',            // Vibrant orange (XP, bonus)
+  streak: '#FF7A45',            // Fire orange-red (momentum)
+  background: '#FFFFFF',        // Clean white
+  cardBackground: '#FFFFFF',    // Card white
+  lightBg: '#F5F5F5',           // Soft gray background
+  tapFeedback: 'rgba(0,0,0,0.1)',
+  correct: '#52C41A',           // Correct answer flash
+  incorrect: '#F5222D',         // Incorrect answer flash
+  combo: '#FAAD14',             // Combo counter
+};
+
+// ==========================================
+// Shadoten App Color Scheme
+// ==========================================
+export const ShadotenColors = {
+  // Header & Primary
+  headerTeal: '#1B9BA4',         // Teal header background
+  teal: '#1B9BA4',               // Primary teal
+  tealLight: '#2DB3BA',          // Light teal accents
+
+  // Content Areas
+  brown: '#8B6F47',              // Brown/tan content background
+  brownLight: '#A0826D',         // Light brown accents
+
+  // Feedback Colors
+  goodPointsTeal: '#1B9BA4',     // Good Points section (teal)
+  goodPointsText: '#FFFFFF',     // White text on good points
+  developmentPointsRed: '#E85D6F', // Development Points section (red/pink)
+  developmentPointsText: '#FFFFFF', // White text on development points
+
+  // Interactive Elements
+  timeBonus: '#FAAD14',          // Time bonus indicator (yellow/gold)
+  timeBonusBackground: 'rgba(250, 173, 20, 0.1)', // Light gold background
+
+  // Highlighting & Feedback
+  correctCircle: '#52C41A',      // Circle for correct answer (green)
+  incorrectX: '#F5222D',         // X mark for incorrect (red)
+
+  // Backgrounds
+  cardWhite: '#FFFFFF',          // Large interactive card background
+  contentBg: '#F5F5F5',          // Light background
+  textDark: '#333333',           // Dark text on white
+  textLight: '#666666',          // Light text on white
+};
+
+// ==========================================
+// React Native Animation Timings
+// ==========================================
+export const AnimationTimings = {
+  // Tap feedback: Quick scale response
+  TAP_SCALE: {
+    duration: 100,
+    from: 0.95,
+    to: 1.0,
+  },
+  // Slide in: Screen transitions
+  SLIDE_IN: {
+    duration: 300,
+    easing: 'easeOut',
+  },
+  // Bounce: Spring-like celebration
+  BOUNCE: {
+    duration: 400,
+    easing: 'spring',
+  },
+  // Confetti: Long celebration
+  CONFETTI: {
+    duration: 2500,
+    easing: 'linear',
+  },
+  // Heart pop: Quick pop animation
+  HEART_POP: {
+    duration: 200,
+    easing: 'easeOut',
+  },
+  // XP float: Floating text upward
+  XP_FLOAT_UP: {
+    duration: 1000,
+    easing: 'easeOut',
+  },
+  // Combo counter: Visible feedback
+  COMBO_POP: {
+    duration: 300,
+    easing: 'spring',
+  },
+  // Level up: Full celebration
+  LEVEL_UP: {
+    duration: 1500,
+    easing: 'linear',
+  },
+};

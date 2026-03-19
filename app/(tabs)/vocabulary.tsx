@@ -11,9 +11,13 @@ import {
 import { useRouter } from 'expo-router';
 import { useVocabularyStore } from '@/src/stores/vocabularyStore';
 import { VOCABULARY_SAMPLE_DATA } from '@/src/lib/vocabularyData';
-import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/theme';
+import { Colors, Spacing, BorderRadius, Shadows, Typography, DuolingoColors } from '@/constants/theme';
 import { EnhancedProgressBar, StepProgress, Milestone } from '@/components/EnhancedProgressBar';
 import { OptimizedButton } from '@/components/OptimizedButton';
+import { XPRewardSystem } from '@/src/components/XPRewardSystem';
+import { DailyGoal } from '@/src/components/DailyGoal';
+import { StreakBanner } from '@/src/components/StreakBanner';
+import { ComboCounter } from '@/src/components/ComboCounter';
 
 const { width } = Dimensions.get('window');
 
@@ -28,6 +32,15 @@ export default function VocabularyScreen() {
     setCurrentStage,
     masteredCount,
     getTodayStats,
+    // Gamification fields
+    hearts,
+    maxHearts,
+    currentLevel,
+    totalXP,
+    xpForNextLevel,
+    streakDays,
+    dailyGoal,
+    comboCount,
   } = useVocabularyStore();
 
   const [screen, setScreen] = useState<Screen>('stage-select');
@@ -56,12 +69,45 @@ export default function VocabularyScreen() {
 
     return (
       <SafeAreaView style={styles.container}>
+        {/* XP Reward System Header */}
+        <XPRewardSystem
+          hearts={hearts}
+          maxHearts={maxHearts}
+          currentLevel={currentLevel}
+          currentXP={totalXP}
+          xpForNextLevel={xpForNextLevel}
+          streakDays={streakDays}
+        />
+
         <ScrollView showsVerticalScrollIndicator={false}>
           {/* Header */}
           <View style={styles.header}>
             <Text style={styles.title}>📚 英単語マスター</Text>
             <Text style={styles.subtitle}>英検準1級 頻出単語</Text>
           </View>
+
+          {/* Daily Goal Banner */}
+          <View style={styles.section}>
+            <DailyGoal
+              target={dailyGoal.target}
+              completed={dailyGoal.completed}
+              xpReward={50}
+            />
+          </View>
+
+          {/* Streak Banner */}
+          {streakDays > 0 && (
+            <View style={styles.section}>
+              <StreakBanner streakDays={streakDays} xpBonus={80} />
+            </View>
+          )}
+
+          {/* Combo Counter */}
+          {comboCount >= 2 && (
+            <View style={styles.section}>
+              <ComboCounter count={comboCount} visible={true} />
+            </View>
+          )}
 
           {/* Overall Progress */}
           <View style={styles.section}>
@@ -568,6 +614,17 @@ const styles = StyleSheet.create({
     marginHorizontal: Spacing.xl,
     marginBottom: Spacing.xl,
     marginTop: Spacing.lg,
+  },
+  progressBar: {
+    height: 8,
+    backgroundColor: Colors.light.border,
+    borderRadius: 4,
+    overflow: 'hidden',
+  },
+  progressFill: {
+    height: 8,
+    backgroundColor: Colors.light.success,
+    borderRadius: 4,
   },
   questionContainer: {
     marginHorizontal: Spacing.xl,

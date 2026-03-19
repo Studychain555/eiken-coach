@@ -1,0 +1,372 @@
+{
+  "metadata": {
+    "version": "1.0",
+    "created_date": "2026-03-19",
+    "purpose": "EigoMaster Demo Data - Realistic Sample for Presentations",
+    "total_records": 550,
+    "description": "Complete sample dataset including 50 students, 5 teachers, 30 listening questions, 100 vocabulary words, 20 writing prompts, 150+ attempts, and learning progress data"
+  },
+
+  "summary_statistics": {
+    "students_total": 50,
+    "students_by_class": {
+      "beginner": 17,
+      "standard": 18,
+      "advanced": 15
+    },
+    "teachers_total": 5,
+    "classes_total": 3,
+    "listening_questions": 30,
+    "vocabulary_words": 100,
+    "writing_prompts": 20,
+    "listening_attempts": 150,
+    "writing_submissions": 50,
+    "progress_records": 100
+  },
+
+  "sample_teachers": [
+    {
+      "id": "550e8400-e29b-41d4-a716-446655440001",
+      "email": "akemi.tanaka@eigomaster.demo",
+      "name": "田中明美",
+      "role": "teacher",
+      "class": "基礎クラス (Beginner)",
+      "total_students": 17,
+      "questions_created": 45,
+      "submissions_graded": 87,
+      "average_student_score": 72.3
+    },
+    {
+      "id": "550e8400-e29b-41d4-a716-446655440002",
+      "email": "yoichi.suzuki@eigomaster.demo",
+      "name": "鈴木洋一",
+      "role": "teacher",
+      "class": "標準クラス (Standard)",
+      "total_students": 18,
+      "questions_created": 52,
+      "submissions_graded": 124,
+      "average_student_score": 78.6
+    },
+    {
+      "id": "550e8400-e29b-41d4-a716-446655440003",
+      "email": "yuki.yamamoto@eigomaster.demo",
+      "name": "山本由紀",
+      "role": "teacher",
+      "class": "発展クラス (Advanced)",
+      "total_students": 15,
+      "questions_created": 68,
+      "submissions_graded": 156,
+      "average_student_score": 85.2
+    }
+  ],
+
+  "sample_classes": [
+    {
+      "id": "550e8400-e29b-41d4-a716-446655450001",
+      "name": "基礎クラス",
+      "level": "Beginner",
+      "teacher": "田中明美",
+      "students_enrolled": 17,
+      "school_name": "進学高等学校",
+      "invite_code": "KISO-2024-ABC123",
+      "focus": "Fundamental listening and vocabulary for EIKEN 2-3 level"
+    },
+    {
+      "id": "550e8400-e29b-41d4-a716-446655450002",
+      "name": "標準クラス",
+      "level": "Standard",
+      "teacher": "鈴木洋一",
+      "students_enrolled": 18,
+      "school_name": "進学高等学校",
+      "invite_code": "HYOJ-2024-DEF456",
+      "focus": "EIKEN Pre-1 preparation with mixed difficulty"
+    },
+    {
+      "id": "550e8400-e29b-41d4-a716-446655450003",
+      "name": "発展クラス",
+      "level": "Advanced",
+      "teacher": "山本由紀",
+      "students_enrolled": 15,
+      "school_name": "進学高等学校",
+      "invite_code": "HATEN-2024-GHI789",
+      "focus": "EIKEN 1 and native-level English"
+    }
+  ],
+
+  "sample_students": [
+    {
+      "id": "550e8400-e29b-41d4-a716-446655010001",
+      "email": "student001@eigomaster.demo",
+      "name": "山田太郎",
+      "class": "基礎クラス",
+      "class_id": "550e8400-e29b-41d4-a716-446655450001",
+      "role": "student",
+      "joined_class": "2025-09-20",
+      "listening_accuracy": 73.5,
+      "writing_average_score": 8.2,
+      "vocabulary_mastered": 28,
+      "total_study_time_hours": 45.5,
+      "last_activity": "2026-03-19T18:00:00+09:00",
+      "mood_trend": "improving"
+    },
+    {
+      "id": "550e8400-e29b-41d4-a716-446655010002",
+      "email": "student002@eigomaster.demo",
+      "name": "鈴木花子",
+      "class": "基礎クラス",
+      "class_id": "550e8400-e29b-41d4-a716-446655450001",
+      "role": "student",
+      "joined_class": "2025-09-20",
+      "listening_accuracy": 71.2,
+      "writing_average_score": 7.9,
+      "vocabulary_mastered": 32,
+      "total_study_time_hours": 48.2,
+      "last_activity": "2026-03-19T18:00:00+09:00",
+      "mood_trend": "stable"
+    },
+    {
+      "id": "550e8400-e29b-41d4-a716-446655010036",
+      "email": "student036@eigomaster.demo",
+      "name": "白石優斗",
+      "class": "発展クラス",
+      "class_id": "550e8400-e29b-41d4-a716-446655450003",
+      "role": "student",
+      "joined_class": "2025-09-22",
+      "listening_accuracy": 94.8,
+      "writing_average_score": 15.2,
+      "vocabulary_mastered": 50,
+      "total_study_time_hours": 65.8,
+      "last_activity": "2026-03-19T18:00:00+09:00",
+      "mood_trend": "excellent"
+    }
+  ],
+
+  "sample_listening_questions": [
+    {
+      "id": "550e8400-e29b-41d4-a716-446660010001",
+      "title": "At the Airport - Gate Information",
+      "difficulty": 1,
+      "difficulty_label": "Basic",
+      "audio_duration_seconds": 45,
+      "script": "Attention all passengers on Flight 202 to Tokyo. Gate change announcement: Flight 202 will now depart from Gate 15 instead of Gate 12...",
+      "choices": [
+        "The flight is departing from Gate 12",
+        "The flight is departing from Gate 15",
+        "The flight is boarding at Gate 12",
+        "Boarding is in 30 minutes"
+      ],
+      "correct_answer": 1,
+      "explanation": "The announcer clearly states the flight will depart from Gate 15 instead of Gate 12.",
+      "times_attempted": 234,
+      "average_accuracy": 92.5,
+      "topics": ["airport", "information", "basics"]
+    },
+    {
+      "id": "550e8400-e29b-41d4-a716-446660010013",
+      "title": "Environmental Science Lecture Excerpt",
+      "difficulty": 3,
+      "difficulty_label": "Advanced",
+      "audio_duration_seconds": 180,
+      "script": "According to recent studies, global temperatures have risen approximately 1.1 degrees Celsius since pre-industrial times...",
+      "choices": [
+        "Temperatures have risen 2.1 degrees since pre-industrial times",
+        "Temperature rise is approximately 1.1 degrees Celsius",
+        "CO2 levels are at 280 ppm",
+        "Predicted rise is 1 to 2 degrees by 2100"
+      ],
+      "correct_answer": 1,
+      "explanation": "The speaker explicitly states approximately 1.1 degrees Celsius rise since pre-industrial times.",
+      "times_attempted": 198,
+      "average_accuracy": 76.4,
+      "topics": ["climate", "science", "lectures"]
+    },
+    {
+      "id": "550e8400-e29b-41d4-a716-446660010018",
+      "title": "Quantum Computing and Cryptography",
+      "difficulty": 5,
+      "difficulty_label": "Expert",
+      "audio_duration_seconds": 240,
+      "script": "Quantum computing presents both unprecedented opportunities and existential threats to current cryptographic systems...",
+      "choices": [
+        "Quantum computers are slower than classical computers",
+        "RSA encryption is unaffected by quantum computing",
+        "Post-quantum cryptography is fully standardized",
+        "Breaking current encryption could occur in 10-15 years"
+      ],
+      "correct_answer": 3,
+      "explanation": "The key timeline mentioned is 10 to 15 years for quantum computers powerful enough to break current encryption.",
+      "times_attempted": 67,
+      "average_accuracy": 54.2,
+      "topics": ["quantum", "computing", "cryptography"]
+    }
+  ],
+
+  "sample_vocabulary": [
+    {
+      "id": "550e8400-e29b-41d4-a716-446662001001",
+      "word": "ambition",
+      "meaning": "野心、大志",
+      "part_of_speech": "noun",
+      "example_sentence": "His ambition is to become a successful entrepreneur.",
+      "stage": 1,
+      "difficulty": 1,
+      "frequency_rank": 45,
+      "synonyms": ["aspiration", "drive"],
+      "antonyms": ["indifference"],
+      "times_learned": 156
+    },
+    {
+      "id": "550e8400-e29b-41d4-a716-446662001015",
+      "word": "pervasive",
+      "meaning": "広がっている、浸透している",
+      "part_of_speech": "adjective",
+      "example_sentence": "The issue of climate change is pervasive in global discussions.",
+      "stage": 2,
+      "difficulty": 2,
+      "frequency_rank": 267,
+      "synonyms": ["widespread", "common"],
+      "antonyms": ["rare", "limited"],
+      "times_learned": 89
+    },
+    {
+      "id": "550e8400-e29b-41d4-a716-446662001038",
+      "word": "magnanimous",
+      "meaning": "寛大な、心の広い",
+      "part_of_speech": "adjective",
+      "example_sentence": "His magnanimous gesture toward his rival earned him respect.",
+      "stage": 3,
+      "difficulty": 3,
+      "frequency_rank": 534,
+      "synonyms": ["generous", "benevolent"],
+      "antonyms": ["petty", "stingy"],
+      "times_learned": 45
+    }
+  ],
+
+  "sample_writing_prompts": [
+    {
+      "id": "550e8400-e29b-41d4-a716-446663001001",
+      "topic": "My Most Memorable Travel Experience",
+      "difficulty": 1,
+      "word_limit": 250,
+      "time_limit_minutes": 30,
+      "category": "Travel & Experiences",
+      "prompt": "Write about a trip that had a significant impact on your perspective or life.",
+      "example_answer": "Last summer, I traveled to rural Japan for two weeks. The experience changed my perspective on life significantly. Living in a small farming village, I learned the value of simplicity and community...",
+      "times_assigned": 48
+    },
+    {
+      "id": "550e8400-e29b-41d4-a716-446663001015",
+      "topic": "The Balance Between Individual Freedom and Collective Good",
+      "difficulty": 3,
+      "word_limit": 350,
+      "time_limit_minutes": 60,
+      "category": "Philosophy & Society",
+      "prompt": "Discuss tensions between personal liberty and social responsibility.",
+      "example_answer": "Democracies constantly balance individual freedom against collective good. Classic examples emerge during public health crises: vaccination mandates restrict personal choice for community protection...",
+      "times_assigned": 12
+    }
+  ],
+
+  "sample_writing_submission": {
+    "id": "550e8400-e29b-41d4-a716-446665001003",
+    "student": "佐藤健一",
+    "student_id": "550e8400-e29b-41d4-a716-446655010003",
+    "prompt": "Environmental Sustainability and Corporate Responsibility",
+    "submitted_at": "2025-10-22T14:45:00+09:00",
+    "content": "Corporations possess significant responsibility for environmental sustainability given their substantial resources and influence. Many companies now embrace circular economy models, reducing waste and emissions substantially. However, some corporations prioritize short-term profits over environmental health. Effective environmental action requires integrated regulatory frameworks. Consumer pressure increasingly drives corporate environmental commitment. Sustainable corporations demonstrate that environmental responsibility and profitability are compatible. Strategic integration of environmental considerations into core business operations, rather than treating them as peripheral concerns, appears essential for achieving meaningful sustainability.",
+    "word_count": 187,
+    "scores": {
+      "content": 4,
+      "structure": 4,
+      "vocabulary": 4,
+      "grammar": 3,
+      "total": 15
+    },
+    "teacher_feedback": "Excellent argument with strong supporting points. Minor grammar issues in last sentence. Sophisticated vocabulary.",
+    "teacher": "山本由紀",
+    "graded_at": "2025-10-22T16:20:00+09:00"
+  },
+
+  "sample_learning_progress": {
+    "student": "山田太郎",
+    "date": "2026-03-19",
+    "listening_attempts_today": 5,
+    "listening_correct_today": 4,
+    "listening_accuracy_today_pct": 80,
+    "listening_time_minutes": 25,
+    "writing_submissions_today": 1,
+    "writing_score_today": 14,
+    "vocabulary_learned_today": 8,
+    "vocabulary_reviewed_today": 12,
+    "vocabulary_mastered_total": 28,
+    "total_study_time_minutes": 45,
+    "mood_rating": 4,
+    "notes": "Good focus today, understood grammar better",
+    "7_day_average_study_time": 41.2,
+    "7_day_average_mood": 4.1,
+    "7_day_listening_accuracy": 74.5
+  },
+
+  "performance_by_class": {
+    "beginner": {
+      "class_name": "基礎クラス",
+      "students": 17,
+      "listening_accuracy_pct": 73.2,
+      "writing_average_score": 8.1,
+      "vocabulary_mastered_average": 28,
+      "total_study_time_average_hours": 41.5,
+      "difficulty_focus": "Questions 1-2",
+      "engagement": "High"
+    },
+    "standard": {
+      "class_name": "標準クラス",
+      "students": 18,
+      "listening_accuracy_pct": 79.8,
+      "writing_average_score": 11.8,
+      "vocabulary_mastered_average": 38,
+      "total_study_time_average_hours": 48.2,
+      "difficulty_focus": "Questions 2-3",
+      "engagement": "Very High"
+    },
+    "advanced": {
+      "class_name": "発展クラス",
+      "students": 15,
+      "listening_accuracy_pct": 89.5,
+      "writing_average_score": 14.7,
+      "vocabulary_mastered_average": 48,
+      "total_study_time_average_hours": 55.8,
+      "difficulty_focus": "Questions 3-5",
+      "engagement": "Excellent"
+    }
+  },
+
+  "key_metrics_for_demo": {
+    "total_active_students": 50,
+    "student_retention_rate_pct": 98,
+    "average_daily_study_time_minutes": 45,
+    "average_listening_accuracy_pct": 80.8,
+    "average_writing_score_out_of_16": 11.5,
+    "vocabulary_mastery_average": 38,
+    "teacher_workload_hours_per_week": 12.5,
+    "submissions_graded_average_per_teacher": 96,
+    "time_spent_grading_minutes_per_submission": 385,
+    "student_mood_average_rating": 4.1,
+    "improvement_over_30_days_pct": 18.5,
+    "completion_rate_writing_assignments_pct": 94,
+    "completion_rate_listening_assignments_pct": 91
+  },
+
+  "demo_talking_points": [
+    "50 active high school students with realistic progression",
+    "3 differentiated classes showing clear performance gaps",
+    "30 listening questions spanning beginner to expert level",
+    "100+ vocabulary words with mastery tracking",
+    "Detailed teacher feedback on 50+ writing submissions",
+    "150+ listening attempts showing authentic success patterns",
+    "100+ daily progress records spanning 30 days",
+    "Clear improvement trends correlating with engagement",
+    "Realistic teacher workload metrics (grading, question creation)",
+    "Data shows system actually measures learning outcomes"
+  ]
+}

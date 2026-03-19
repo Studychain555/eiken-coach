@@ -12,8 +12,12 @@ import { useListeningStore } from '@/src/stores/listeningStore';
 import { LISTENING_SAMPLE_DATA } from '@/src/lib/listeningData';
 import ListeningQuestionScreen from '@/src/components/ListeningQuestionScreen';
 import ListeningResultScreen from '@/src/components/ListeningResultScreen';
-import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/theme';
+import { Colors, Spacing, BorderRadius, Shadows, Typography, DuolingoColors } from '@/constants/theme';
 import { EnhancedProgressBar } from '@/components/EnhancedProgressBar';
+import { XPRewardSystem } from '@/src/components/XPRewardSystem';
+import { DailyGoal } from '@/src/components/DailyGoal';
+import { StreakBanner } from '@/src/components/StreakBanner';
+import { ComboCounter } from '@/src/components/ComboCounter';
 
 type Screen = 'list' | 'question' | 'result';
 
@@ -36,6 +40,15 @@ export default function ListeningScreen() {
     getTodayStats,
     completedCount,
     totalCount,
+    // Gamification fields
+    hearts,
+    maxHearts,
+    currentLevel,
+    totalXP,
+    xpForNextLevel,
+    streakDays,
+    dailyGoal,
+    comboCount,
   } = useListeningStore();
 
   const [screen, setScreen] = useState<Screen>('list');
@@ -43,6 +56,19 @@ export default function ListeningScreen() {
   useEffect(() => {
     if (questions.length === 0) {
       setQuestions(LISTENING_SAMPLE_DATA);
+    }
+
+    // デモモード: ゲーミフィケーション画面用のダミーデータ投入
+    const demoUser = localStorage.getItem('eigomaster_demo_user');
+    if (demoUser) {
+      // ストア内のゲーミフィケーション状態を初期化（デモ用）
+      try {
+        // (既存の状態は保持し、ゲーミフィケーション値のみ設定)
+        // useListeningStore の内部状態が初期化されているので、ここでは何もしない
+        console.log('✅ デモモード: ゲーミフィケーション画面を表示');
+      } catch (error) {
+        console.error('デモモード初期化エラー:', error);
+      }
     }
   }, []);
 
@@ -70,12 +96,45 @@ export default function ListeningScreen() {
 
     return (
       <SafeAreaView style={styles.container}>
+        {/* XP Reward System Header */}
+        <XPRewardSystem
+          hearts={hearts}
+          maxHearts={maxHearts}
+          currentLevel={currentLevel}
+          currentXP={totalXP}
+          xpForNextLevel={xpForNextLevel}
+          streakDays={streakDays}
+        />
+
         <ScrollView showsVerticalScrollIndicator={false}>
           {/* Header */}
           <View style={styles.header}>
             <Text style={styles.title}>🎧 リスニング練習</Text>
             <Text style={styles.subtitle}>英検準1級形式</Text>
           </View>
+
+          {/* Daily Goal Banner */}
+          <View style={styles.section}>
+            <DailyGoal
+              target={dailyGoal.target}
+              completed={dailyGoal.completed}
+              xpReward={50}
+            />
+          </View>
+
+          {/* Streak Banner */}
+          {streakDays > 0 && (
+            <View style={styles.section}>
+              <StreakBanner streakDays={streakDays} xpBonus={100} />
+            </View>
+          )}
+
+          {/* Combo Counter */}
+          {comboCount >= 2 && (
+            <View style={styles.section}>
+              <ComboCounter count={comboCount} visible={true} />
+            </View>
+          )}
 
           {/* Completion Progress */}
           <View style={styles.section}>

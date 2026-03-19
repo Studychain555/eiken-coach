@@ -69,9 +69,10 @@ export default function ShadowingScreen({
   // タイマー管理
   useEffect(() => {
     if (isRecording) {
-      timerRef.current = setInterval(() => {
-        setRecordingTime((prev) => prev + 1);
+      const timerId = setInterval(() => {
+        setRecordingTime(recordingTime + 1);
       }, 1000);
+      timerRef.current = timerId as any;
     } else {
       if (timerRef.current) clearInterval(timerRef.current);
       setRecordingTime(0);
@@ -79,7 +80,7 @@ export default function ShadowingScreen({
     return () => {
       if (timerRef.current) clearInterval(timerRef.current);
     };
-  }, [isRecording]);
+  }, [isRecording, recordingTime]);
 
   const playOriginalAudio = async () => {
     try {
@@ -155,9 +156,11 @@ export default function ShadowingScreen({
       debugLog(TAG, 'Stopping recording', { round: currentRound });
 
       setIsRecording(false);
-      await recordingRef.current.stopAsync();
+      if (recordingRef.current) {
+        await (recordingRef.current as any).stopAndUnloadAsync();
+      }
 
-      const uri = recordingRef.current.getURI();
+      const uri = recordingRef.current?.getURI();
       if (!uri) {
         throw new Error('Failed to get recording URI');
       }

@@ -127,7 +127,7 @@ export class TokenManager {
     expiryTime: number
   ): Promise<void> {
     try {
-      await AsyncStorage.multiSet([
+      await (AsyncStorage as any).multiSet([
         [this.TOKEN_STORAGE_KEY, accessToken],
         [this.REFRESH_TOKEN_STORAGE_KEY, refreshToken],
         [this.TOKEN_EXPIRY_KEY, expiryTime.toString()],
@@ -146,7 +146,7 @@ export class TokenManager {
     refreshToken: string | null;
   }> {
     try {
-      const [accessToken, refreshToken] = await AsyncStorage.multiGet([
+      const [accessToken, refreshToken] = await (AsyncStorage as any).multiGet([
         this.TOKEN_STORAGE_KEY,
         this.REFRESH_TOKEN_STORAGE_KEY,
       ]);
@@ -166,7 +166,7 @@ export class TokenManager {
    */
   static async clearTokens(): Promise<void> {
     try {
-      await AsyncStorage.multiRemove([
+      await (AsyncStorage as any).multiRemove([
         this.TOKEN_STORAGE_KEY,
         this.REFRESH_TOKEN_STORAGE_KEY,
         this.TOKEN_EXPIRY_KEY,
@@ -382,7 +382,7 @@ export class SessionManager {
 
     this.sessionTimeout = setTimeout(() => {
       this.destroySession();
-    }, this.SESSION_TIMEOUT);
+    }, this.SESSION_TIMEOUT) as any;
   }
 }
 
@@ -406,7 +406,7 @@ export class EncryptionManager {
       const key = Buffer.from(encryptionKey.padEnd(this.KEY_LENGTH, '0').slice(0, this.KEY_LENGTH));
 
       // cipher を作成
-      const cipher = createHmac('sha256', key);
+      const cipher = createHmac('sha256', key) as any;
       const encrypted = cipher.update(plaintext, 'utf8', 'hex');
       cipher.end();
       const authTag = cipher.digest();
@@ -430,7 +430,7 @@ export class EncryptionManager {
       const key = Buffer.from(encryptionKey.padEnd(this.KEY_LENGTH, '0').slice(0, this.KEY_LENGTH));
 
       // 検証用の HMAC を生成
-      const cipher = createHmac('sha256', key);
+      const cipher = createHmac('sha256', key) as any;
       const decrypted = cipher.update(encrypted, 'hex', 'utf8');
       cipher.end();
       const expectedAuthTag = cipher.digest();

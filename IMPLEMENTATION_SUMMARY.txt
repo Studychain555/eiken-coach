@@ -1,0 +1,413 @@
+================================================================================
+  EigoMaster ビルドパイプライン実装完了レポート
+================================================================================
+
+実装日時: 2026-03-19 03:28 JST
+プロジェクト: EigoMaster (Expo React Native アプリ)
+対応プラットフォーム: Web, iOS, Android
+
+================================================================================
+ 1. 実装ファイル一覧
+================================================================================
+
+【GitHub Actions ワークフロー】
+✓ .github/workflows/test.yml
+  - ユニットテスト実行
+  - E2E テスト
+  - セキュリティスキャン
+  - 実行時間: 10-15 分
+
+✓ .github/workflows/build-web.yml
+  - Web ビルド (Expo export)
+  - Vercel デプロイ (develop/main)
+  - Cloudflare Pages デプロイ (main)
+  - 実行時間: 5-10 分
+
+✓ .github/workflows/build-ios.yml
+  - EAS Build for iOS
+  - TestFlight 自動提出
+  - Slack 通知
+  - 実行時間: 30-45 分
+
+✓ .github/workflows/build-android.yml
+  - EAS Build for Android
+  - Google Play 内部テスト版提出
+  - Slack 通知
+  - 実行時間: 45-60 分
+
+【環境別設定ファイル】
+✓ .env.development
+  - ローカル開発用
+  - localhost:54321 (Supabase Local)
+  - デバッグモード有効
+
+✓ .env.staging
+  - ステージング環境用
+  - staging-supabase.eigomaster.app
+  - 本番設定で事前検証
+
+✓ .env.production
+  - 本番環境用 (既存)
+  - 本番 Supabase URL
+  - 本番 API キー
+
+【デプロイスクリプト】
+✓ scripts/deploy.sh
+  - マルチプラットフォーム対応
+  - 環境別デプロイ (development/staging/production)
+  - ドライランモード対応
+  - 対話的な確認ダイアログ
+  - 使用例: ./scripts/deploy.sh -e production -p all -s
+
+✓ scripts/rollback.sh
+  - ロールバック専用
+  - iOS/Android/全対応
+  - 前バージョン自動検出
+  - 安全確認ダイアログ
+  - 使用例: ./scripts/rollback.sh -p ios
+
+【設定ファイル更新】
+✓ eas.json
+  - development プロファイル追加
+  - preview (staging) プロファイル
+  - production プロファイル
+  - チャネル設定 (development/staging/production)
+  - 環境変数自動注入設定
+
+✓ app.json
+  - 既存設定は変更なし
+  - ビルドプロファイルは eas.json で管理
+
+✓ package.json
+  - npm ビルド・デプロイスクリプト追加:
+    - npm run build (全プラットフォーム)
+    - npm run build:web, build:ios, build:android (個別)
+    - npm run submit (ストア提出)
+    - npm run deploy (デプロイスクリプト実行)
+    - npm run rollback (ロールバック実行)
+    - npm run ci:test, ci:build (CI/CD用)
+
+【ドキュメント】
+✓ BUILD_PIPELINE_README.md
+  - ビルドパイプライン完全ガイド
+  - アーキテクチャ概要
+  - クイックスタート
+  - よくあるパターン
+  - トラブルシューティング
+
+✓ BUILD_PIPELINE_QUICK_START.md
+  - 最速セットアップ (5分)
+  - よくある質問 (FAQ)
+  - 環境変数管理
+  - ビルド設定詳細
+  - ロールバック手順
+
+✓ DEPLOYMENT_GUIDE.md
+  - 詳細デプロイプロセス
+  - ブランチ戦略
+  - バージョン管理
+  - デプロイ前チェックリスト
+  - トラブルシューティング
+  - パフォーマンス最適化
+
+✓ CI_CD_ARCHITECTURE.md
+  - システムアーキテクチャ図
+  - ワークフロー詳細説明
+  - 環境別設定
+  - 秘密情報管理
+  - エラーハンドリング
+  - ベストプラクティス
+
+✓ DEPLOYMENT_CHECKLIST.md
+  - Phase 1-5 の詳細チェックリスト
+  - コード品質確認
+  - 環境変数確認
+  - 本番環境確認
+  - ポストデプロイ確認
+  - ロールバック判定基準
+
+✓ GITHUB_SECRETS_SETUP.md
+  - GitHub Secrets 設定方法
+  - 必須 Secrets リスト
+  - 取得方法の詳細手順
+  - セキュリティベストプラクティス
+  - トラブルシューティング
+  - 一括設定スクリプト
+
+================================================================================
+ 2. デプロイフロー概要
+================================================================================
+
+【開発環境 (develop ブランチ)】
+  git push origin develop
+    ↓
+  GitHub Actions: test.yml 実行
+    ├─ Unit Tests
+    ├─ Linting
+    └─ Security Scan
+    ↓
+  GitHub Actions: build-web.yml, build-ios.yml, build-android.yml 並列実行
+    ├─ Web: npm run web → Vercel デプロイ (preview)
+    ├─ iOS: eas build → TestFlight 提出
+    └─ Android: eas build → Google Play 内部テスト版
+    ↓
+  完了まで: 1-2 時間
+
+【本番環境 (main ブランチ)】
+  方法 1: git push origin main
+  方法 2: git tag -a v1.0.5 && git push origin v1.0.5
+  方法 3: ./scripts/deploy.sh -e production -p all -s
+    ↓
+  GitHub Actions: test.yml + build-* 全実行
+    ├─ Web: Cloudflare Pages デプロイ
+    ├─ iOS: TestFlight 提出
+    └─ Android: Google Play 内部テスト版
+    ↓
+  Slack #deployments チャネルに通知
+    ↓
+  完了まで: 1-2 時間
+
+【ロールバック】
+  ./scripts/rollback.sh -p ios    # iOS のみ
+  ./scripts/rollback.sh -p all    # 全プラットフォーム
+    ↓
+  前バージョンを自動検出
+  対話的に確認
+    ↓
+  完了まで: 30-45 分
+
+================================================================================
+ 3. GitHub Actions ワークフロー トリガー
+================================================================================
+
+【自動トリガー】
+✓ test.yml
+  - on: push [main, develop]
+  - on: pull_request [main, develop]
+
+✓ build-web.yml
+  - on: push [main, develop]
+  - on: workflow_dispatch (手動実行)
+  - パス条件: app/**, components/**, etc.
+
+✓ build-ios.yml
+  - on: push [main, develop]
+  - on: workflow_dispatch (手動実行 + environment 選択)
+  - パス条件: app/**, components/**, etc.
+
+✓ build-android.yml
+  - on: push [main, develop]
+  - on: workflow_dispatch (手動実行 + environment 選択)
+  - パス条件: app/**, components/**, etc.
+
+【手動トリガー】
+$ gh workflow run build-web.yml -f environment=production
+$ gh run retry {run-id}
+
+================================================================================
+ 4. 環境別設定
+================================================================================
+
+【development (開発)】
+- Supabase Local: http://localhost:54321
+- デバッグモード: 有効
+- Distribution: internal
+- リソースクラス: m1
+
+【staging (ステージング)】
+- Supabase Staging
+- デバッグモード: 無効
+- Distribution: internal
+- TestFlight・Google Play 内部テスト版に提出
+- リソースクラス: m1 (iOS), medium (Android)
+
+【production (本番)】
+- Supabase Production
+- デバッグモード: 無効
+- Distribution: store
+- App Store・Google Play に提出
+- リソースクラス: m1 (iOS), medium (Android)
+
+================================================================================
+ 5. GitHub Secrets 必須設定
+================================================================================
+
+【EAS・Expo 認証】
+✓ EAS_TOKEN
+✓ APPLE_ID
+✓ APPLE_PASSWORD
+✓ APPLE_TEAM_ID
+✓ ASC_APP_ID
+✓ GOOGLE_PLAY_API_KEY (Base64)
+
+【Web ホスティング】
+✓ VERCEL_TOKEN
+✓ VERCEL_ORG_ID
+✓ VERCEL_PROJECT_ID
+✓ CLOUDFLARE_API_TOKEN
+✓ CLOUDFLARE_ACCOUNT_ID
+
+【通知】
+✓ SLACK_WEBHOOK_URL
+
+詳細: ./GITHUB_SECRETS_SETUP.md
+
+================================================================================
+ 6. npm スクリプトコマンド
+================================================================================
+
+【テスト】
+$ npm test              # Jest ユニットテスト
+$ npm run lint          # ESLint
+$ npm audit             # セキュリティ監査
+$ npm run ci:test       # CI テスト
+
+【ビルド】
+$ npm run build         # 全プラットフォーム
+$ npm run build:web     # Web のみ
+$ npm run build:ios     # iOS のみ
+$ npm run build:android # Android のみ
+$ npm run ci:build      # CI ビルド
+
+【デプロイ・ロールバック】
+$ npm run deploy        # ./scripts/deploy.sh 実行
+$ npm run rollback      # ./scripts/rollback.sh 実行
+$ npm run submit        # ストア提出
+
+================================================================================
+ 7. セキュリティ・ベストプラクティス
+================================================================================
+
+【秘密情報管理】
+✓ GitHub Secrets で全秘密情報を管理
+✓ .env.local は .gitignore に含める
+✓ API キーのローテーション (毎月)
+✓ Slack Webhook URL 安全保管
+
+【コード品質】
+✓ 全ワークフローで npm audit 実行
+✓ Trufflehog で秘密情報スキャン
+✓ GitHub Code Scanning 対応
+
+【デプロイ安全対策】
+✓ 本番デプロイは業務時間内に限定
+✓ 全デプロイ前にチェックリスト実行
+✓ ロールバック計画を常に用意
+✓ デプロイ後 24 時間監視体制
+
+【監視・アラート】
+✓ Slack #deployments チャネルに自動通知
+✓ Sentry でエラーログ監視
+✓ Google Analytics で ユーザー行動追跡
+
+================================================================================
+ 8. 実行時間まとめ
+================================================================================
+
+【個別ワークフロー】
+- テスト実行: 10-15 分
+- Web ビルド: 5-10 分
+- iOS ビルド: 30-45 分
+- Android ビルド: 45-60 分
+
+【デプロイ】
+- ステージング Web: 10-15 分
+- ステージング 全プラットフォーム: 1-2 時間
+- 本番 Web: 5-10 分
+- 本番 全プラットフォーム: 1-2 時間
+
+【ロールバック】
+- Web: 5-10 分
+- iOS/Android: 30-45 分
+
+================================================================================
+ 9. ドキュメント参照順序
+================================================================================
+
+【急いでいる場合】
+1. BUILD_PIPELINE_QUICK_START.md (5分)
+   → セットアップ・デプロイ方法
+
+【デプロイを実施する場合】
+1. DEPLOYMENT_CHECKLIST.md
+   → デプロイ前の全チェック項目
+2. DEPLOYMENT_GUIDE.md
+   → 詳細なデプロイプロセス
+
+【パイプラインを理解・保守する場合】
+1. BUILD_PIPELINE_README.md
+   → 全体概要・ファイル構成
+2. CI_CD_ARCHITECTURE.md
+   → アーキテクチャ・デバッグ方法
+3. GITHUB_SECRETS_SETUP.md
+   → 秘密情報の管理・更新
+
+================================================================================
+ 10. 次のステップ
+================================================================================
+
+【Step 1: GitHub Secrets セットアップ】
+実施時間: 30分
+1. GITHUB_SECRETS_SETUP.md に従い Github Secrets 設定
+2. EAS Token, Apple ID, Google Play API キーを取得
+3. gh secret set コマンドで GitHub Secrets 設定
+
+【Step 2: ステージング環境テスト】
+実施時間: 1-2 時間
+1. develop ブランチにコミット・プッシュ
+2. GitHub Actions の実行を監視
+3. Slack #deployments で通知確認
+4. https://staging.eigomaster.app でアクセス確認
+
+【Step 3: 本番デプロイ実施】
+実施時間: 1-2 時間
+1. DEPLOYMENT_CHECKLIST.md で全チェック実施
+2. ./scripts/deploy.sh -e production -p all -s 実行
+   または git push origin main で自動実行
+3. Slack で デプロイ通知を確認
+4. https://eigomaster.app でアクセス確認
+5. Sentry・Google Analytics で監視開始
+
+【Step 4: デプロイ後監視 (24時間)】
+1. Sentry でエラーレート監視
+2. Google Analytics でユーザー行動確認
+3. 定期的に App Store / Google Play で審査状況確認
+
+================================================================================
+ 11. トラブルシューティング リソース
+================================================================================
+
+【ビルド失敗】
+→ CI_CD_ARCHITECTURE.md > トラブルシューティング
+
+【デプロイ失敗】
+→ DEPLOYMENT_GUIDE.md > トラブルシューティング
+
+【GitHub Secrets トラブル】
+→ GITHUB_SECRETS_SETUP.md > トラブルシューティング
+
+【ローカルデバッグ】
+→ CI_CD_ARCHITECTURE.md > ローカルでのワークフローテスト
+
+================================================================================
+ 12. 実装チェックリスト
+================================================================================
+
+✓ GitHub Actions ワークフロー 4個 実装完了
+✓ 環境別設定ファイル (.env.development, .env.staging) 作成完了
+✓ デプロイスクリプト 2個 (deploy.sh, rollback.sh) 作成完了
+✓ EAS 設定 (eas.json) 更新完了
+✓ npm スクリプト 11個 追加完了
+✓ ドキュメント 6個 作成完了
+✓ GitHub Secrets セットアップガイド 作成完了
+
+[ ] GitHub Secrets 設定 (初回セットアップ時)
+[ ] ステージング環境テスト実行
+[ ] 本番デプロイ実施
+
+================================================================================
+
+本番環境デプロイの準備が整いました。
+詳細は BUILD_PIPELINE_README.md を参照してください。
+
+================================================================================

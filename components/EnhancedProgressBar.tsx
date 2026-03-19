@@ -145,7 +145,7 @@ export function StepProgress({
                   color: index <= currentStep ? color : Colors.light.textTertiary,
                   fontWeight: index === currentStep ? '600' : '400',
                 },
-              ]}
+              ] as any}
             >
               {label}
             </Text>
@@ -235,7 +235,7 @@ export function CircularProgress({
         width={size}
         height={size}
         viewBox={`0 0 ${size} ${size}`}
-        style={{ transform: [{ rotate: '-90deg' }] }}
+        style={{ transform: [{ rotate: '-90deg' }] } as any}
       >
         <circle
           cx={size / 2}
@@ -263,7 +263,7 @@ export function CircularProgress({
             {Math.round(percentage)}%
           </Text>
           {label && (
-            <Text style={styles.circularLabelText}>{label}</Text>
+            <Text style={styles.circularLabelText as any}>{label}</Text>
           )}
         </View>
       )}
@@ -314,7 +314,7 @@ const styles = StyleSheet.create({
   },
   stepCheckmark: {
     color: '#fff',
-    fontWeight: 'bold',
+    fontWeight: '700',
   },
   stepLine: {
     position: 'absolute',

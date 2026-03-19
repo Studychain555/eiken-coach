@@ -191,12 +191,13 @@ Provide your response in JSON format:
       return Math.min(max, Math.max(0, num));
     };
 
+    const typedResult = result as any;
     return {
-      accuracyScore: normalizeScore(result.accuracyScore),
-      rhythmScore: normalizeScore(result.rhythmScore),
-      pronunciationScore: normalizeScore(result.pronunciationScore),
-      feedback: result.feedback || 'フィードバックが生成されませんでした',
-      corrections: Array.isArray(result.corrections) ? result.corrections : [],
+      accuracyScore: normalizeScore(typedResult.accuracyScore),
+      rhythmScore: normalizeScore(typedResult.rhythmScore),
+      pronunciationScore: normalizeScore(typedResult.pronunciationScore),
+      feedback: typedResult.feedback || 'フィードバックが生成されませんでした',
+      corrections: Array.isArray(typedResult.corrections) ? typedResult.corrections : [],
     };
   } finally {
     clearTimeout(timeoutId);
@@ -244,7 +245,7 @@ export async function scoreWritingSubmission(
       error: error instanceof Error ? error.message : error,
       essayLength: studentEssay.length,
     });
-    return generateDummyWritingScore(topic, studentEssay);
+    return await generateDummyWritingScore(topic, studentEssay);
   }
 }
 
@@ -380,10 +381,11 @@ Provide response in JSON:
       return Math.min(max, Math.max(0, num));
     };
 
-    const contentScore = normalizeWritingScore(result.contentScore, 4);
-    const structureScore = normalizeWritingScore(result.structureScore, 4);
-    const vocabularyScore = normalizeWritingScore(result.vocabularyScore, 4);
-    const grammarScore = normalizeWritingScore(result.grammarScore, 4);
+    const typedResult = result as any;
+    const contentScore = normalizeWritingScore(typedResult.contentScore, 4);
+    const structureScore = normalizeWritingScore(typedResult.structureScore, 4);
+    const vocabularyScore = normalizeWritingScore(typedResult.vocabularyScore, 4);
+    const grammarScore = normalizeWritingScore(typedResult.grammarScore, 4);
 
     return {
       contentScore,
@@ -391,9 +393,9 @@ Provide response in JSON:
       vocabularyScore,
       grammarScore,
       totalScore: contentScore + structureScore + vocabularyScore + grammarScore,
-      feedback: result.feedback || 'フィードバックがありません',
-      corrections: Array.isArray(result.corrections) ? result.corrections : [],
-      modelAnswer: result.modelAnswer || '',
+      feedback: typedResult.feedback || 'フィードバックがありません',
+      corrections: Array.isArray(typedResult.corrections) ? typedResult.corrections : [],
+      modelAnswer: typedResult.modelAnswer || '',
     };
   } finally {
     clearTimeout(timeoutId);
@@ -431,10 +433,23 @@ function generateDummyScore(
   };
 }
 
-function generateDummyWritingScore(
+async function generateDummyWritingScore(
   topic: string,
   essay: string
-): ReturnType<typeof scoreWritingSubmission> {
+): Promise<{
+  contentScore: number;
+  structureScore: number;
+  vocabularyScore: number;
+  grammarScore: number;
+  totalScore: number;
+  feedback: string;
+  corrections: Array<{
+    original: string;
+    corrected: string;
+    explanation: string;
+  }>;
+  modelAnswer: string;
+}> {
   const score = Math.floor(Math.random() * 4) + 1;
 
   return {

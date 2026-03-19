@@ -81,8 +81,8 @@ class PerformanceMonitor {
    * メモリ使用量を記録
    */
   recordMemoryUsage() {
-    if (typeof performance !== 'undefined' && performance.memory) {
-      const memoryMB = performance.memory.usedJSHeapSize / 1048576; // bytes to MB
+    if (typeof performance !== 'undefined' && (performance as any).memory) {
+      const memoryMB = (performance as any).memory.usedJSHeapSize / 1048576; // bytes to MB
       this.metrics.memoryUsage = memoryMB;
       this.logMetric('Memory Usage', `${memoryMB.toFixed(2)}MB`);
 

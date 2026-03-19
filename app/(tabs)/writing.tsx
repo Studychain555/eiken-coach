@@ -15,9 +15,12 @@ import { useWritingStore } from '@/src/stores/writingStore';
 import { WRITING_SAMPLE_PROMPTS } from '@/src/lib/writingData';
 import { scoreWritingSubmission } from '@/src/lib/aiScoringService';
 import WritingResultScreen from '@/src/components/WritingResultScreen';
-import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/theme';
+import { Colors, Spacing, BorderRadius, Shadows, Typography, DuolingoColors } from '@/constants/theme';
 import { OptimizedButton, ButtonGroup } from '@/components/OptimizedButton';
 import { EnhancedProgressBar } from '@/components/EnhancedProgressBar';
+import { XPRewardSystem } from '@/src/components/XPRewardSystem';
+import { DailyGoal } from '@/src/components/DailyGoal';
+import { StreakBanner } from '@/src/components/StreakBanner';
 
 type Screen = 'prompt-select' | 'editor' | 'result';
 
@@ -43,6 +46,14 @@ export default function WritingScreen() {
     getTodayStats,
     getTotalSubmissions,
     getAverageScore,
+    // Gamification fields
+    hearts,
+    maxHearts,
+    currentLevel,
+    totalXP,
+    xpForNextLevel,
+    streakDays,
+    dailyGoal,
   } = useWritingStore();
 
   const [screen, setScreen] = useState<Screen>('prompt-select');
@@ -127,12 +138,38 @@ export default function WritingScreen() {
 
     return (
       <SafeAreaView style={styles.container}>
+        {/* XP Reward System Header */}
+        <XPRewardSystem
+          hearts={hearts}
+          maxHearts={maxHearts}
+          currentLevel={currentLevel}
+          currentXP={totalXP}
+          xpForNextLevel={xpForNextLevel}
+          streakDays={streakDays}
+        />
+
         <ScrollView showsVerticalScrollIndicator={false}>
           {/* Header */}
           <View style={styles.header}>
             <Text style={styles.title}>✍️ ライティング練習</Text>
             <Text style={styles.subtitle}>英検準1級形式</Text>
           </View>
+
+          {/* Daily Goal Banner */}
+          <View style={styles.section}>
+            <DailyGoal
+              target={dailyGoal.target}
+              completed={dailyGoal.completed}
+              xpReward={100}
+            />
+          </View>
+
+          {/* Streak Banner */}
+          {streakDays > 0 && (
+            <View style={styles.section}>
+              <StreakBanner streakDays={streakDays} xpBonus={100} />
+            </View>
+          )}
 
           {/* Stats */}
           <View style={styles.section}>
