@@ -3,8 +3,26 @@
  * JWT トークン、暗号化、セッション管理、監査ログ
  */
 
-import { createHmac, randomBytes } from 'crypto';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+
+// Web 互換性のためのヘルパー関数
+const getRandomBytes = (size: number): string => {
+  if (typeof window !== 'undefined' && window.crypto) {
+    // Web環境: crypto.getRandomValues() を使用
+    const array = new Uint8Array(size);
+    window.crypto.getRandomValues(array);
+    return Array.from(array).map(b => b.toString(16).padStart(2, '0')).join('');
+  } else {
+    // Node.js環境: crypto.randomBytes() を使用
+    try {
+      const { randomBytes } = require('crypto');
+      return randomBytes(size).toString('hex');
+    } catch {
+      // フォールバック: Math.random() を使用
+      return Array.from({ length: size }, () => Math.floor(Math.random() * 256).toString(16).padStart(2, '0')).join('');
+    }
+  }
+};
 
 // ============================================================================
 // JWT トークン管理
@@ -228,7 +246,7 @@ export class TokenManager {
    * プライベート: JWT ID を生成
    */
   private static generateJTI(): string {
-    return randomBytes(16).toString('hex');
+    return getRandomBytes(16);
   }
 }
 
@@ -369,7 +387,7 @@ export class SessionManager {
    * プライベート: デバイスID を生成
    */
   private static generateDeviceId(): string {
-    return `${Date.now()}-${randomBytes(8).toString('hex')}`;
+    return `${Date.now()}-${getRandomBytes(8)}`;
   }
 
   /**
@@ -568,7 +586,7 @@ export class AuditLogger {
    * プライベート: ログID を生成
    */
   private static generateLogId(): string {
-    return `${Date.now()}-${randomBytes(8).toString('hex')}`;
+    return `${Date.now()}-${getRandomBytes(8)}`;
   }
 }
 

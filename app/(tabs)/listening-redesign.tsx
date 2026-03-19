@@ -39,6 +39,26 @@ export default function ListeningScreenRedesign() {
   const [timeBonus, setTimeBonus] = useState(100);
   const [triggerCelebration, setTriggerCelebration] = useState(false);
   const [celebrationType, setCelebrationType] = useState<'confetti' | 'correct'>('confetti');
+  const [isPlaying, setIsPlaying] = useState(false);
+  const audioRef = React.useRef<HTMLAudioElement | null>(null);
+
+  const playAudio = async (audioUrl: string) => {
+    try {
+      setIsPlaying(true);
+      if (typeof window !== 'undefined') {
+        // Web環境: HTML5 Audio API を使用
+        if (!audioRef.current) {
+          audioRef.current = new Audio(audioUrl);
+        }
+        audioRef.current.src = audioUrl;
+        await audioRef.current.play();
+      }
+    } catch (error) {
+      console.error('❌ 音声再生エラー:', error);
+    } finally {
+      setIsPlaying(false);
+    }
+  };
 
   useEffect(() => {
     if (questions.length === 0) {
@@ -156,12 +176,20 @@ export default function ListeningScreenRedesign() {
         <View style={styles.questionContainer}>
           {/* Audio Section */}
           <View style={styles.audioSection}>
-            <TouchableOpacity style={styles.playButton}>
-              <Text style={styles.playIcon}>🔊</Text>
+            <TouchableOpacity
+              style={styles.playButton}
+              onPress={() => playAudio(question.audioUrl)}
+              disabled={isPlaying}
+            >
+              <Text style={styles.playIcon}>{isPlaying ? '⏸️' : '🔊'}</Text>
             </TouchableOpacity>
-            <Text style={styles.audioLabel}>音声を再生</Text>
-            <TouchableOpacity style={styles.audioActionBtn}>
-              <Text style={styles.audioActionText}>遅い速度で再生</Text>
+            <Text style={styles.audioLabel}>{isPlaying ? '再生中...' : '音声を再生'}</Text>
+            <TouchableOpacity
+              style={styles.audioActionBtn}
+              onPress={() => playAudio(question.audioUrl)}
+              disabled={isPlaying}
+            >
+              <Text style={styles.audioActionText}>{isPlaying ? '停止中' : '遅い速度で再生'}</Text>
             </TouchableOpacity>
           </View>
 
