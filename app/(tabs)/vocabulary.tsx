@@ -173,66 +173,8 @@ export default function VocabularyScreen() {
             </View>
           </View>
 
-          {/* Daily Goal Banner */}
-          <View style={styles.section}>
-            <DailyGoal
-              target={dailyGoal.target}
-              completed={dailyGoal.completed}
-              xpReward={50}
-            />
-          </View>
-
-          {/* Streak Banner */}
-          {streakDays > 0 && (
-            <View style={styles.section}>
-              <StreakBanner streakDays={streakDays} xpBonus={80} />
-            </View>
-          )}
-
-          {/* Combo Counter */}
-          {comboCount >= 2 && (
-            <View style={styles.section}>
-              <ComboCounter count={comboCount} visible={true} />
-            </View>
-          )}
-
-          {/* Overall Progress */}
-          <View style={styles.section}>
-            <Milestone
-              milestone={2000}
-              current={masteredCount}
-              unit="単語"
-              icon="📚"
-              color={Colors.light.primary}
-            />
-          </View>
-
-          {/* Today's Stats */}
-          <View style={styles.section}>
-            <View style={styles.statsRow}>
-              <View style={styles.statBox}>
-                <Text style={styles.statBoxEmoji}>🎯</Text>
-                <Text style={styles.statBoxValue}>{stats.attempted}</Text>
-                <Text style={styles.statBoxLabel}>出題</Text>
-              </View>
-              <View style={styles.statBox}>
-                <Text style={styles.statBoxEmoji}>✅</Text>
-                <Text style={styles.statBoxValue}>{stats.correct}</Text>
-                <Text style={styles.statBoxLabel}>正解</Text>
-              </View>
-              <View style={styles.statBox}>
-                <Text style={styles.statBoxEmoji}>📊</Text>
-                <Text style={[styles.statBoxValue, { color: Colors.light.success }]}>
-                  {stats.accuracy}%
-                </Text>
-                <Text style={styles.statBoxLabel}>正答率</Text>
-              </View>
-            </View>
-          </View>
-
           {/* Difficulty Tabs */}
           <View style={styles.section}>
-            <Text style={styles.sectionTitle}>難易度を選択</Text>
             <View style={styles.difficultyTabs}>
               {(Object.entries(STAGE_GROUPS) as [DifficultyTab, typeof STAGE_GROUPS[DifficultyTab]][]).map(
                 ([key, group]) => (
@@ -261,7 +203,6 @@ export default function VocabularyScreen() {
 
           {/* Stages Grid */}
           <View style={styles.section}>
-            <Text style={styles.sectionTitle}>ステージを選択</Text>
             <View style={styles.stageGrid}>
               {currentTab.stages.map((stage: number) => {
                 const isLocked = stage > 3;
@@ -292,15 +233,6 @@ export default function VocabularyScreen() {
             </View>
           </View>
 
-          {/* Tips Box */}
-          <View style={styles.section}>
-            <View style={styles.tipsBox}>
-              <Text style={styles.tipsEmoji}>💡</Text>
-              <Text style={styles.tipsText}>
-                1ステージ = 100語。同じ単語を3回連続正解で「修得」になります。
-              </Text>
-            </View>
-          </View>
         </ScrollView>
       </SafeAreaView>
     );
@@ -557,24 +489,24 @@ const styles = StyleSheet.create({
     backgroundColor: NaturalColors.background,
   },
   header: {
-    paddingHorizontal: Spacing.xl,
-    paddingTop: Spacing.lg,
-    paddingBottom: Spacing.md,
+    paddingHorizontal: Spacing.lg,
+    paddingTop: Spacing.sm,
+    paddingBottom: Spacing.xs,
   },
   title: {
-    fontSize: 28,
+    fontSize: 22,
     fontWeight: '800',
     color: Colors.light.text,
-    marginBottom: Spacing.sm,
+    marginBottom: Spacing.xs,
   },
   subtitle: {
-    fontSize: 14,
+    fontSize: 12,
     color: Colors.light.textSecondary,
-    fontWeight: '500',
+    fontWeight: '400',
   },
   section: {
-    marginHorizontal: Spacing.xl,
-    marginTop: Spacing.xl,
+    marginHorizontal: Spacing.lg,
+    marginTop: Spacing.md,
   },
   sectionTitle: {
     fontSize: 18,
@@ -615,8 +547,8 @@ const styles = StyleSheet.create({
   },
   difficultyTab: {
     flex: 1,
-    paddingHorizontal: Spacing.md,
-    paddingVertical: Spacing.lg,
+    paddingHorizontal: Spacing.sm,
+    paddingVertical: Spacing.md,
     backgroundColor: Colors.light.surfaceCard,
     borderRadius: BorderRadius.lg,
     alignItems: 'center',
@@ -629,13 +561,13 @@ const styles = StyleSheet.create({
     borderColor: Colors.light.primary,
   },
   difficultyTabEmoji: {
-    fontSize: 18,
-    marginBottom: Spacing.sm,
+    fontSize: 16,
+    marginBottom: Spacing.xs,
   },
   difficultyTabLabel: {
-    fontSize: 13,
+    fontSize: 11,
     color: Colors.light.text,
-    fontWeight: '600',
+    fontWeight: '500',
     textAlign: 'center',
   },
   difficultyTabLabelActive: {
@@ -645,13 +577,13 @@ const styles = StyleSheet.create({
   stageGrid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    gap: Spacing.lg,
+    gap: Spacing.sm,
   },
   stageButton: {
-    width: (width - 72) / 4,
+    width: (width - 56) / 5,
     aspectRatio: 1,
     backgroundColor: Colors.light.primaryLight,
-    borderRadius: BorderRadius.lg,
+    borderRadius: BorderRadius.md,
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 2,
@@ -682,7 +614,7 @@ const styles = StyleSheet.create({
     lineHeight: 24,
   },
   stageButtonNumber: {
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: '700',
     color: Colors.light.primary,
   },
@@ -941,15 +873,15 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
   },
   changeLevelButton: {
-    paddingHorizontal: Spacing.md,
-    paddingVertical: Spacing.sm,
+    paddingHorizontal: Spacing.sm,
+    paddingVertical: Spacing.xs,
     backgroundColor: Colors.light.primary,
     borderRadius: BorderRadius.full,
     justifyContent: 'center',
     alignItems: 'center',
   },
   changeLevelButtonText: {
-    fontSize: 12,
+    fontSize: 11,
     fontWeight: '600',
     color: '#fff',
   },
