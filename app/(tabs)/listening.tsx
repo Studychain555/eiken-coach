@@ -20,6 +20,8 @@ import { XPRewardSystem } from '@/src/components/XPRewardSystem';
 import { DailyGoal } from '@/src/components/DailyGoal';
 import { StreakBanner } from '@/src/components/StreakBanner';
 import { ComboCounter } from '@/src/components/ComboCounter';
+import { ErrorScreen } from '@/src/components/ErrorScreen';
+import { EmptyState } from '@/src/components/EmptyState';
 
 type Screen = 'list' | 'question' | 'result' | 'shadowing';
 
@@ -51,6 +53,10 @@ export default function ListeningScreen() {
     streakDays,
     dailyGoal,
     comboCount,
+    // Error handling
+    syncError,
+    setSyncError,
+    retry,
   } = useListeningStore();
 
   const [screen, setScreen] = useState<Screen>('list');
@@ -104,6 +110,32 @@ export default function ListeningScreen() {
   };
 
   if (screen === 'list') {
+    // エラーハンドリング
+    if (syncError) {
+      return (
+        <SafeAreaView style={styles.container}>
+          <ErrorScreen
+            title="同期に失敗しました"
+            description={syncError}
+            retryFn={retry}
+          />
+        </SafeAreaView>
+      );
+    }
+
+    // データなしの場合
+    if (questions.length === 0) {
+      return (
+        <SafeAreaView style={styles.container}>
+          <EmptyState
+            title="リスニング問題がありません"
+            description="問題を読み込み中です。しばらくお待ちください。"
+            icon="🎧"
+          />
+        </SafeAreaView>
+      );
+    }
+
     const stats = getTodayStats();
     const completionRate = (completedCount / totalCount) * 100;
 

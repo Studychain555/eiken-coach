@@ -10,7 +10,7 @@ const { width } = Dimensions.get('window');
 
 interface Props {
   count?: number;
-  type?: 'card' | 'list' | 'text';
+  type?: 'card' | 'list' | 'text' | 'form' | 'result';
 }
 
 export function SkeletonLoader({ count = 3, type = 'card' }: Props) {
@@ -66,12 +66,42 @@ export function SkeletonLoader({ count = 3, type = 'card' }: Props) {
     </Animated.View>
   );
 
+  const renderForm = () => (
+    <Animated.View style={[formResultStyles.form, { opacity }]}>
+      <View style={formResultStyles.formField}>
+        <View style={[styles.skeletonLine, { height: 14, marginBottom: 8 }]} />
+        <View style={[formResultStyles.formInput]} />
+      </View>
+      <View style={formResultStyles.formField}>
+        <View style={[styles.skeletonLine, { height: 14, marginBottom: 8 }]} />
+        <View style={[formResultStyles.formInput, { height: 100 }]} />
+      </View>
+      <View style={formResultStyles.formButton} />
+    </Animated.View>
+  );
+
+  const renderResult = () => (
+    <Animated.View style={[formResultStyles.result, { opacity }]}>
+      <View style={formResultStyles.resultHeader} />
+      <View style={formResultStyles.resultContent}>
+        <View style={[styles.skeletonLine, { height: 16, marginBottom: 12 }]} />
+        <View style={[styles.skeletonLine, { width: '80%', marginBottom: 12 }]} />
+        <View style={[styles.skeletonLine, { width: '90%', marginBottom: 20 }]} />
+        <View style={formResultStyles.resultBar} />
+      </View>
+    </Animated.View>
+  );
+
   const renderItem = () => {
     switch (type) {
       case 'list':
         return renderList();
       case 'text':
         return renderText();
+      case 'form':
+        return renderForm();
+      case 'result':
+        return renderResult();
       case 'card':
       default:
         return renderCard();
@@ -186,5 +216,46 @@ const spinnerStyles = StyleSheet.create({
     height: 10,
     borderRadius: 5,
     backgroundColor: '#fff',
+  },
+});
+
+// Add form and result skeleton styles to the main styles
+const formResultStyles = StyleSheet.create({
+  form: {
+    backgroundColor: '#fff',
+    borderRadius: 8,
+    padding: 16,
+  },
+  formField: {
+    marginBottom: 16,
+  },
+  formInput: {
+    height: 40,
+    backgroundColor: '#ddd',
+    borderRadius: 4,
+  },
+  formButton: {
+    height: 44,
+    backgroundColor: '#ddd',
+    borderRadius: 4,
+    marginTop: 12,
+  },
+  result: {
+    backgroundColor: '#fff',
+    borderRadius: 8,
+    overflow: 'hidden',
+  },
+  resultHeader: {
+    height: 120,
+    backgroundColor: '#ddd',
+  },
+  resultContent: {
+    padding: 16,
+  },
+  resultBar: {
+    height: 8,
+    backgroundColor: '#ddd',
+    borderRadius: 4,
+    marginBottom: 8,
   },
 });

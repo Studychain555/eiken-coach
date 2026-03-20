@@ -19,6 +19,8 @@ import { DailyGoal } from '@/src/components/DailyGoal';
 import { StreakBanner } from '@/src/components/StreakBanner';
 import { ComboCounter } from '@/src/components/ComboCounter';
 import { CelebrationAnimation } from '@/src/components/CelebrationAnimation';
+import { ErrorScreen } from '@/src/components/ErrorScreen';
+import { EmptyState } from '@/src/components/EmptyState';
 import { EIKENLevelSelector } from '@/src/components/EIKENLevelSelector';
 import { useEIKENVocabStore } from '@/src/stores/eikenVocabularyStore';
 import { EIKENLevel, EIKENLevelLabels } from '@/src/lib/eiken-vocabulary-schema';
@@ -52,6 +54,10 @@ export default function VocabularyScreen() {
     streakDays,
     dailyGoal,
     comboCount,
+    // Error handling
+    syncError,
+    setSyncError,
+    retry,
   } = useVocabularyStore();
 
   const { selectedLevel, setSelectedLevel, loadWordsForLevel } = useEIKENVocabStore();
@@ -64,6 +70,32 @@ export default function VocabularyScreen() {
       setWords(VOCABULARY_SAMPLE_DATA);
     }
   }, []);
+
+  // エラーハンドリング
+  if (syncError) {
+    return (
+      <SafeAreaView style={styles.container}>
+        <ErrorScreen
+          title="同期に失敗しました"
+          description={syncError}
+          retryFn={retry}
+        />
+      </SafeAreaView>
+    );
+  }
+
+  // データなしの場合
+  if (words.length === 0) {
+    return (
+      <SafeAreaView style={styles.container}>
+        <EmptyState
+          title="単語データがありません"
+          description="単語データを読み込み中です。しばらくお待ちください。"
+          icon="📚"
+        />
+      </SafeAreaView>
+    );
+  }
 
   const handleSelectLevel = (level: EIKENLevel) => {
     setSelectedLevel(level);

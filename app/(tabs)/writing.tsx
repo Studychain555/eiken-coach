@@ -22,6 +22,8 @@ import { XPRewardSystem } from '@/src/components/XPRewardSystem';
 import { DailyGoal } from '@/src/components/DailyGoal';
 import { StreakBanner } from '@/src/components/StreakBanner';
 import { CelebrationAnimation } from '@/src/components/CelebrationAnimation';
+import { ErrorScreen } from '@/src/components/ErrorScreen';
+import { EmptyState } from '@/src/components/EmptyState';
 
 type Screen = 'prompt-select' | 'editor' | 'result';
 
@@ -55,6 +57,10 @@ export default function WritingScreen() {
     xpForNextLevel,
     streakDays,
     dailyGoal,
+    // Error handling
+    syncError,
+    setSyncError,
+    retry,
   } = useWritingStore();
 
   const [screen, setScreen] = useState<Screen>('prompt-select');
@@ -139,6 +145,38 @@ export default function WritingScreen() {
   if (screen === 'prompt-select') {
     const stats = getTodayStats();
     const totalSubmissions = getTotalSubmissions();
+
+    // Show error screen if sync failed
+    if (syncError) {
+      return (
+        <ErrorScreen
+          title="同期に失敗しました"
+          description={syncError}
+          retryFn={() => {
+            setSyncError(null);
+            retry();
+          }}
+          showHomeButton={true}
+        />
+      );
+    }
+
+    // Show empty state if no prompts
+    if (prompts.length === 0) {
+      return (
+        <SafeAreaView style={styles.container}>
+          <EmptyState
+            title="プロンプトが見つかりません"
+            description="現在、利用可能なライティング課題はありません。"
+            icon="✏️"
+            actionLabel="ホームに戻る"
+            onAction={() => {
+              // Navigation logic if needed
+            }}
+          />
+        </SafeAreaView>
+      );
+    }
 
     return (
       <SafeAreaView style={styles.container}>
