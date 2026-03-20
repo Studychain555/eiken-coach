@@ -114,7 +114,7 @@ export const useWritingStore = create<WritingState>((set, get) => ({
     }));
     get().addXP(xpGain);
     get().updateStreak();
-    get().syncToSupabase();
+    setTimeout(() => { get().syncToSupabase().catch(err => console.error("Sync error:", err)); }, 500);
   },
 
   getSubmissionsByPrompt: (promptId) => {

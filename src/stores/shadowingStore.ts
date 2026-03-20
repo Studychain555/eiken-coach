@@ -97,7 +97,7 @@ export const useShadowingStore = create<ShadowingState>((set, get) => ({
           completedAt: new Date(),
         },
       });
-      get().syncToSupabase();
+      setTimeout(() => { get().syncToSupabase().catch(err => console.error("Sync error:", err)); }, 500);
     }
   },
 

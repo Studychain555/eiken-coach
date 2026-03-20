@@ -127,7 +127,7 @@ export const useListeningStore = create<ListeningState>((set, get) => ({
   progress: {},
   loadProgress: (data) => {
     set({ progress: data });
-    get().syncToSupabase();
+    setTimeout(() => { get().syncToSupabase().catch(err => console.error("Sync error:", err)); }, 500);
   },
 
   attempts: [],

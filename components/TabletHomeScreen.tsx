@@ -41,17 +41,15 @@ export default function TabletHomeScreen({ onRefresh }: TabletHomeScreenProps) {
   const [refreshing, setRefreshing] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
 
-  // Store hooks
-  const { user } = useAuthStore();
-  const {
-    listeningProgress,
-    vocabularyProgress,
-    writingProgress,
-    streakDays,
-    totalXP,
-    currentLevel,
-    hearts,
-  } = useLearningStore();
+  // Store hooks - using selectors to prevent infinite loops
+  const user = useAuthStore((state) => state.user);
+  const listeningProgress = useLearningStore((state) => state.listeningProgress);
+  const vocabularyProgress = useLearningStore((state) => state.vocabularyProgress);
+  const writingProgress = useLearningStore((state) => state.writingProgress);
+  const streakDays = useLearningStore((state) => state.streakDays);
+  const totalXP = useLearningStore((state) => state.totalXP || 0);
+  const currentLevel = useLearningStore((state) => state.currentLevel || 5);
+  const hearts = useLearningStore((state) => state.hearts || 3);
 
   const listeningStats = useListeningStore((state) => ({
     completed: state.completedQuestions || 0,

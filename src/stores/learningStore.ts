@@ -58,7 +58,10 @@ export const useLearningStore = create<LearningState>((set, get) => ({
   },
   setListeningProgress: (progress) => {
     set({ listeningProgress: progress });
-    get().syncToSupabase();
+    // Debounce sync to prevent infinite loops
+    setTimeout(() => {
+      get().syncToSupabase().catch((err) => console.error('Sync error:', err));
+    }, 500);
   },
 
   vocabularyProgress: {
@@ -68,7 +71,10 @@ export const useLearningStore = create<LearningState>((set, get) => ({
   },
   setVocabularyProgress: (progress) => {
     set({ vocabularyProgress: progress });
-    get().syncToSupabase();
+    // Debounce sync to prevent infinite loops
+    setTimeout(() => {
+      get().syncToSupabase().catch((err) => console.error('Sync error:', err));
+    }, 500);
   },
 
   writingProgress: {
@@ -77,13 +83,19 @@ export const useLearningStore = create<LearningState>((set, get) => ({
   },
   setWritingProgress: (progress) => {
     set({ writingProgress: progress });
-    get().syncToSupabase();
+    // Debounce sync to prevent infinite loops
+    setTimeout(() => {
+      get().syncToSupabase().catch((err) => console.error('Sync error:', err));
+    }, 500);
   },
 
   streakDays: 0,
   setStreakDays: (days) => {
     set({ streakDays: days });
-    get().syncToSupabase();
+    // Debounce sync to prevent infinite loops
+    setTimeout(() => {
+      get().syncToSupabase().catch((err) => console.error('Sync error:', err));
+    }, 500);
   },
 
   syncToSupabase: async () => {
