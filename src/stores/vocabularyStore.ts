@@ -20,6 +20,10 @@ interface VocabularyState {
   userId: string | null;
   setUserId: (userId: string | null) => void;
 
+  // ローディング状態
+  isLoading: boolean;
+  setIsLoading: (loading: boolean) => void;
+
   // 単語データ
   words: VocabularyWord[];
   setWords: (words: VocabularyWord[]) => void;
@@ -103,8 +107,11 @@ export const useVocabularyStore = create<VocabularyState>((set, get) => ({
   userId: null,
   setUserId: (userId) => set({ userId }),
 
+  isLoading: false,
+  setIsLoading: (loading) => set({ isLoading: loading }),
+
   words: [],
-  setWords: (words) => set({ words, totalCount: words.length }),
+  setWords: (words) => set({ words, totalCount: words.length, isLoading: false }),
 
   progress: {},
   loadProgress: (data) => {

@@ -22,6 +22,7 @@ import { StreakBanner } from '@/src/components/StreakBanner';
 import { ComboCounter } from '@/src/components/ComboCounter';
 import { ErrorScreen } from '@/src/components/ErrorScreen';
 import { EmptyState } from '@/src/components/EmptyState';
+import { SkeletonLoader } from '@/src/components/SkeletonLoader';
 
 type Screen = 'list' | 'question' | 'result' | 'shadowing';
 
@@ -44,6 +45,7 @@ export default function ListeningScreen() {
     getTodayStats,
     completedCount,
     totalCount,
+    isLoading,
     // Gamification fields
     hearts,
     maxHearts,
@@ -123,15 +125,22 @@ export default function ListeningScreen() {
       );
     }
 
-    // データなしの場合
-    if (questions.length === 0) {
+    // ローディング中 - スケルトン表示
+    if (questions.length === 0 || isLoading) {
       return (
         <SafeAreaView style={styles.container}>
-          <EmptyState
-            title="リスニング問題がありません"
-            description="問題を読み込み中です。しばらくお待ちください。"
-            icon="🎧"
-          />
+          <View style={styles.header}>
+            <Text style={styles.title}>🎧 リスニング練習</Text>
+            <Text style={styles.subtitle}>英検準1級形式</Text>
+          </View>
+          <ScrollView
+            showsVerticalScrollIndicator={false}
+            contentContainerStyle={{ paddingBottom: 100 }}
+          >
+            <View style={styles.section}>
+              <SkeletonLoader count={4} type="form" />
+            </View>
+          </ScrollView>
         </SafeAreaView>
       );
     }
@@ -226,7 +235,7 @@ export default function ListeningScreen() {
             <Text style={styles.sectionTitle}>問題を選択</Text>
             {questions.length === 0 ? (
               <View style={styles.loadingContainer}>
-                <ActivityIndicator size="large" color={Colors.light.primary} />
+                <SkeletonLoader count={3} type="list" />
               </View>
             ) : (
               questions.map((question, index) => {

@@ -18,6 +18,10 @@ interface WritingState {
   userId: string | null;
   setUserId: (userId: string | null) => void;
 
+  // ローディング状態
+  isLoading: boolean;
+  setIsLoading: (loading: boolean) => void;
+
   // 問題データ
   prompts: WritingPrompt[];
   setPrompts: (prompts: WritingPrompt[]) => void;
@@ -90,8 +94,11 @@ export const useWritingStore = create<WritingState>((set, get) => ({
   userId: null,
   setUserId: (userId) => set({ userId }),
 
+  isLoading: false,
+  setIsLoading: (loading) => set({ isLoading: loading }),
+
   prompts: [],
-  setPrompts: (prompts) => set({ prompts }),
+  setPrompts: (prompts) => set({ prompts, isLoading: false }),
 
   currentPrompt: null,
   setCurrentPrompt: (prompt) => set({ currentPrompt: prompt }),

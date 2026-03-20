@@ -24,6 +24,8 @@ import { CelebrationAnimation } from '@/src/components/CelebrationAnimation';
 import { ErrorScreen } from '@/src/components/ErrorScreen';
 import { EmptyState } from '@/src/components/EmptyState';
 import { InputWithValidation } from '@/src/components/InputWithValidation';
+import { ConfirmationModal } from '@/src/components/ConfirmationModal';
+import { SkeletonLoader } from '@/src/components/SkeletonLoader';
 
 type Screen = 'prompt-select' | 'editor' | 'result';
 
@@ -49,6 +51,8 @@ export default function WritingScreen() {
     getTodayStats,
     getTotalSubmissions,
     getAverageScore,
+    isLoading,
+    setIsLoading,
     // Gamification fields
     hearts,
     maxHearts,
@@ -67,6 +71,9 @@ export default function WritingScreen() {
   const [isScoring, setIsScoring] = useState(false);
   const [showCelebration, setShowCelebration] = useState(false);
   const [currentPage, setCurrentPage] = useState(0);
+  const [showConfirmSubmit, setShowConfirmSubmit] = useState(false);
+  const [showConfirmUnsaved, setShowConfirmUnsaved] = useState(false);
+  const [pendingBackNavigation, setPendingBackNavigation] = useState(false);
   const ITEMS_PER_PAGE = 3;
 
   useEffect(() => {
@@ -107,7 +114,16 @@ export default function WritingScreen() {
       return;
     }
 
+    // Show confirmation modal
+    setShowConfirmSubmit(true);
+  };
+
+  const handleConfirmSubmit = async () => {
+    if (!currentPrompt) return;
+
     setIsScoring(true);
+    setIsLoading(true);
+    setShowConfirmSubmit(false);
 
     try {
       const apiKey = process.env.EXPO_PUBLIC_CLAUDE_API_KEY;
@@ -132,6 +148,17 @@ export default function WritingScreen() {
       Alert.alert('エラー', '採点に失敗しました');
     } finally {
       setIsScoring(false);
+      setIsLoading(false);
+    }
+  };
+
+  const handleBackToSelectWithCheck = () => {
+    const hasUnsavedData = (currentContent.trim().length > 0 || !!currentImageUrl);
+    if (hasUnsavedData) {
+      setPendingBackNavigation(true);
+      setShowConfirmUnsaved(true);
+    } else {
+      handleBackToSelect();
     }
   };
 
@@ -161,19 +188,22 @@ export default function WritingScreen() {
       );
     }
 
-    // Show empty state if no prompts
-    if (prompts.length === 0) {
+    // Show skeleton loader while loading prompts
+    if (prompts.length === 0 || isLoading) {
       return (
         <SafeAreaView style={styles.container}>
-          <EmptyState
-            title="プロンプトが見つかりません"
-            description="現在、利用可能なライティング課題はありません。"
-            icon="✏️"
-            actionLabel="ホームに戻る"
-            onAction={() => {
-              // Navigation logic if needed
-            }}
-          />
+          <View style={styles.header}>
+            <Text style={styles.title}>✍️ ライティング練習</Text>
+            <Text style={styles.subtitle}>英検準1級形式</Text>
+          </View>
+          <ScrollView
+            showsVerticalScrollIndicator={false}
+            contentContainerStyle={{ paddingBottom: 100 }}
+          >
+            <View style={styles.section}>
+              <SkeletonLoader count={3} type="form" />
+            </View>
+          </ScrollView>
         </SafeAreaView>
       );
     }
@@ -328,13 +358,46 @@ export default function WritingScreen() {
   if (screen === 'editor' && currentPrompt) {
     return (
       <SafeAreaView style={styles.container}>
+        {/* Confirmation Modals */}
+        <ConfirmationModal
+          visible={showConfirmSubmit}
+          title="AI採点に送信"
+          message="このエッセイを採点に送信します。よろしいですか？"
+          icon="✍️"
+          confirmText="送信"
+          cancelText="キャンセル"
+          isLoading={isScoring}
+          onConfirm={handleConfirmSubmit}
+          onCancel={() => setShowConfirmSubmit(false)}
+        />
+
+        <ConfirmationModal
+          visible={showConfirmUnsaved}
+          title="未保存のデータ"
+          message="入力されたエッセイが保存されません。よろしいですか？"
+          icon="⚠️"
+          confirmText="破棄"
+          cancelText="キャンセル"
+          isDestructive={true}
+          onConfirm={() => {
+            setShowConfirmUnsaved(false);
+            if (pendingBackNavigation) {
+              handleBackToSelect();
+            }
+          }}
+          onCancel={() => {
+            setShowConfirmUnsaved(false);
+            setPendingBackNavigation(false);
+          }}
+        />
+
         <ScrollView
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{ paddingBottom: 100 }}
         >
           {/* Header */}
           <View style={styles.editorHeader}>
-            <TouchableOpacity onPress={handleBackToSelect}>
+            <TouchableOpacity onPress={handleBackToSelectWithCheck}>
               <Text style={styles.backButton}>← 戻る</Text>
             </TouchableOpacity>
             <Text style={styles.editorTitle}>{currentPrompt.topic}</Text>
@@ -392,21 +455,21 @@ export default function WritingScreen() {
             </View>
           )}
 
-          {/* Submit Button */}
-          <TouchableOpacity
-            style={[styles.submitButton, isScoring && styles.submitButtonDisabled]}
-            onPress={handleSubmitEssay}
-            disabled={isScoring}
-          >
-            {isScoring ? (
-              <ActivityIndicator color="#fff" />
-            ) : (
-              <>
-                <Text style={styles.submitButtonIcon}>✓</Text>
-                <Text style={styles.submitButtonText}>AI 採点に送信</Text>
-              </>
-            )}
-          </TouchableOpacity>
+          {/* Submit Button with Loading State */}
+          {isScoring ? (
+            <View style={[styles.submitButton, styles.submitButtonDisabled]}>
+              <SkeletonLoader count={1} type="form" />
+            </View>
+          ) : (
+            <TouchableOpacity
+              style={styles.submitButton}
+              onPress={handleSubmitEssay}
+              disabled={isScoring}
+            >
+              <Text style={styles.submitButtonIcon}>✓</Text>
+              <Text style={styles.submitButtonText}>AI 採点に送信</Text>
+            </TouchableOpacity>
+          )}
 
           {/* Info */}
           <View style={styles.infoBox}>

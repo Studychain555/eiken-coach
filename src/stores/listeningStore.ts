@@ -25,6 +25,10 @@ interface ListeningState {
   userId: string | null;
   setUserId: (userId: string | null) => void;
 
+  // ローディング状態
+  isLoading: boolean;
+  setIsLoading: (loading: boolean) => void;
+
   // 問題データ
   questions: ListeningQuestion[];
   setQuestions: (questions: ListeningQuestion[]) => void;
@@ -117,11 +121,15 @@ export const useListeningStore = create<ListeningState>((set, get) => ({
   userId: null,
   setUserId: (userId) => set({ userId }),
 
+  isLoading: false,
+  setIsLoading: (loading) => set({ isLoading: loading }),
+
   questions: [],
   setQuestions: (questions) =>
     set({
       questions,
       totalCount: questions.length,
+      isLoading: false,
     }),
 
   currentQuestion: null,

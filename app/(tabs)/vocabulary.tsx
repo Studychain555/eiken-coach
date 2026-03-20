@@ -24,6 +24,7 @@ import { EmptyState } from '@/src/components/EmptyState';
 import { EIKENLevelSelector } from '@/src/components/EIKENLevelSelector';
 import { useEIKENVocabStore } from '@/src/stores/eikenVocabularyStore';
 import { EIKENLevel, EIKENLevelLabels } from '@/src/lib/eiken-vocabulary-schema';
+import { SkeletonLoader } from '@/src/components/SkeletonLoader';
 
 const { width } = Dimensions.get('window');
 
@@ -45,6 +46,7 @@ export default function VocabularyScreen() {
     setCurrentStage,
     masteredCount,
     getTodayStats,
+    isLoading,
     // Gamification fields
     hearts,
     maxHearts,
@@ -84,15 +86,22 @@ export default function VocabularyScreen() {
     );
   }
 
-  // データなしの場合
-  if (words.length === 0) {
+  // ローディング中 - スケルトン表示
+  if (words.length === 0 || isLoading) {
     return (
       <SafeAreaView style={styles.container}>
-        <EmptyState
-          title="単語データがありません"
-          description="単語データを読み込み中です。しばらくお待ちください。"
-          icon="📚"
-        />
+        <View style={styles.header}>
+          <Text style={styles.title}>📚 英単語マスター</Text>
+          <Text style={styles.subtitle}>単語を読み込み中...</Text>
+        </View>
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={{ paddingBottom: 100 }}
+        >
+          <View style={styles.section}>
+            <SkeletonLoader count={3} type="form" />
+          </View>
+        </ScrollView>
       </SafeAreaView>
     );
   }
@@ -386,9 +395,17 @@ function VocabularyTestScreen({
 
   if (!currentWord) {
     return (
-      <View style={styles.loadingContainer}>
-        <Text style={styles.loadingText}>読み込み中...</Text>
-      </View>
+      <SafeAreaView style={styles.container}>
+        <View style={styles.testHeader}>
+          <TouchableOpacity onPress={onBack}>
+            <Text style={styles.backButton}>← 戻る</Text>
+          </TouchableOpacity>
+          <Text style={styles.stageTitle}>読み込み中...</Text>
+        </View>
+        <View style={styles.loadingContainer}>
+          <SkeletonLoader count={2} type="form" />
+        </View>
+      </SafeAreaView>
     );
   }
 
