@@ -151,7 +151,10 @@ export default function ListeningScreen() {
           streakDays={streakDays}
         />
 
-        <ScrollView showsVerticalScrollIndicator={false}>
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={{ paddingBottom: 100 }}
+        >
           {/* Header */}
           <View style={styles.header}>
             <Text style={styles.title}>🎧 リスニング練習</Text>

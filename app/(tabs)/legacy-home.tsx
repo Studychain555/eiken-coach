@@ -37,7 +37,10 @@ export default function LegacyHomeScreen() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView showsVerticalScrollIndicator={false}>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ paddingBottom: 100 }}
+      >
         {/* Header with Level Badge */}
         <View style={styles.header}>
           <View style={styles.headerTop}>

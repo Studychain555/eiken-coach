@@ -394,7 +394,10 @@ export default function TeacherDashboard() {
               </TouchableOpacity>
             </View>
 
-            <ScrollView style={styles.modalForm}>
+            <ScrollView
+              style={styles.modalForm}
+              contentContainerStyle={{ paddingBottom: 20 }}
+            >
               <View style={styles.formGroup}>
                 <Text style={styles.formLabel}>タイトル</Text>
                 <TextInput
@@ -483,7 +486,10 @@ export default function TeacherDashboard() {
                 </TouchableOpacity>
               </View>
 
-              <ScrollView style={styles.modalForm}>
+              <ScrollView
+              style={styles.modalForm}
+              contentContainerStyle={{ paddingBottom: 20 }}
+            >
                 <View style={styles.studentDetailCard}>
                   <View style={styles.detailRow}>
                     <Text style={styles.detailLabel}>リスニング:</Text>

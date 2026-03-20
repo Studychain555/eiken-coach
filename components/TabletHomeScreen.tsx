@@ -28,6 +28,7 @@ export default function TabletHomeScreen({ onRefresh }: TabletHomeScreenProps) {
       <ScrollView
         showsVerticalScrollIndicator={false}
         scrollEnabled={true}
+        contentContainerStyle={{ paddingBottom: 100 }}
       >
         {/* Welcome Header */}
         <View style={styles.header}>

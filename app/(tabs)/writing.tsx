@@ -190,7 +190,10 @@ export default function WritingScreen() {
           streakDays={streakDays}
         />
 
-        <ScrollView showsVerticalScrollIndicator={false}>
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={{ paddingBottom: 100 }}
+        >
           {/* Header */}
           <View style={styles.header}>
             <Text style={styles.title}>✍️ ライティング練習</Text>
@@ -325,7 +328,10 @@ export default function WritingScreen() {
   if (screen === 'editor' && currentPrompt) {
     return (
       <SafeAreaView style={styles.container}>
-        <ScrollView showsVerticalScrollIndicator={false}>
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={{ paddingBottom: 100 }}
+        >
           {/* Header */}
           <View style={styles.editorHeader}>
             <TouchableOpacity onPress={handleBackToSelect}>

@@ -144,7 +144,10 @@ export default function VocabularyScreen() {
           streakDays={streakDays}
         />
 
-        <ScrollView showsVerticalScrollIndicator={false}>
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={{ paddingBottom: 100 }}
+        >
           {/* Header */}
           <View style={styles.header}>
             <View style={styles.headerTop}>
