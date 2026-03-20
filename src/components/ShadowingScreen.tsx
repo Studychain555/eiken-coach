@@ -184,7 +184,7 @@ export default function ShadowingScreen({
         apiKey
       );
 
-      // レコードを追加
+      // レコードを追加（phraseFeedbacks を含める）
       addRecord({
         id: `record_${currentRound}_${Date.now()}`,
         attemptId,
@@ -195,8 +195,10 @@ export default function ShadowingScreen({
         rhythmScore: Math.round(result.rhythmScore * 10) / 10,
         pronunciationScore: Math.round(result.pronunciationScore * 10) / 10,
         feedback: result.feedback,
+        phraseFeedbacks: result.phraseFeedbacks,
+        wordFeedbacks: result.wordFeedbacks,
         createdAt: new Date(),
-      });
+      } as any);
 
       setIsScoringRound(null);
 

@@ -24,6 +24,7 @@ export default function ShadowingResultScreen({ onBack, onComplete }: Props) {
   const { currentSession, getAverageScores, getRecords, getImprovement } =
     useShadowingStore();
   const [expandedRound, setExpandedRound] = useState<number | null>(null);
+  const [showDetailedModal, setShowDetailedModal] = useState<number | null>(null);
 
   if (!currentSession) {
     return (
@@ -189,10 +190,7 @@ export default function ShadowingResultScreen({ onBack, onComplete }: Props) {
                   )}
                   <TouchableOpacity
                     style={styles.detailedButton}
-                    onPress={() => {
-                      // Note: DetailedShadowingFeedback component can be integrated here
-                      // For now, this button shows the detailed feedback in the feedback text above
-                    }}
+                    onPress={() => setShowDetailedModal(record.roundNumber)}
                   >
                     <Text style={styles.detailedButtonText}>
                       📝 詳細な分析を見る
@@ -203,6 +201,22 @@ export default function ShadowingResultScreen({ onBack, onComplete }: Props) {
             </TouchableOpacity>
           ))}
         </View>
+
+        {/* Detailed Feedback Modal - Fullscreen DetailedShadowingFeedback */}
+        {showDetailedModal !== null && (
+          <View style={styles.modalOverlay}>
+            <DetailedShadowingFeedback
+              script={currentSession.script}
+              pronunciationScore={records[showDetailedModal - 1]?.pronunciationScore ?? 0}
+              rhythmScore={records[showDetailedModal - 1]?.rhythmScore ?? 0}
+              accuracyScore={records[showDetailedModal - 1]?.accuracyScore ?? 0}
+              overallFeedback={records[showDetailedModal - 1]?.feedback ?? ''}
+              roundNumber={showDetailedModal}
+              phraseFeedbacks={(records[showDetailedModal - 1] as any)?.phraseFeedbacks}
+              wordFeedbacks={(records[showDetailedModal - 1] as any)?.wordFeedbacks}
+            />
+          </View>
+        )}
 
         {/* Action Buttons */}
         <View style={styles.buttonContainer}>
@@ -466,5 +480,10 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: '600',
     color: NaturalColors.textDark,
+  },
+  modalOverlay: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: NaturalColors.background,
+    zIndex: 999,
   },
 });

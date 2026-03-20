@@ -9,32 +9,26 @@ import {
   SafeAreaView,
   Dimensions,
 } from 'react-native';
+import { PhraseFeedback, WordFeedback } from '@/src/lib/aiScoringService';
 import { NaturalColors, Spacing, BorderRadius } from '@/constants/theme';
-
-interface WordFeedback {
-  word: string;
-  status: 'correct' | 'incorrect' | 'weak';
-  yourVersion?: string;
-  correctPronunciation?: string;
-  explanation?: string;
-  tip?: string;
-  tag?: 'Pronunciation' | 'Linking' | 'Rhythm' | 'Grammar' | 'Meaning';
-}
+import PhraseDetailModal from './PhraseDetailModal';
 
 interface DetailedShadowingFeedbackProps {
   script: string;
-  wordFeedbacks: WordFeedback[];
   pronunciationScore: number;
   rhythmScore: number;
   accuracyScore: number;
   overallFeedback: string;
   roundNumber: number;
+  phraseFeedbacks?: PhraseFeedback[];
+  wordFeedbacks?: WordFeedback[];
 }
 
 const { width } = Dimensions.get('window');
 
 export default function DetailedShadowingFeedback({
   script,
+  phraseFeedbacks,
   wordFeedbacks,
   pronunciationScore,
   rhythmScore,
@@ -42,13 +36,24 @@ export default function DetailedShadowingFeedback({
   overallFeedback,
   roundNumber,
 }: DetailedShadowingFeedbackProps) {
+  const [selectedPhrase, setSelectedPhrase] = useState<PhraseFeedback | null>(null);
   const [selectedWord, setSelectedWord] = useState<WordFeedback | null>(null);
-  const [modalVisible, setModalVisible] = useState(false);
+  const [phraseModalVisible, setPhraseModalVisible] = useState(false);
+  const [wordModalVisible, setWordModalVisible] = useState(false);
+
+  const handlePhrasePress = (phrase: PhraseFeedback) => {
+    setSelectedPhrase(phrase);
+    setPhraseModalVisible(true);
+  };
 
   const handleWordPress = (feedback: WordFeedback) => {
     setSelectedWord(feedback);
-    setModalVisible(true);
+    setWordModalVisible(true);
   };
+
+  // フレーズレベルのフィードバック表示か、ワード単位か判定
+  const showPhraseLevel = phraseFeedbacks && phraseFeedbacks.length > 0;
+  const showWordLevel = wordFeedbacks && wordFeedbacks.length > 0;
 
   // スクリプトの単語を分割
   const scriptWords = script.split(/\s+/);
@@ -60,7 +65,33 @@ export default function DetailedShadowingFeedback({
     return '#C85C5C'; // Error red
   };
 
-  const getStatusColor = (status: string) => {
+  const getPhraseStatusColor = (status: string) => {
+    switch (status) {
+      case 'good':
+        return '#52C41A'; // Green
+      case 'needsWork':
+        return '#FAAD14'; // Yellow
+      case 'major':
+        return '#F5222D'; // Red
+      default:
+        return '#999';
+    }
+  };
+
+  const getPhraseStatusBgColor = (status: string) => {
+    switch (status) {
+      case 'good':
+        return 'rgba(82, 196, 26, 0.1)';
+      case 'needsWork':
+        return 'rgba(250, 173, 20, 0.1)';
+      case 'major':
+        return 'rgba(245, 34, 45, 0.1)';
+      default:
+        return 'rgba(200, 200, 200, 0.08)';
+    }
+  };
+
+  const getWordStatusColor = (status: string) => {
     switch (status) {
       case 'correct':
         return '#52A876'; // Natural green
@@ -73,7 +104,7 @@ export default function DetailedShadowingFeedback({
     }
   };
 
-  const getStatusEmoji = (status: string) => {
+  const getWordStatusEmoji = (status: string) => {
     switch (status) {
       case 'correct':
         return '✓';
@@ -81,6 +112,19 @@ export default function DetailedShadowingFeedback({
         return '✗';
       case 'weak':
         return '△';
+      default:
+        return '•';
+    }
+  };
+
+  const getPhraseStatusLabel = (status: string): string => {
+    switch (status) {
+      case 'good':
+        return '✅';
+      case 'needsWork':
+        return '⚠️';
+      case 'major':
+        return '❌';
       default:
         return '•';
     }
@@ -152,16 +196,110 @@ export default function DetailedShadowingFeedback({
           </View>
         </View>
 
+        {/* Phrase-by-Phrase Feedback (if available) */}
+        {showPhraseLevel && (
+          <View style={styles.sentenceSection}>
+            <Text style={styles.sectionTitle}>🎯 フレーズ単位の分析</Text>
+            <View style={styles.phraseFeedbackList}>
+              {phraseFeedbacks!.map((feedback, index) => (
+                <TouchableOpacity
+                  key={index}
+                  onPress={() => handlePhrasePress(feedback)}
+                  activeOpacity={0.7}
+                >
+                  <View
+                    style={[
+                      styles.phraseCard,
+                      {
+                        backgroundColor: getPhraseStatusBgColor(feedback.status),
+                        borderColor: getPhraseStatusColor(feedback.status),
+                      },
+                    ]}
+                  >
+                    {/* Phrase Header */}
+                    <View style={styles.phraseCardHeader}>
+                      <View style={styles.phraseInfo}>
+                        <Text
+                          style={[
+                            styles.phraseText,
+                            { color: getPhraseStatusColor(feedback.status) },
+                          ]}
+                        >
+                          {getPhraseStatusLabel(feedback.status)} {feedback.phrase}
+                        </Text>
+                      </View>
+                      <Text style={styles.phraseArrow}>→</Text>
+                    </View>
+
+                    {/* Correct Reading */}
+                    {feedback.correctReading && (
+                      <View style={styles.phraseReading}>
+                        <Text style={styles.readingLabel}>正しい読み方:</Text>
+                        <Text
+                          style={[
+                            styles.readingValue,
+                            { color: getPhraseStatusColor(feedback.status) },
+                          ]}
+                        >
+                          {feedback.correctReading}
+                        </Text>
+                      </View>
+                    )}
+
+                    {/* Issues Summary */}
+                    {feedback.issues && feedback.issues.length > 0 && (
+                      <View style={styles.phraseIssues}>
+                        <Text style={styles.issuesLabel}>問題点:</Text>
+                        <View style={styles.issuesTags}>
+                          {feedback.issues.map((issue, issueIdx) => (
+                            <View
+                              key={issueIdx}
+                              style={[
+                                styles.issueTag,
+                                {
+                                  borderColor: getPhraseStatusColor(feedback.status),
+                                },
+                              ]}
+                            >
+                              <Text style={styles.issueTagText}>
+                                {issue.type === 'linking' && '🔗'}
+                                {issue.type === 'reduction' && '⬇️'}
+                                {issue.type === 'stress' && '💪'}
+                                {issue.type === 'intonation' && '📈'}
+                                {issue.type === 'pronunciation' && '🗣️'}
+                                {' '}
+                                {issue.type === 'linking' && 'リンキング'}
+                                {issue.type === 'reduction' && 'リダクション'}
+                                {issue.type === 'stress' && 'ストレス'}
+                                {issue.type === 'intonation' && 'イントネーション'}
+                                {issue.type === 'pronunciation' && '発音'}
+                              </Text>
+                            </View>
+                          ))}
+                        </View>
+                      </View>
+                    )}
+
+                    {/* Tap to Details */}
+                    <Text style={styles.tapToDetails}>タップで詳細表示</Text>
+                  </View>
+                </TouchableOpacity>
+              ))}
+            </View>
+          </View>
+        )}
+
         {/* Word-by-Word Feedback */}
-        <View style={styles.sentenceSection}>
-          <Text style={styles.sectionTitle}>📝 各単語の評価</Text>
+        {showWordLevel && (
+          <View style={styles.sentenceSection}>
+            <Text style={styles.sectionTitle}>📝 各単語の評価</Text>
           <View style={styles.sentenceContainer}>
             {scriptWords.map((word, index) => {
-              const feedback = wordFeedbacks.find((f) =>
+              const feedback = wordFeedbacks!.find((f) =>
                 f.word.toLowerCase() === word.toLowerCase()
               );
               const status = feedback?.status || 'correct';
-              const statusEmoji = getStatusEmoji(status);
+              const statusEmoji = getWordStatusEmoji(status);
 
               return (
                 <TouchableOpacity
@@ -173,7 +311,7 @@ export default function DetailedShadowingFeedback({
                     style={[
                       styles.wordPill,
                       {
-                        borderColor: getStatusColor(status),
+                        borderColor: getWordStatusColor(status),
                         backgroundColor:
                           status === 'correct'
                             ? 'rgba(82, 168, 118, 0.1)'
@@ -186,7 +324,7 @@ export default function DetailedShadowingFeedback({
                     <Text
                       style={[
                         styles.wordText,
-                        { color: getStatusColor(status) },
+                        { color: getWordStatusColor(status) },
                       ]}
                     >
                       {statusEmoji} {word}
@@ -196,6 +334,7 @@ export default function DetailedShadowingFeedback({
               );
             })}
           </View>
+        )}
         </View>
 
         {/* Overall Feedback */}
@@ -228,12 +367,19 @@ export default function DetailedShadowingFeedback({
         <View style={styles.spacer} />
       </ScrollView>
 
-      {/* Detailed Feedback Modal */}
+      {/* Phrase Detail Modal */}
+      <PhraseDetailModal
+        visible={phraseModalVisible}
+        phrase={selectedPhrase}
+        onClose={() => setPhraseModalVisible(false)}
+      />
+
+      {/* Word Detailed Feedback Modal */}
       <Modal
-        visible={modalVisible}
+        visible={wordModalVisible}
         transparent
         animationType="slide"
-        onRequestClose={() => setModalVisible(false)}
+        onRequestClose={() => setWordModalVisible(false)}
       >
         <SafeAreaView style={styles.modalContainer}>
           <View style={styles.modalHeader}>
@@ -372,7 +518,7 @@ export default function DetailedShadowingFeedback({
 
           <TouchableOpacity
             style={styles.modalCloseButton}
-            onPress={() => setModalVisible(false)}
+            onPress={() => setWordModalVisible(false)}
           >
             <Text style={styles.modalCloseButtonText}>閉じる</Text>
           </TouchableOpacity>
@@ -441,6 +587,86 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     color: NaturalColors.textDark,
     marginBottom: Spacing.lg,
+  },
+  phraseFeedbackList: {
+    gap: Spacing.lg,
+  },
+  phraseCard: {
+    paddingHorizontal: Spacing.lg,
+    paddingVertical: Spacing.lg,
+    borderRadius: BorderRadius.lg,
+    borderWidth: 2,
+    marginBottom: Spacing.sm,
+  },
+  phraseCardHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: Spacing.md,
+  },
+  phraseInfo: {
+    flex: 1,
+  },
+  phraseText: {
+    fontSize: 15,
+    fontWeight: '700',
+    lineHeight: 20,
+  },
+  phraseArrow: {
+    fontSize: 18,
+    color: NaturalColors.textMedium,
+    marginLeft: Spacing.md,
+  },
+  phraseReading: {
+    paddingHorizontal: Spacing.md,
+    paddingVertical: Spacing.md,
+    backgroundColor: 'rgba(255, 255, 255, 0.5)',
+    borderRadius: BorderRadius.md,
+    marginBottom: Spacing.md,
+  },
+  readingLabel: {
+    fontSize: 12,
+    fontWeight: '600',
+    color: NaturalColors.textMedium,
+    marginBottom: Spacing.sm,
+  },
+  readingValue: {
+    fontSize: 18,
+    fontWeight: '700',
+    lineHeight: 24,
+  },
+  phraseIssues: {
+    marginBottom: Spacing.md,
+  },
+  issuesLabel: {
+    fontSize: 12,
+    fontWeight: '600',
+    color: NaturalColors.textMedium,
+    marginBottom: Spacing.sm,
+  },
+  issuesTags: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: Spacing.sm,
+  },
+  issueTag: {
+    paddingHorizontal: Spacing.md,
+    paddingVertical: Spacing.sm,
+    borderRadius: BorderRadius.full,
+    borderWidth: 1.5,
+    backgroundColor: 'rgba(255, 255, 255, 0.5)',
+  },
+  issueTagText: {
+    fontSize: 12,
+    fontWeight: '600',
+    color: NaturalColors.textDark,
+  },
+  tapToDetails: {
+    fontSize: 11,
+    fontStyle: 'italic',
+    color: NaturalColors.textMedium,
+    marginTop: Spacing.md,
+    textAlign: 'right',
   },
   sentenceContainer: {
     flexDirection: 'row',
