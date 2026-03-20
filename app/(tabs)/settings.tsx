@@ -145,7 +145,7 @@ const styles = StyleSheet.create({
   },
   section: {
     marginHorizontal: Spacing.xl,
-    marginBottom: Spacing.xl,
+    marginBottom: Spacing.lg,
   },
   sectionTitle: {
     fontSize: 14,

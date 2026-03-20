@@ -60,6 +60,8 @@ export default function WritingScreen() {
   const [screen, setScreen] = useState<Screen>('prompt-select');
   const [isScoring, setIsScoring] = useState(false);
   const [showCelebration, setShowCelebration] = useState(false);
+  const [currentPage, setCurrentPage] = useState(0);
+  const ITEMS_PER_PAGE = 3;
 
   useEffect(() => {
     if (prompts.length === 0) {
@@ -217,10 +219,10 @@ export default function WritingScreen() {
             </View>
           </View>
 
-          {/* Prompts */}
+          {/* Prompts with Pagination */}
           <View style={styles.section}>
             <Text style={styles.sectionTitle}>問題を選択</Text>
-            {prompts.map((prompt, index) => (
+            {prompts.slice(currentPage * ITEMS_PER_PAGE, (currentPage + 1) * ITEMS_PER_PAGE).map((prompt, index) => (
               <TouchableOpacity
                 key={prompt.id}
                 style={styles.promptCard}
@@ -228,7 +230,7 @@ export default function WritingScreen() {
                 activeOpacity={0.7}
               >
                 <View style={styles.promptNumber}>
-                  <Text style={styles.promptNumberText}>{index + 1}</Text>
+                  <Text style={styles.promptNumberText}>{currentPage * ITEMS_PER_PAGE + index + 1}</Text>
                 </View>
                 <View style={styles.promptCardContent}>
                   <View style={styles.promptCardHeader}>
@@ -249,6 +251,33 @@ export default function WritingScreen() {
                 </View>
               </TouchableOpacity>
             ))}
+
+            {/* Pagination Controls */}
+            <View style={styles.paginationContainer}>
+              <TouchableOpacity
+                style={[
+                  styles.paginationButton,
+                  currentPage === 0 && styles.paginationButtonDisabled,
+                ]}
+                onPress={() => setCurrentPage(currentPage - 1)}
+                disabled={currentPage === 0}
+              >
+                <Text style={styles.paginationButtonText}>← 前へ</Text>
+              </TouchableOpacity>
+              <Text style={styles.paginationInfo}>
+                {currentPage + 1} / {Math.ceil(prompts.length / ITEMS_PER_PAGE)}
+              </Text>
+              <TouchableOpacity
+                style={[
+                  styles.paginationButton,
+                  currentPage >= Math.ceil(prompts.length / ITEMS_PER_PAGE) - 1 && styles.paginationButtonDisabled,
+                ]}
+                onPress={() => setCurrentPage(currentPage + 1)}
+                disabled={currentPage >= Math.ceil(prompts.length / ITEMS_PER_PAGE) - 1}
+              >
+                <Text style={styles.paginationButtonText}>次へ →</Text>
+              </TouchableOpacity>
+            </View>
           </View>
         </ScrollView>
       </SafeAreaView>
@@ -520,6 +549,38 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: Colors.light.primary,
     fontWeight: '700',
+  },
+
+  // Pagination
+  paginationContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingVertical: Spacing.lg,
+    marginTop: Spacing.lg,
+  },
+  paginationButton: {
+    paddingHorizontal: Spacing.lg,
+    paddingVertical: Spacing.md,
+    backgroundColor: Colors.light.primaryLight,
+    borderRadius: BorderRadius.lg,
+    borderWidth: 1,
+    borderColor: Colors.light.primary,
+  },
+  paginationButtonDisabled: {
+    backgroundColor: Colors.light.backgroundAlt,
+    borderColor: Colors.light.border,
+    opacity: 0.5,
+  },
+  paginationButtonText: {
+    fontSize: 13,
+    color: Colors.light.primary,
+    fontWeight: '600',
+  },
+  paginationInfo: {
+    fontSize: 13,
+    color: Colors.light.textSecondary,
+    fontWeight: '600',
   },
 
   // Editor Screen

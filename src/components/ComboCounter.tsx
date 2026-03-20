@@ -36,18 +36,18 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     gap: Spacing.sm,
-    paddingHorizontal: Spacing.lg,
-    paddingVertical: Spacing.md,
+    paddingHorizontal: Spacing.md,
+    paddingVertical: Spacing.sm,
     borderRadius: BorderRadius.xl,
     marginBottom: Spacing.lg,
   },
   emoji: {
-    fontSize: 24,
+    fontSize: 20,
   },
   text: {
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: 600,
-    lineHeight: 24,
+    lineHeight: 20,
     color: '#FFFFFF',
   } as any,
 });

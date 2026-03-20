@@ -26,6 +26,13 @@ import { EIKENLevel, EIKENLevelLabels } from '@/src/lib/eiken-vocabulary-schema'
 const { width } = Dimensions.get('window');
 
 type Screen = 'level-select' | 'stage-select' | 'test' | 'result';
+type DifficultyTab = 'beginner' | 'intermediate' | 'advanced';
+
+const STAGE_GROUPS: Record<DifficultyTab, { label: string; emoji: string; stages: number[] }> = {
+  beginner: { label: '初級', emoji: '⭐', stages: Array.from({ length: 8 }, (_, i) => i + 1) },
+  intermediate: { label: '中級', emoji: '⭐⭐⭐', stages: Array.from({ length: 6 }, (_, i) => i + 9) },
+  advanced: { label: '上級', emoji: '⭐⭐⭐⭐⭐', stages: Array.from({ length: 6 }, (_, i) => i + 15) },
+};
 
 export default function VocabularyScreen() {
   const router = useRouter();
@@ -49,6 +56,7 @@ export default function VocabularyScreen() {
 
   const { selectedLevel, setSelectedLevel, loadWordsForLevel } = useEIKENVocabStore();
   const [screen, setScreen] = useState<Screen>('level-select');
+  const [selectedTab, setSelectedTab] = useState<DifficultyTab>('beginner');
 
   useEffect(() => {
     // 初期化：単語データをロード
@@ -56,9 +64,6 @@ export default function VocabularyScreen() {
       setWords(VOCABULARY_SAMPLE_DATA);
     }
   }, []);
-
-  const stagesCount = 20;
-  const wordsPerStage = 100;
 
   const handleSelectLevel = (level: EIKENLevel) => {
     setSelectedLevel(level);
@@ -180,57 +185,65 @@ export default function VocabularyScreen() {
             </View>
           </View>
 
-          {/* Difficulty Guide */}
+          {/* Difficulty Tabs */}
           <View style={styles.section}>
-            <Text style={styles.sectionTitle}>難易度ガイド</Text>
-            <View style={styles.difficultyGuide}>
-              <View style={styles.difficultyItem}>
-                <Text style={styles.difficultyEmoji}>⭐</Text>
-                <Text style={styles.difficultyLabel}>初級</Text>
-              </View>
-              <View style={styles.difficultyItem}>
-                <Text style={styles.difficultyEmoji}>⭐⭐⭐</Text>
-                <Text style={styles.difficultyLabel}>中級</Text>
-              </View>
-              <View style={styles.difficultyItem}>
-                <Text style={styles.difficultyEmoji}>⭐⭐⭐⭐⭐</Text>
-                <Text style={styles.difficultyLabel}>上級</Text>
-              </View>
+            <Text style={styles.sectionTitle}>難易度を選択</Text>
+            <View style={styles.difficultyTabs}>
+              {(Object.entries(STAGE_GROUPS) as [DifficultyTab, typeof STAGE_GROUPS[DifficultyTab]][]).map(
+                ([key, group]) => (
+                  <TouchableOpacity
+                    key={key}
+                    style={[
+                      styles.difficultyTab,
+                      selectedTab === key && styles.difficultyTabActive,
+                    ]}
+                    onPress={() => setSelectedTab(key)}
+                  >
+                    <Text style={styles.difficultyTabEmoji}>{group.emoji}</Text>
+                    <Text
+                      style={[
+                        styles.difficultyTabLabel,
+                        selectedTab === key && styles.difficultyTabLabelActive,
+                      ]}
+                    >
+                      {group.label}
+                    </Text>
+                  </TouchableOpacity>
+                )
+              )}
             </View>
           </View>
 
-          {/* Stages */}
+          {/* Stages Grid */}
           <View style={styles.section}>
             <Text style={styles.sectionTitle}>ステージを選択</Text>
             <View style={styles.stageGrid}>
-              {Array.from({ length: stagesCount }, (_, i) => i + 1).map(
-                (stage) => {
-                  const isLocked = stage > 3;
-                  const isCompleted = stage <= 1;
+              {currentTab.stages.map((stage) => {
+                const isLocked = stage > 3;
+                const isCompleted = stage <= 1;
 
-                  return (
-                    <TouchableOpacity
-                      key={stage}
-                      style={[
-                        styles.stageButton,
-                        isLocked && styles.stageButtonDisabled,
-                        isCompleted && styles.stageButtonCompleted,
-                      ]}
-                      onPress={() => handleStartStage(stage)}
-                      disabled={isLocked}
-                      activeOpacity={0.7}
-                    >
-                      {isCompleted && (
-                        <Text style={styles.stageBadge}>✓</Text>
-                      )}
-                      <Text style={styles.stageButtonNumber}>{stage}</Text>
-                      {isLocked && (
-                        <Text style={styles.stageLock}>🔒</Text>
-                      )}
-                    </TouchableOpacity>
-                  );
-                }
-              )}
+                return (
+                  <TouchableOpacity
+                    key={stage}
+                    style={[
+                      styles.stageButton,
+                      isLocked && styles.stageButtonDisabled,
+                      isCompleted && styles.stageButtonCompleted,
+                    ]}
+                    onPress={() => handleStartStage(stage)}
+                    disabled={isLocked}
+                    activeOpacity={0.7}
+                  >
+                    {isCompleted && (
+                      <Text style={styles.stageBadge}>✓</Text>
+                    )}
+                    <Text style={styles.stageButtonNumber}>{stage}</Text>
+                    {isLocked && (
+                      <Text style={styles.stageLock}>🔒</Text>
+                    )}
+                  </TouchableOpacity>
+                );
+              })}
             </View>
           </View>
 
@@ -538,28 +551,38 @@ const styles = StyleSheet.create({
     color: Colors.light.textSecondary,
     fontWeight: '500',
   },
-  difficultyGuide: {
+  difficultyTabs: {
     flexDirection: 'row',
     gap: Spacing.lg,
   },
-  difficultyItem: {
+  difficultyTab: {
     flex: 1,
     paddingHorizontal: Spacing.md,
     paddingVertical: Spacing.lg,
     backgroundColor: Colors.light.surfaceCard,
     borderRadius: BorderRadius.lg,
     alignItems: 'center',
+    borderWidth: 2,
+    borderColor: Colors.light.border,
     ...Shadows.xs,
   },
-  difficultyEmoji: {
+  difficultyTabActive: {
+    backgroundColor: Colors.light.primaryLight,
+    borderColor: Colors.light.primary,
+  },
+  difficultyTabEmoji: {
     fontSize: 18,
     marginBottom: Spacing.sm,
   },
-  difficultyLabel: {
-    fontSize: 12,
+  difficultyTabLabel: {
+    fontSize: 13,
     color: Colors.light.text,
     fontWeight: '600',
     textAlign: 'center',
+  },
+  difficultyTabLabelActive: {
+    color: Colors.light.primary,
+    fontWeight: '700',
   },
   stageGrid: {
     flexDirection: 'row',
@@ -754,31 +777,31 @@ const styles = StyleSheet.create({
   },
   feedbackContainer: {
     marginHorizontal: Spacing.xl,
-    marginBottom: Spacing.xl,
+    marginBottom: Spacing.md,
     paddingHorizontal: Spacing.lg,
-    paddingVertical: Spacing.lg,
+    paddingVertical: Spacing.md,
     backgroundColor: Colors.light.primaryLight,
     borderLeftWidth: 4,
     borderLeftColor: Colors.light.warning,
     borderRadius: BorderRadius.lg,
   },
   feedbackLabel: {
-    fontSize: 12,
+    fontSize: 11,
     color: Colors.light.textSecondary,
-    marginBottom: Spacing.md,
+    marginBottom: Spacing.sm,
     fontWeight: '600',
   },
   exampleSentence: {
-    fontSize: 15,
+    fontSize: 14,
     color: Colors.light.text,
     fontWeight: '500',
-    lineHeight: 22,
-    marginBottom: Spacing.md,
+    lineHeight: 20,
+    marginBottom: Spacing.sm,
   },
   exampleTranslation: {
-    fontSize: 14,
+    fontSize: 13,
     color: Colors.light.textSecondary,
-    lineHeight: 20,
+    lineHeight: 18,
   },
   nextButton: {
     marginHorizontal: Spacing.xl,
