@@ -6,7 +6,6 @@ import {
   SafeAreaView,
   TouchableOpacity,
   ScrollView,
-  TextInput,
   Alert,
   ActivityIndicator,
 } from 'react-native';
@@ -24,6 +23,7 @@ import { StreakBanner } from '@/src/components/StreakBanner';
 import { CelebrationAnimation } from '@/src/components/CelebrationAnimation';
 import { ErrorScreen } from '@/src/components/ErrorScreen';
 import { EmptyState } from '@/src/components/EmptyState';
+import { InputWithValidation } from '@/src/components/InputWithValidation';
 
 type Screen = 'prompt-select' | 'editor' | 'result';
 
@@ -360,20 +360,13 @@ export default function WritingScreen() {
 
           {/* Text Editor */}
           <View style={styles.editorContainer}>
-            <View style={styles.editorHeader2}>
-              <Text style={styles.editorLabel}>エッセイを入力</Text>
-              <Text style={styles.wordCount}>
-                {currentContent.length} / {currentPrompt.wordLimit * 1.5}文字
-              </Text>
-            </View>
-            <TextInput
-              style={styles.textInput}
-              placeholder="ここにエッセイを入力してください..."
-              placeholderTextColor="#999"
-              multiline
+            <InputWithValidation
               value={currentContent}
               onChangeText={setCurrentContent}
+              minLength={currentPrompt.wordLimit * 0.8}
               maxLength={currentPrompt.wordLimit * 2}
+              placeholder="ここにエッセイを入力してください..."
+              label="エッセイを入力"
             />
           </View>
 
@@ -686,33 +679,6 @@ const styles = StyleSheet.create({
   editorContainer: {
     marginHorizontal: 24,
     marginTop: 16,
-  },
-  editorHeader2: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 8,
-  },
-  editorLabel: {
-    fontSize: 13,
-    fontWeight: '600',
-    color: '#333',
-  },
-  wordCount: {
-    fontSize: 12,
-    color: '#999',
-  },
-  textInput: {
-    backgroundColor: '#fff',
-    borderRadius: 8,
-    paddingHorizontal: 16,
-    paddingVertical: 14,
-    fontSize: 14,
-    color: '#333',
-    minHeight: 200,
-    textAlignVertical: 'top',
-    borderWidth: 1,
-    borderColor: '#ddd',
   },
   imagePreviewContainer: {
     marginHorizontal: 24,

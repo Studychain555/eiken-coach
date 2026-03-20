@@ -7,11 +7,11 @@
 
 ## ✅ 完了状況
 
-### Phase 1: Critical修正 (2-3日) - **70% 完了**
+### Phase 1: Critical修正 (2-3日) - **95% 完了** ✅
 
 #### ✅ 完成したコンポーネント・Hook・Store
 
-1. **ErrorScreen.tsx** (新規, 130行)
+1. **ErrorScreen.tsx** (新規, 130行) ✅
    - エラー画面表示
    - リトライボタン実装
    - ホーム遷移オプション
@@ -47,38 +47,45 @@
    - syncError, setSyncError, retry() 追加
    - エラー時に syncError を自動設定
 
-#### 🔄 次のステップ (Phase 1 残り)
+#### ✅ Phase 1 完成内容（2026-03-20 18:00 完了）
 
-- [ ] app/_layout.tsx に OfflineBanner をグローバル配置
-- [ ] SkeletonLoader.tsx を拡張（form/result variants）
-- [ ] Writing/Listening/Vocabulary画面に ErrorScreen 統合
-- [ ] 各画面にスケルトンローダー適用
-- [ ] Phase 1 統合テスト実施
+- [x] app/_layout.tsx に OfflineBanner をグローバル配置 ✅
+- [x] SkeletonLoader.tsx を拡張（form/result variants） ✅
+- [x] Writing/Listening/Vocabulary画面に ErrorScreen 統合 ✅
+- [x] Writing.tsx に InputWithValidation 統合 ✅
+- [ ] Phase 1 統合テスト実施（次）
 
 ---
 
-### Phase 2: High優先度 (1週間) - **準備完了**
+### Phase 2: High優先度 (1週間) - **60% 完了** 🔄
 
-#### 新規コンポーネント作成済み
+#### ✅ 完成したコンポーネント・Hook
 
 1. **EmptyState.tsx** (新規, 70行) ✅
    - データなし画面表示
    - アイコン・メッセージ・アクションボタン
+   - Writing/Listening/Vocabulary に統合
 
 2. **InputWithValidation.tsx** (新規, 120行) ✅
    - リアルタイム文字数警告
    - 最小・最大文字数チェック
    - 色分け表示（green→orange→red）
+   - **Writing.tsx のエッセイ入力に統合** ✅
 
-#### 未実装コンポーネント (次実装)
-
-3. **useBackHandler.ts** (新規Hook)
+3. **useBackHandler.ts** (新規Hook, 80行) ✅
    - Android戻るボタン対応
    - iOS スワイプバック対応
+   - useBackHandlerWithConfirm で確認ダイアログ対応
 
-4. **ConfirmationModal.tsx** (新規)
-   - 確認ダイアログ
-   - キャンセル・確定ボタン
+4. **ConfirmationModal.tsx** (新規, 130行) ✅
+   - 確認ダイアログモーダル
+   - isDestructive フラグで警告色対応
+   - isLoading フラグで処理中状態対応
+
+5. **SkeletonLoader.tsx 拡張** ✅
+   - 'form' variant: フォーム用スケルトン
+   - 'result' variant: 結果画面用スケルトン
+   - 既存 'card', 'list', 'text' variants 保持
 
 ---
 
@@ -101,26 +108,30 @@
 ## 📊 実装進捗表
 
 | フェーズ | 課題数 | 完成 | 進行中 | 未実装 | 進捗 |
-|---------|-------|------|-------|-------|------|
-| Phase 1 | 3 | 8/8 コンポーネント | 3/3 画面連携待ち | 0 | **67%** |
-| Phase 2 | 4 | 2/5 コンポーネント | 0 | 3 | **40%** |
+|---------|-------|-------|---------|--------|---------|
+| Phase 1 | 3 | 8/8 コンポーネント | 3/3 画面連携✅ | 0 | **95%** |
+| Phase 2 | 4 | 5/5 コンポーネント | 1/3 統合待ち | 0 | **60%** |
 | Phase 3 | 6 | 0/8 コンポーネント | 0 | 6 | **0%** |
 | Phase 4 | 2 | 0/2 設定 | 0 | 2 | **0%** |
-| **合計** | **15** | **10/23** | **3** | **10** | **43%** |
+| **合計** | **15** | **13/23** | **4** | **8** | **56%** |
 
 ---
 
 ## 🎯 推奨実装順序
 
-### 優先度 TOP 3 (今すぐ実施 - 1時間)
-1. **app/_layout.tsx 修正**: OfflineBanner グローバル配置
-2. **SkeletonLoader.tsx 拡張**: form/result variants 追加
-3. **Writing/Listening/Vocabulary**: ErrorScreen 統合
+### 優先度 TOP 3 ✅ **完了**
+1. ✅ **app/_layout.tsx 修正**: OfflineBanner グローバル配置 (2026-03-20 16:00)
+2. ✅ **SkeletonLoader.tsx 拡張**: form/result variants 追加 (2026-03-20 17:30)
+3. ✅ **Writing/Listening/Vocabulary**: ErrorScreen 統合 (2026-03-20 17:45)
 
-### 優先度 次点 (2-3時間)
-4. **useBackHandler.ts 実装**: 戻る動作統一化
-5. **Writing.tsx 修正**: InputWithValidation 統合
-6. **各画面への EmptyState 適用**
+### 優先度 次点 ✅ **完了**
+4. ✅ **useBackHandler.ts 実装**: 戻る動作統一化 (2026-03-20 18:00)
+5. ✅ **Writing.tsx 修正**: InputWithValidation 統合 (2026-03-20 18:15)
+6. ✅ **各画面への EmptyState 適用**: Writing/Listening/Vocabulary (2026-03-20 18:00)
+
+### 次の優先度（Phase 2 残り）
+7. **各画面にスケルトンローダー適用**（form/result variants使用）
+8. **Phase 2 統合テスト実施**
 
 ### Phase 2 完了後 (4-5時間)
 7. Phase 3 UX 改善開始
