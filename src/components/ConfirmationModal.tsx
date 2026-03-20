@@ -131,9 +131,9 @@ const styles = StyleSheet.create({
     marginBottom: Spacing.lg,
   },
   title: {
-    ...Typography.headline,
+    ...Typography.h2,
     fontSize: 18,
-    fontWeight: '700',
+    fontWeight: '700' as any,
     color: Colors.light.text,
     marginBottom: Spacing.md,
     textAlign: 'center',
@@ -167,7 +167,7 @@ const styles = StyleSheet.create({
   },
   cancelButtonText: {
     ...Typography.bodySmall,
-    fontWeight: '600',
+    fontWeight: '600' as any,
     color: Colors.light.textSecondary,
   },
   confirmButton: {
@@ -175,7 +175,7 @@ const styles = StyleSheet.create({
   },
   confirmButtonText: {
     ...Typography.bodySmall,
-    fontWeight: '600',
+    fontWeight: '600' as any,
     color: '#fff',
   },
   destructiveButton: {
