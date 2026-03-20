@@ -12,11 +12,22 @@ import {
   ErrorType,
 } from './errorHandler';
 
+export interface WordFeedback {
+  word: string;
+  status: 'correct' | 'incorrect' | 'weak';
+  yourVersion?: string;
+  correctPronunciation?: string;
+  explanation?: string;
+  tip?: string;
+  tag?: 'Pronunciation' | 'Linking' | 'Rhythm' | 'Grammar' | 'Meaning';
+}
+
 export interface ScoringResult {
   accuracyScore: number; // 0-10
   rhythmScore: number; // 0-10
   pronunciationScore: number; // 0-10
   feedback: string;
+  wordFeedbacks: WordFeedback[]; // ワード・バイ・ワード分析
   corrections: Array<{
     original: string;
     corrected: string;
@@ -77,7 +88,7 @@ async function callClaudeAPI(
   apiKey: string
 ): Promise<ScoringResult> {
   const prompt = `
-You are an English pronunciation and listening expert. Evaluate the following shadowing (repetition) exercise.
+You are an English pronunciation and listening expert. Evaluate the following shadowing (repetition) exercise with detailed word-by-word analysis.
 
 Original Script:
 ${originalScript}
@@ -92,12 +103,31 @@ Please evaluate the student's shadowing attempt on these criteria (scale 0-10):
 2. **Rhythm** (リズム): Is the rhythm and pacing appropriate?
 3. **Pronunciation** (発音): Are the individual words pronounced correctly?
 
+IMPORTANT: Provide DETAILED WORD-BY-WORD ANALYSIS in the "wordFeedbacks" array.
+For each key word in the original script:
+- Determine if it was pronounced correctly, incorrectly, or weakly
+- Provide the correct pronunciation with IPA notation
+- Explain what the student said vs what is correct
+- Give a specific tip for improvement
+- Tag the issue (Pronunciation, Linking, Rhythm, Grammar, or Meaning)
+
 Provide your response in JSON format:
 {
   "accuracyScore": <number 0-10>,
   "rhythmScore": <number 0-10>,
   "pronunciationScore": <number 0-10>,
   "feedback": "<overall feedback in Japanese>",
+  "wordFeedbacks": [
+    {
+      "word": "<English word>",
+      "status": "correct|incorrect|weak",
+      "yourVersion": "<what student said>",
+      "correctPronunciation": "<IPA with notes>",
+      "explanation": "<why it was wrong or needs improvement>",
+      "tip": "<specific improvement tip in Japanese>",
+      "tag": "Pronunciation|Linking|Rhythm|Grammar|Meaning"
+    }
+  ],
   "corrections": [
     {
       "original": "<correct phrase>",
@@ -192,11 +222,40 @@ Provide your response in JSON format:
     };
 
     const typedResult = result as any;
+
+    // wordFeedbacks の検証と整形
+    const validateWordFeedback = (feedback: any): WordFeedback | null => {
+      if (!feedback || typeof feedback !== 'object') return null;
+
+      const status = feedback.status as any;
+      if (!['correct', 'incorrect', 'weak'].includes(status)) return null;
+
+      const tag = feedback.tag as any;
+      if (!['Pronunciation', 'Linking', 'Rhythm', 'Grammar', 'Meaning'].includes(tag)) return null;
+
+      return {
+        word: String(feedback.word || ''),
+        status,
+        yourVersion: feedback.yourVersion ? String(feedback.yourVersion) : undefined,
+        correctPronunciation: feedback.correctPronunciation ? String(feedback.correctPronunciation) : undefined,
+        explanation: feedback.explanation ? String(feedback.explanation) : undefined,
+        tip: feedback.tip ? String(feedback.tip) : undefined,
+        tag,
+      };
+    };
+
+    const wordFeedbacks = Array.isArray(typedResult.wordFeedbacks)
+      ? typedResult.wordFeedbacks
+          .map(validateWordFeedback)
+          .filter((fb): fb is WordFeedback => fb !== null)
+      : [];
+
     return {
       accuracyScore: normalizeScore(typedResult.accuracyScore),
       rhythmScore: normalizeScore(typedResult.rhythmScore),
       pronunciationScore: normalizeScore(typedResult.pronunciationScore),
       feedback: typedResult.feedback || 'フィードバックが生成されませんでした',
+      wordFeedbacks,
       corrections: Array.isArray(typedResult.corrections) ? typedResult.corrections : [],
     };
   } finally {
@@ -435,6 +494,9 @@ function generateDummyScore(
   // スクリプトと異なる単語を見つける
   const corrections = findDifferences(script, transcript);
 
+  // ワード・バイ・ワード分析を生成
+  const wordFeedbacks = generateWordFeedbacks(scriptWords, transcriptWords);
+
   // スコアに基づいた具体的なフィードバックを生成
   const feedback = generateSpecificFeedback(
     accuracyScore,
@@ -451,8 +513,121 @@ function generateDummyScore(
     rhythmScore,
     pronunciationScore,
     feedback,
+    wordFeedbacks,
     corrections,
   };
+}
+
+/**
+ * ワード・バイ・ワード分析を生成
+ * 各単語について正解/不正解/弱いの判定と改善のコツを提供
+ */
+function generateWordFeedbacks(
+  scriptWords: string[],
+  transcriptWords: string[]
+): WordFeedback[] {
+  const feedbacks: WordFeedback[] = [];
+
+  // 主な単語のみ分析（パフォーマンス最適化）
+  const wordsToAnalyze = Math.min(scriptWords.length, 10);
+
+  for (let i = 0; i < wordsToAnalyze; i++) {
+    const scriptWord = scriptWords[i];
+    const transcriptWord = transcriptWords[i] || '';
+    const isMatch = scriptWord.toLowerCase() === transcriptWord.toLowerCase();
+
+    // 単語ごとの発音タイプを推測
+    const tags: Array<'Pronunciation' | 'Linking' | 'Rhythm' | 'Grammar' | 'Meaning'> = ['Pronunciation'];
+
+    // 複数単語の連結で発音変化が起きやすい場合
+    if (i > 0 && i < scriptWords.length - 1) {
+      const prevEndsWithConsonant = /[bcdfghjklmnpqrstvwxyz]$/i.test(scriptWords[i - 1]);
+      const currStartsWithVowel = /^[aeiou]/i.test(scriptWord);
+      if (prevEndsWithConsonant && currStartsWithVowel) {
+        tags.push('Linking');
+      }
+    }
+
+    let status: 'correct' | 'incorrect' | 'weak' = 'correct';
+    let correctPronunciation = '';
+    let explanation = '';
+    let tip = '';
+
+    if (!isMatch) {
+      // 音声が異なる場合
+      const similarity = calculateWordSimilarity(scriptWord, transcriptWord);
+      if (similarity > 0.6) {
+        status = 'weak';
+        explanation = `「${scriptWord}」は「${transcriptWord}」のように聞こえました。発音が少し曖昧です。`;
+        tip = `より正確に「${scriptWord}」と発音してください。各音を明確に出しましょう。`;
+      } else {
+        status = 'incorrect';
+        explanation = `「${scriptWord}」と「${transcriptWord}」は異なります。音をしっかり確認してください。`;
+        tip = `「${scriptWord}」の発音を辞書で確認し、繰り返し練習しましょう。`;
+      }
+
+      correctPronunciation = getIpaPronunciation(scriptWord);
+    } else {
+      status = 'correct';
+      explanation = `「${scriptWord}」は正確に発音されました。素晴らしい！`;
+      tip = `この発音をキープして、次のラウンドでも同じレベルを保ちましょう。`;
+      correctPronunciation = getIpaPronunciation(scriptWord);
+    }
+
+    feedbacks.push({
+      word: scriptWord,
+      status,
+      yourVersion: transcriptWord !== '' ? transcriptWord : undefined,
+      correctPronunciation,
+      explanation,
+      tip,
+      tag: tags[0],
+    });
+  }
+
+  return feedbacks;
+}
+
+/**
+ * 2つの単語の類似度を計算（簡易的）
+ */
+function calculateWordSimilarity(word1: string, word2: string): number {
+  const w1 = word1.toLowerCase();
+  const w2 = word2.toLowerCase();
+
+  if (w1 === w2) return 1;
+  if (w1.length === 0 || w2.length === 0) return 0;
+
+  // レーベンシュタイン距離で類似度計算
+  const maxLen = Math.max(w1.length, w2.length);
+  let matches = 0;
+
+  for (let i = 0; i < Math.min(w1.length, w2.length); i++) {
+    if (w1[i] === w2[i]) matches++;
+  }
+
+  return matches / maxLen;
+}
+
+/**
+ * 単語の IPA 発音記号を返す（簡易版）
+ */
+function getIpaPronunciation(word: string): string {
+  // 簡易的な IPA 発音サンプル
+  const ipaMap: Record<string, string> = {
+    'the': 'ðə (弱形) / ðiː (強形)',
+    'a': 'ə (弱形) / eɪ (強形)',
+    'is': 'ɪz',
+    'and': 'ənd / ænd',
+    'to': 'tə (弱形) / tuː (強形)',
+    'of': 'əv / ʌv',
+    'in': 'ɪn',
+    'that': 'ðæt',
+    'you': 'juː / jə',
+    'it': 'ɪt',
+  };
+
+  return ipaMap[word.toLowerCase()] || `/${word}/`;
 }
 
 /**
