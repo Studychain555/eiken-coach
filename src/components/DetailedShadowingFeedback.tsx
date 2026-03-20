@@ -334,6 +334,7 @@ export default function DetailedShadowingFeedback({
               );
             })}
           </View>
+          </View>
         )}
 
         {/* Overall Feedback */}
