@@ -12,6 +12,19 @@ import {
   ErrorType,
 } from './errorHandler';
 
+export interface PhraseFeedback {
+  phrase: string; // フレーズ（例："the future will be"）
+  status: 'good' | 'needsWork' | 'major'; // 良い / 改善が必要 / 大きな問題
+  correctReading?: string; // 正しい読み方（カタカナ）
+  yourVersion?: string; // ユーザーの読み方
+  issues: {
+    type: 'linking' | 'reduction' | 'stress' | 'intonation' | 'pronunciation'; // 問題の種類
+    description: string; // 説明
+    tip: string; // 改善のコツ
+  }[];
+  example?: string; // 具体例
+}
+
 export interface WordFeedback {
   word: string;
   status: 'correct' | 'incorrect' | 'weak';
@@ -27,7 +40,8 @@ export interface ScoringResult {
   rhythmScore: number; // 0-10
   pronunciationScore: number; // 0-10
   feedback: string;
-  wordFeedbacks: WordFeedback[]; // ワード・バイ・ワード分析
+  phraseFeedbacks?: PhraseFeedback[]; // フレーズ単位の詳細分析（新規）
+  wordFeedbacks?: WordFeedback[]; // ワード・バイ・ワード分析
   corrections: Array<{
     original: string;
     corrected: string;
@@ -88,7 +102,7 @@ async function callClaudeAPI(
   apiKey: string
 ): Promise<ScoringResult> {
   const prompt = `
-You are an English pronunciation and listening expert. Evaluate the following shadowing (repetition) exercise with detailed word-by-word analysis.
+You are an English pronunciation expert specializing in EIKEN Grade 1 (英検準1級) level shadowing exercises. Evaluate the student's shadowing (repetition) performance using detailed phrase-level analysis.
 
 Original Script:
 ${originalScript}
@@ -100,39 +114,52 @@ Round: ${roundNumber}/7
 
 Please evaluate the student's shadowing attempt on these criteria (scale 0-10):
 1. **Accuracy** (正確性): How closely does the transcription match the original script?
-2. **Rhythm** (リズム): Is the rhythm and pacing appropriate?
-3. **Pronunciation** (発音): Are the individual words pronounced correctly?
+2. **Rhythm** (リズム): Is the rhythm, pacing, and intonation appropriate?
+3. **Pronunciation** (発音): Are the phonemes and connected speech phenomena correctly produced?
 
-IMPORTANT: Provide DETAILED WORD-BY-WORD ANALYSIS in the "wordFeedbacks" array.
-For each key word in the original script:
-- Determine if it was pronounced correctly, incorrectly, or weakly
-- Provide the correct pronunciation with IPA notation
+IMPORTANT: Provide DETAILED PHRASE-BY-PHRASE ANALYSIS in the "phraseFeedbacks" array.
+For each phrase (2-5 words) in the original script:
+- Identify if the pronunciation is "good", "needsWork", or "major" (issue)
+- Provide the correct reading in katakana (e.g., "ザ フューチャ ウル ビー")
 - Explain what the student said vs what is correct
-- Give a specific tip for improvement
-- Tag the issue (Pronunciation, Linking, Rhythm, Grammar, or Meaning)
+- Identify issues in categories: linking, reduction, stress, intonation, pronunciation
+- Give specific, actionable improvement tips in Japanese
+- Include relevant examples or context
 
-Provide your response in JSON format:
+FOCUS AREAS for EIKEN Grade 1 (英検準1級):
+- **Linking**: /t/ + vowel liaison, /n/ absorption before consonants
+- **Reduction**: Schwa reduction, vowel elision in unstressed syllables
+- **Stress**: Word stress patterns, sentence stress and emphasis
+- **Intonation**: Question intonation, emotional nuance, pausing
+- **Pronunciation**: Vowel clarity, consonant distinctness, rhythm flow
+
+Provide your response in VALID JSON format:
 {
   "accuracyScore": <number 0-10>,
   "rhythmScore": <number 0-10>,
   "pronunciationScore": <number 0-10>,
-  "feedback": "<overall feedback in Japanese>",
-  "wordFeedbacks": [
+  "feedback": "<overall feedback in Japanese, 2-3 sentences>",
+  "phraseFeedbacks": [
     {
-      "word": "<English word>",
-      "status": "correct|incorrect|weak",
-      "yourVersion": "<what student said>",
-      "correctPronunciation": "<IPA with notes>",
-      "explanation": "<why it was wrong or needs improvement>",
-      "tip": "<specific improvement tip in Japanese>",
-      "tag": "Pronunciation|Linking|Rhythm|Grammar|Meaning"
+      "phrase": "<phrase from script, 2-5 words>",
+      "status": "good|needsWork|major",
+      "correctReading": "<correct reading in katakana>",
+      "yourVersion": "<what student said in katakana or description>",
+      "issues": [
+        {
+          "type": "linking|reduction|stress|intonation|pronunciation",
+          "description": "<specific problem found>",
+          "tip": "<actionable improvement tip in Japanese>"
+        }
+      ],
+      "example": "<optional: context or comparison example>"
     }
   ],
   "corrections": [
     {
       "original": "<correct phrase>",
       "corrected": "<student's version>",
-      "explanation": "<why it was wrong>"
+      "explanation": "<why it was wrong or what to improve>"
     }
   ]
 }
@@ -223,31 +250,41 @@ Provide your response in JSON format:
 
     const typedResult = result as any;
 
-    // wordFeedbacks の検証と整形
-    const validateWordFeedback = (feedback: any): WordFeedback | null => {
+    // phraseFeedbacks の検証と整形
+    const validatePhraseFeedback = (feedback: any): PhraseFeedback | null => {
       if (!feedback || typeof feedback !== 'object') return null;
 
       const status = feedback.status as any;
-      if (!['correct', 'incorrect', 'weak'].includes(status)) return null;
+      if (!['good', 'needsWork', 'major'].includes(status)) return null;
 
-      const tag = feedback.tag as any;
-      if (!['Pronunciation', 'Linking', 'Rhythm', 'Grammar', 'Meaning'].includes(tag)) return null;
+      // issues の検証
+      let issues: PhraseFeedback['issues'] = [];
+      if (Array.isArray(feedback.issues)) {
+        issues = feedback.issues
+          .filter((issue: any) => issue && typeof issue === 'object')
+          .map((issue: any) => ({
+            type: (['linking', 'reduction', 'stress', 'intonation', 'pronunciation'].includes(issue.type as any)
+              ? issue.type
+              : 'pronunciation') as PhraseFeedback['issues'][0]['type'],
+            description: String(issue.description || ''),
+            tip: String(issue.tip || ''),
+          }));
+      }
 
       return {
-        word: String(feedback.word || ''),
+        phrase: String(feedback.phrase || ''),
         status,
+        correctReading: feedback.correctReading ? String(feedback.correctReading) : undefined,
         yourVersion: feedback.yourVersion ? String(feedback.yourVersion) : undefined,
-        correctPronunciation: feedback.correctPronunciation ? String(feedback.correctPronunciation) : undefined,
-        explanation: feedback.explanation ? String(feedback.explanation) : undefined,
-        tip: feedback.tip ? String(feedback.tip) : undefined,
-        tag,
+        issues,
+        example: feedback.example ? String(feedback.example) : undefined,
       };
     };
 
-    const wordFeedbacks = Array.isArray(typedResult.wordFeedbacks)
-      ? typedResult.wordFeedbacks
-          .map(validateWordFeedback)
-          .filter((fb): fb is WordFeedback => fb !== null)
+    const phraseFeedbacks = Array.isArray(typedResult.phraseFeedbacks)
+      ? typedResult.phraseFeedbacks
+          .map(validatePhraseFeedback)
+          .filter((fb: PhraseFeedback | null): fb is PhraseFeedback => fb !== null)
       : [];
 
     return {
@@ -255,7 +292,7 @@ Provide your response in JSON format:
       rhythmScore: normalizeScore(typedResult.rhythmScore),
       pronunciationScore: normalizeScore(typedResult.pronunciationScore),
       feedback: typedResult.feedback || 'フィードバックが生成されませんでした',
-      wordFeedbacks,
+      phraseFeedbacks,
       corrections: Array.isArray(typedResult.corrections) ? typedResult.corrections : [],
     };
   } finally {
@@ -494,8 +531,8 @@ function generateDummyScore(
   // スクリプトと異なる単語を見つける
   const corrections = findDifferences(script, transcript);
 
-  // ワード・バイ・ワード分析を生成
-  const wordFeedbacks = generateWordFeedbacks(scriptWords, transcriptWords);
+  // フレーズ単位の分析を生成
+  const phraseFeedbacks = generatePhraseFeedbacks(script, transcript, scriptWords, transcriptWords);
 
   // スコアに基づいた具体的なフィードバックを生成
   const feedback = generateSpecificFeedback(
@@ -513,79 +550,183 @@ function generateDummyScore(
     rhythmScore,
     pronunciationScore,
     feedback,
-    wordFeedbacks,
+    phraseFeedbacks,
     corrections,
   };
 }
 
 /**
- * ワード・バイ・ワード分析を生成
- * 各単語について正解/不正解/弱いの判定と改善のコツを提供
+ * フレーズ単位の分析を生成
+ * 各フレーズについてstatus(good/needsWork/major)と改善のコツを提供
  */
-function generateWordFeedbacks(
+function generatePhraseFeedbacks(
+  originalScript: string,
+  transcript: string,
   scriptWords: string[],
   transcriptWords: string[]
-): WordFeedback[] {
-  const feedbacks: WordFeedback[] = [];
+): PhraseFeedback[] {
+  const feedbacks: PhraseFeedback[] = [];
 
-  // 主な単語のみ分析（パフォーマンス最適化）
-  const wordsToAnalyze = Math.min(scriptWords.length, 10);
+  // フレーズ（2-5単語）に分割
+  const phrases = createPhrasesFromScript(scriptWords, originalScript);
 
-  for (let i = 0; i < wordsToAnalyze; i++) {
-    const scriptWord = scriptWords[i];
-    const transcriptWord = transcriptWords[i] || '';
-    const isMatch = scriptWord.toLowerCase() === transcriptWord.toLowerCase();
+  for (const phrase of phrases) {
+    const phraseWords = phrase.words;
+    const phraseText = phraseWords.join(' ');
 
-    // 単語ごとの発音タイプを推測
-    const tags: Array<'Pronunciation' | 'Linking' | 'Rhythm' | 'Grammar' | 'Meaning'> = ['Pronunciation'];
+    // 対応するトランスクリプション部分を見つける
+    const transcriptPhrase = findCorrespondingPhrase(transcriptWords, phraseWords);
+    const isMatch = phraseWords.every((word, idx) =>
+      word.toLowerCase() === (transcriptPhrase[idx] || '').toLowerCase()
+    );
 
-    // 複数単語の連結で発音変化が起きやすい場合
-    if (i > 0 && i < scriptWords.length - 1) {
-      const prevEndsWithConsonant = /[bcdfghjklmnpqrstvwxyz]$/i.test(scriptWords[i - 1]);
-      const currStartsWithVowel = /^[aeiou]/i.test(scriptWord);
-      if (prevEndsWithConsonant && currStartsWithVowel) {
-        tags.push('Linking');
-      }
-    }
-
-    let status: 'correct' | 'incorrect' | 'weak' = 'correct';
-    let correctPronunciation = '';
-    let explanation = '';
-    let tip = '';
+    // status を判定
+    let status: 'good' | 'needsWork' | 'major' = 'good';
+    const similarity = calculatePhraseSimilarity(phraseWords, transcriptPhrase);
 
     if (!isMatch) {
-      // 音声が異なる場合
-      const similarity = calculateWordSimilarity(scriptWord, transcriptWord);
       if (similarity > 0.6) {
-        status = 'weak';
-        explanation = `「${scriptWord}」は「${transcriptWord}」のように聞こえました。発音が少し曖昧です。`;
-        tip = `より正確に「${scriptWord}」と発音してください。各音を明確に出しましょう。`;
+        status = 'needsWork';
       } else {
-        status = 'incorrect';
-        explanation = `「${scriptWord}」と「${transcriptWord}」は異なります。音をしっかり確認してください。`;
-        tip = `「${scriptWord}」の発音を辞書で確認し、繰り返し練習しましょう。`;
+        status = 'major';
       }
-
-      correctPronunciation = getIpaPronunciation(scriptWord);
-    } else {
-      status = 'correct';
-      explanation = `「${scriptWord}」は正確に発音されました。素晴らしい！`;
-      tip = `この発音をキープして、次のラウンドでも同じレベルを保ちましょう。`;
-      correctPronunciation = getIpaPronunciation(scriptWord);
     }
 
+    // 問題の種類を推測
+    const issues: PhraseFeedback['issues'] = [];
+
+    if (status !== 'good') {
+      // リンキング：単語間の連結
+      if (phraseWords.length > 1) {
+        const lastWordEndsWithConsonant = /[bcdfghjklmnpqrstvwxyz]$/i.test(phraseWords[phraseWords.length - 1]);
+        const nextWordStartsWithVowel = phraseWords.length > 0 && /^[aeiou]/i.test(phraseWords[0] || '');
+        if (lastWordEndsWithConsonant && nextWordStartsWithVowel && !isMatch) {
+          issues.push({
+            type: 'linking',
+            description: '単語間のリンキング（連結）が不十分です。',
+            tip: `「${phraseWords[phraseWords.length - 1]}」の最後と次の単語をスムーズに繋げてください。`
+          });
+        }
+      }
+
+      // 強弱アクセント
+      const hasStressPatternIssue = phraseWords.some((word, idx) => {
+        const scriptWord = phraseWords[idx];
+        const transcriptWord = transcriptPhrase[idx] || '';
+        return scriptWord.toLowerCase() !== transcriptWord.toLowerCase();
+      });
+
+      if (hasStressPatternIssue && issues.length === 0) {
+        issues.push({
+          type: 'stress',
+          description: 'ストレス（強弱）のパターンに問題があります。',
+          tip: '主要な単語にアクセントを置き、その他の単語は弱く発音しましょう。'
+        });
+      }
+
+      // 発音の正確性
+      if (issues.length === 0) {
+        issues.push({
+          type: 'pronunciation',
+          description: '個々の音の発音に改善の余地があります。',
+          tip: '各単語を辞書で確認し、正確な音を学びましょう。'
+        });
+      }
+    }
+
+    // カタカナ読み方を生成
+    const correctReading = generateKatakanaReading(phraseText);
+    const yourVersion = generateKatakanaReading(transcriptPhrase.join(' '));
+
     feedbacks.push({
-      word: scriptWord,
+      phrase: phraseText,
       status,
-      yourVersion: transcriptWord !== '' ? transcriptWord : undefined,
-      correctPronunciation,
-      explanation,
-      tip,
-      tag: tags[0],
+      correctReading,
+      yourVersion: yourVersion !== correctReading ? yourVersion : undefined,
+      issues,
+      example: createPhraseExample(phraseText)
     });
   }
 
   return feedbacks;
+}
+
+/**
+ * スクリプトからフレーズを作成（2-5単語）
+ */
+function createPhrasesFromScript(words: string[], script: string): Array<{ words: string[] }> {
+  const phrases: Array<{ words: string[] }> = [];
+  const phraseSize = 3; // 基本的に3単語のフレーズ
+
+  for (let i = 0; i < words.length; i += phraseSize) {
+    const phraseWords = words.slice(i, Math.min(i + phraseSize, words.length));
+    if (phraseWords.length > 0) {
+      phrases.push({ words: phraseWords });
+    }
+  }
+
+  return phrases;
+}
+
+/**
+ * トランスクリプションから対応するフレーズを探す
+ */
+function findCorrespondingPhrase(transcriptWords: string[], phraseWords: string[]): string[] {
+  // 簡易的：同じ位置を返す（実際にはより高度なマッチングが可能）
+  const startIdx = 0;
+  return transcriptWords.slice(startIdx, startIdx + phraseWords.length);
+}
+
+/**
+ * フレーズの類似度を計算
+ */
+function calculatePhraseSimilarity(phrase1: string[], phrase2: string[]): number {
+  if (phrase1.length === 0) return 0;
+
+  let matches = 0;
+  for (let i = 0; i < Math.min(phrase1.length, phrase2.length); i++) {
+    if (phrase1[i].toLowerCase() === phrase2[i].toLowerCase()) {
+      matches++;
+    }
+  }
+
+  return matches / phrase1.length;
+}
+
+/**
+ * 英語のフレーズをカタカナで読む（簡易版）
+ */
+function generateKatakanaReading(phrase: string): string {
+  // 基本的なカタカナ変換（実装例）
+  const katakanaMap: Record<string, string> = {
+    'the': 'ザ',
+    'a': 'ア',
+    'is': 'イズ',
+    'and': 'アンド',
+    'to': 'トゥ',
+    'of': 'オブ',
+    'in': 'イン',
+    'that': 'ザット',
+    'you': 'ユー',
+    'it': 'イット',
+    'future': 'フューチャー',
+    'will': 'ウィル',
+    'be': 'ビー',
+  };
+
+  return phrase.split(/\s+/).map(word =>
+    katakanaMap[word.toLowerCase()] || word
+  ).join(' ');
+}
+
+/**
+ * フレーズの例を作成
+ */
+function createPhraseExample(phrase: string): string | undefined {
+  if (phrase.length < 10) {
+    return `例: "${phrase}" は一般的な表現です。`;
+  }
+  return undefined;
 }
 
 /**

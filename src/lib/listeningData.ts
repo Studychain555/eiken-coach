@@ -2,11 +2,19 @@
  * 英検準1級 リスニング問題データ（サンプル）
  */
 
+export interface PhraseGuide {
+  phrase: string; // フレーズ（例："the future will be"）
+  reading: string; // 読み方（例："ザ フューチャ ウル ビー"）
+  tips: string[]; // 発音のコツ（リンキング、リダクション等）
+  emphasis?: string; // 強調する部分
+}
+
 export interface ListeningQuestion {
   id: string;
   title: string;
   audioUrl: string; // 実際の音声ファイルURL
   script: string; // 完全なスクリプト
+  phraseGuides?: PhraseGuide[]; // フレーズ単位の発音ガイド
   choices: string[]; // 4択選択肢
   correctAnswer: number; // 正解のインデックス (0-3)
   difficulty: number; // 難易度 1-5
@@ -26,6 +34,38 @@ Man: We have quite a few books on that topic. What level are you looking for? Ac
 Woman: Something for general readers would be nice. I want something that explains the current situation clearly.
 Man: I think we have just the right book for you. Let me check our system.
     `,
+    phraseGuides: [
+      {
+        phrase: 'Excuse me, do you work here at the bookstore?',
+        reading: 'イクスキューズ ミー ドゥ ユー ワーク ヒアー',
+        tips: [
+          '「Excuse me」は文頭で弱く発音',
+          '「do you」は「ドゥユー」でなく「ドュ」とリダクション',
+          'ここの「here」は「ヒア」で強調される'
+        ],
+        emphasis: 'here'
+      },
+      {
+        phrase: "I'm looking for a book about environmental issues",
+        reading: 'アイム ルッキング フォー エ ブック アバウト エンヴァイロンメンタル イシューズ',
+        tips: [
+          '「for a」は「フォー」でなく「フラ」とリダクション',
+          '「about」の「a」は弱く発音（シュワー音）',
+          '「environmental」は 4音節：エン・ヴァイ・ロン・メン・タル'
+        ],
+        emphasis: 'issues'
+      },
+      {
+        phrase: 'Something for general readers would be nice',
+        reading: 'サムシング フォー ジェネラル リーダーズ ウッド ビー ナイス',
+        tips: [
+          '「for」と「general」は「フォー」「ジェネラル」で繋ぐ',
+          '「would be」は「ウッド ビー」でなく「ウッビー」とリンキング',
+          'センテンス末尾の「nice」は上げ気味のイントネーション'
+        ],
+        emphasis: 'nice'
+      }
+    ],
     choices: [
       '女性は環境問題についての学術的な本を探している',
       '女性は一般読者向けの環境問題についての本を探している',
