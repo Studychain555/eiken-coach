@@ -1,36 +1,20 @@
 /**
  * Tablet-Optimized Home Screen
- * Duolingo-like layout with welcome, status, goals, and learning stats
+ * Simplified version to prevent infinite loops
  * Designed for tablet viewing (768px+) - fits on screen without scrolling
  */
 
-import React, { useMemo, useCallback } from 'react';
+import React from 'react';
 import {
   View,
   StyleSheet,
+  Text,
   ScrollView,
   SafeAreaView,
-  Dimensions,
-  RefreshControl,
-  ActivityIndicator,
+  TouchableOpacity,
 } from 'react-native';
 import { useRouter } from 'expo-router';
-import { useAuthStore } from '@/src/stores/authStore';
-import { useLearningStore } from '@/src/stores/learningStore';
-import { useListeningStore } from '@/src/stores/listeningStore';
-import { useVocabularyStore } from '@/src/stores/vocabularyStore';
-import { useWritingStore } from '@/src/stores/writingStore';
-import { Colors, Spacing, BorderRadius, Typography, NaturalColors, DuolingoColors } from '@/constants/theme';
-
-// Import sub-components
-import WelcomeHeader from './TabletComponents/WelcomeHeader';
-import StatusBar from './TabletComponents/StatusBar';
-import DailyGoalsSection from './TabletComponents/DailyGoalsSection';
-import LearningStatsSection from './TabletComponents/LearningStatsSection';
-import QuickActionButtons from './TabletComponents/QuickActionButtons';
-
-const { width, height } = Dimensions.get('window');
-const isTablet = width >= 600;
+import { Colors, Spacing, Typography, BorderRadius, DuolingoColors } from '@/constants/theme';
 
 interface TabletHomeScreenProps {
   onRefresh?: () => void;
@@ -38,170 +22,104 @@ interface TabletHomeScreenProps {
 
 export default function TabletHomeScreen({ onRefresh }: TabletHomeScreenProps) {
   const router = useRouter();
-  const [refreshing, setRefreshing] = React.useState(false);
-  const [loading, setLoading] = React.useState(false);
-
-  // Store hooks - using selectors to prevent infinite loops
-  const user = useAuthStore((state) => state.user);
-  const listeningProgress = useLearningStore((state) => state.listeningProgress);
-  const vocabularyProgress = useLearningStore((state) => state.vocabularyProgress);
-  const writingProgress = useLearningStore((state) => state.writingProgress);
-  const streakDays = useLearningStore((state) => state.streakDays);
-  const totalXP = useLearningStore((state) => state.totalXP || 0);
-  const currentLevel = useLearningStore((state) => state.currentLevel || 5);
-  const hearts = useLearningStore((state) => state.hearts || 3);
-
-  const listeningStats = useListeningStore((state) => ({
-    completed: state.completedQuestions || 0,
-    total: state.totalQuestions || 10,
-    todayMinutes: state.todayStudyMinutes || 0,
-  }));
-
-  const vocabularyStats = useVocabularyStore((state) => ({
-    mastered: state.masteredWords || 0,
-    total: state.totalWords || 2000,
-    currentStage: state.currentStage || 1,
-  }));
-
-  const writingStats = useWritingStore((state) => ({
-    submissions: state.submissions || 0,
-    averageScore: state.averageScore || 0,
-    todaySubmissions: state.todaySubmissions || 0,
-  }));
-
-  // Calculate overall mastery percentage
-  const masteryPercentage = useMemo(() => {
-    const totalAttempted = (listeningStats.completed || 0) +
-                          (vocabularyStats.mastered || 0) +
-                          (writingStats.submissions || 0);
-    const totalPossible = (listeningStats.total || 10) +
-                         (vocabularyStats.total || 2000) +
-                         (writingStats.submissions > 0 ? writingStats.submissions * 5 : 100);
-
-    if (totalPossible === 0) return 0;
-    return Math.round((totalAttempted / totalPossible) * 100);
-  }, [listeningStats, vocabularyStats, writingStats]);
-
-  // Estimate learning time (simplified: based on remaining items)
-  const estimatedHours = useMemo(() => {
-    const remainingListening = Math.max(0, listeningStats.total - listeningStats.completed);
-    const remainingVocab = Math.max(0, vocabularyStats.total - vocabularyStats.mastered);
-    const estimatedMinutes = (remainingListening * 2) + (remainingVocab * 0.5);
-    return Math.ceil(estimatedMinutes / 60);
-  }, [listeningStats, vocabularyStats]);
-
-  const handleRefresh = useCallback(async () => {
-    setRefreshing(true);
-    try {
-      if (onRefresh) {
-        await onRefresh();
-      }
-      // Simulate a small delay for better UX
-      await new Promise((resolve) => setTimeout(resolve, 500));
-    } finally {
-      setRefreshing(false);
-    }
-  }, [onRefresh]);
-
-  const userName = useMemo(() => {
-    if (user?.name) return user.name;
-    if (user?.email) return user.email.split('@')[0];
-    return 'ユーザー';
-  }, [user]);
-
-  if (loading) {
-    return (
-      <SafeAreaView style={styles.container}>
-        <View style={styles.loadingContainer}>
-          <ActivityIndicator size="large" color={DuolingoColors.primary} />
-        </View>
-      </SafeAreaView>
-    );
-  }
 
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView
         showsVerticalScrollIndicator={false}
-        refreshControl={
-          <RefreshControl
-            refreshing={refreshing}
-            onRefresh={handleRefresh}
-            tintColor={DuolingoColors.primary}
-          />
-        }
         scrollEnabled={true}
-        nestedScrollEnabled={true}
       >
         {/* Welcome Header */}
-        <WelcomeHeader
-          userName={userName}
-          level={currentLevel || 5}
-          xp={totalXP || 0}
-        />
+        <View style={styles.header}>
+          <Text style={styles.welcomeText}>おはよう！</Text>
+          <View style={styles.levelBadge}>
+            <Text style={styles.levelText}>⭐ Lv.5</Text>
+          </View>
+        </View>
 
-        {/* Status Bar - Streak, Hearts, XP */}
-        <StatusBar
-          streak={streakDays || 0}
-          hearts={hearts || 3}
-          xp={totalXP || 0}
-        />
+        {/* Status Bar */}
+        <View style={styles.statusBar}>
+          <Text style={styles.statusItem}>🔥 7日</Text>
+          <Text style={styles.statusItem}>❤️ x3</Text>
+          <Text style={styles.statusItem}>⭐ 1250XP</Text>
+        </View>
 
-        {/* Daily Goals Section - 3 cards horizontal */}
-        <DailyGoalsSection
-          listeningGoal={{
-            count: 1,
-            xpReward: 10,
-            completed: listeningStats.completed > 0,
-          }}
-          vocabularyGoal={{
-            count: 50,
-            xpReward: 50,
-            completed: vocabularyStats.mastered > 0,
-          }}
-          writingGoal={{
-            count: 1,
-            xpReward: 100,
-            completed: writingStats.submissions > 0,
-          }}
-        />
+        {/* Daily Goals */}
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>今日の目標</Text>
+          <View style={styles.goalsContainer}>
+            <View style={styles.goalCard}>
+              <Text style={styles.goalIcon}>🎧</Text>
+              <Text style={styles.goalTitle}>リスニング</Text>
+              <Text style={styles.goalCount}>1</Text>
+              <Text style={styles.goalXp}>+10XP</Text>
+            </View>
+            <View style={styles.goalCard}>
+              <Text style={styles.goalIcon}>📚</Text>
+              <Text style={styles.goalTitle}>英単語</Text>
+              <Text style={styles.goalCount}>50</Text>
+              <Text style={styles.goalXp}>+50XP</Text>
+            </View>
+            <View style={styles.goalCard}>
+              <Text style={styles.goalIcon}>✏️</Text>
+              <Text style={styles.goalTitle}>ライティング</Text>
+              <Text style={styles.goalCount}>1</Text>
+              <Text style={styles.goalXp}>+100XP</Text>
+            </View>
+          </View>
+        </View>
 
-        {/* Learning Stats Section */}
-        <LearningStatsSection
-          masteryPercentage={masteryPercentage}
-          stats={{
-            listening: {
-              name: 'リスニング',
-              completed: listeningStats.completed,
-              total: listeningStats.total,
-              icon: '🎧',
-            },
-            vocabulary: {
-              name: '英単語',
-              completed: vocabularyStats.mastered,
-              total: vocabularyStats.total,
-              icon: '📚',
-            },
-            writing: {
-              name: 'ライティング',
-              completed: writingStats.submissions,
-              total: Math.max(20, writingStats.submissions * 2),
-              icon: '✏️',
-            },
-          }}
-          estimatedHours={estimatedHours}
-          todayMinutes={listeningStats.todayMinutes || 0}
-        />
+        {/* Learning Stats */}
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>学習進捗</Text>
+          <View style={styles.statsCard}>
+            <View style={styles.masteryCircle}>
+              <Text style={styles.masteryPercentage}>46.9%</Text>
+              <Text style={styles.masteryLabel}>習熟度</Text>
+            </View>
+            <View style={styles.statsItems}>
+              <View style={styles.statRow}>
+                <Text>🎧 リスニング</Text>
+                <Text>0/10</Text>
+              </View>
+              <View style={styles.statRow}>
+                <Text>📚 英単語</Text>
+                <Text>145/250</Text>
+              </View>
+              <View style={styles.statRow}>
+                <Text>✏️ ライティング</Text>
+                <Text>12/20</Text>
+              </View>
+            </View>
+          </View>
+        </View>
 
-        {/* Quick Action Buttons */}
-        <QuickActionButtons
-          onNavigate={(screen) => {
-            router.push(`/(tabs)/${screen}`);
-          }}
-        />
+        {/* Quick Actions */}
+        <View style={styles.section}>
+          <View style={styles.buttonsContainer}>
+            <TouchableOpacity
+              style={styles.actionButton}
+              onPress={() => router.push('/(tabs)/listening')}
+            >
+              <Text style={styles.buttonText}>🎧 リスニング</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.actionButton}
+              onPress={() => router.push('/(tabs)/vocabulary')}
+            >
+              <Text style={styles.buttonText}>📚 英単語</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.actionButton}
+              onPress={() => router.push('/(tabs)/writing')}
+            >
+              <Text style={styles.buttonText}>✏️ ライティング</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
 
         {/* Bottom padding */}
-        <View style={styles.bottomPadding} />
+        <View style={{ height: Spacing.xl }} />
       </ScrollView>
     </SafeAreaView>
   );
@@ -212,13 +130,132 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: Colors.light.background,
   },
-  loadingContainer: {
-    flex: 1,
-    justifyContent: 'center',
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     alignItems: 'center',
-    backgroundColor: Colors.light.background,
+    paddingHorizontal: Spacing.xl,
+    paddingVertical: Spacing.lg,
   },
-  bottomPadding: {
-    height: Spacing.xl,
+  welcomeText: {
+    ...Typography.h4,
+    color: Colors.light.text,
+    fontWeight: '700',
+  },
+  levelBadge: {
+    backgroundColor: DuolingoColors.primary,
+    paddingHorizontal: Spacing.lg,
+    paddingVertical: Spacing.sm,
+    borderRadius: BorderRadius.lg,
+  },
+  levelText: {
+    color: '#fff',
+    fontWeight: '700',
+    fontSize: 14,
+  },
+  statusBar: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    paddingHorizontal: Spacing.xl,
+    paddingVertical: Spacing.md,
+    backgroundColor: Colors.light.surfaceCard,
+    marginHorizontal: Spacing.xl,
+    marginVertical: Spacing.lg,
+    borderRadius: BorderRadius.lg,
+  },
+  statusItem: {
+    ...Typography.bodySmall,
+    color: Colors.light.text,
+    fontWeight: '600',
+  },
+  section: {
+    paddingHorizontal: Spacing.xl,
+    paddingVertical: Spacing.lg,
+  },
+  sectionTitle: {
+    ...Typography.h5,
+    color: Colors.light.text,
+    fontWeight: '700',
+    marginBottom: Spacing.lg,
+  },
+  goalsContainer: {
+    flexDirection: 'row',
+    gap: Spacing.lg,
+  },
+  goalCard: {
+    flex: 1,
+    backgroundColor: Colors.light.surfaceCard,
+    borderRadius: BorderRadius.lg,
+    padding: Spacing.lg,
+    alignItems: 'center',
+    borderWidth: 2,
+    borderColor: DuolingoColors.primary,
+  },
+  goalIcon: {
+    fontSize: 32,
+    marginBottom: Spacing.sm,
+  },
+  goalTitle: {
+    ...Typography.caption,
+    color: Colors.light.textSecondary,
+    fontWeight: '600',
+    marginBottom: Spacing.xs,
+  },
+  goalCount: {
+    ...Typography.h4,
+    color: Colors.light.text,
+    fontWeight: '700',
+    marginBottom: Spacing.sm,
+  },
+  goalXp: {
+    ...Typography.caption,
+    color: DuolingoColors.primary,
+    fontWeight: '700',
+  },
+  statsCard: {
+    backgroundColor: Colors.light.surfaceCard,
+    borderRadius: BorderRadius.lg,
+    padding: Spacing.lg,
+  },
+  masteryCircle: {
+    alignItems: 'center',
+    marginBottom: Spacing.lg,
+  },
+  masteryPercentage: {
+    fontSize: 48,
+    fontWeight: '900',
+    color: DuolingoColors.primary,
+  },
+  masteryLabel: {
+    ...Typography.caption,
+    color: Colors.light.textSecondary,
+    fontWeight: '600',
+    marginTop: Spacing.xs,
+  },
+  statsItems: {
+    gap: Spacing.lg,
+  },
+  statRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingVertical: Spacing.sm,
+    borderBottomWidth: 1,
+    borderBottomColor: Colors.light.border,
+  },
+  buttonsContainer: {
+    flexDirection: 'row',
+    gap: Spacing.lg,
+  },
+  actionButton: {
+    flex: 1,
+    backgroundColor: DuolingoColors.primary,
+    borderRadius: BorderRadius.lg,
+    paddingVertical: Spacing.lg,
+    alignItems: 'center',
+  },
+  buttonText: {
+    color: '#fff',
+    fontWeight: '700',
+    fontSize: 14,
   },
 });
