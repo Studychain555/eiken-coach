@@ -18,6 +18,7 @@ import { XPRewardSystem } from '@/src/components/XPRewardSystem';
 import { DailyGoal } from '@/src/components/DailyGoal';
 import { StreakBanner } from '@/src/components/StreakBanner';
 import { ComboCounter } from '@/src/components/ComboCounter';
+import { CelebrationAnimation } from '@/src/components/CelebrationAnimation';
 import { EIKENLevelSelector } from '@/src/components/EIKENLevelSelector';
 import { useEIKENVocabStore } from '@/src/stores/eikenVocabularyStore';
 import { EIKENLevel, EIKENLevelLabels } from '@/src/lib/eiken-vocabulary-schema';
@@ -280,6 +281,8 @@ function VocabularyTestScreen({
   const [answered, setAnswered] = useState(false);
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
   const [questionIndex, setQuestionIndex] = useState(0);
+  const [showCelebration, setShowCelebration] = useState(false);
+  const [celebrationType, setCelebrationType] = useState<'correct' | 'incorrect'>('correct');
 
   useEffect(() => {
     // ステージの単語を取得
@@ -297,7 +300,18 @@ function VocabularyTestScreen({
 
   const handleSelectAnswer = (answer: string) => {
     setSelectedAnswer(answer);
-    setAnswered(true);
+    const isCorrect = currentOptions.find((opt) => opt.word === answer)?.isCorrect || false;
+
+    // Trigger celebration animation
+    setCelebrationType(isCorrect ? 'correct' : 'incorrect');
+    setShowCelebration(true);
+
+    // After animation, set answered state
+    setTimeout(() => {
+      setAnswered(true);
+      setShowCelebration(false);
+    }, 1200);
+
     selectAnswer(answer);
   };
 
@@ -337,6 +351,13 @@ function VocabularyTestScreen({
 
   return (
     <SafeAreaView style={styles.container}>
+      {/* Celebration Animation Overlay */}
+      <CelebrationAnimation
+        type={celebrationType}
+        trigger={showCelebration}
+        onComplete={() => setShowCelebration(false)}
+      />
+
       <ScrollView showsVerticalScrollIndicator={false}>
         {/* Header */}
         <View style={styles.testHeader}>

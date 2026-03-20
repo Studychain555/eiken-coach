@@ -14,6 +14,7 @@ import { useListeningStore } from '@/src/stores/listeningStore';
 import { useAudioPlayer } from '@/hooks/useAudioPlayer';
 import { debugLog, debugError } from '@/src/lib/debugUtils';
 import { handleError } from '@/src/lib/errorHandler';
+import { CelebrationAnimation } from './CelebrationAnimation';
 
 const { width } = Dimensions.get('window');
 const TAG = 'ListeningQuestionScreen';
@@ -35,6 +36,8 @@ export default function ListeningQuestionScreen({
 }: Props) {
   const [screen, setScreen] = useState<Screen>('player');
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
+  const [showCelebration, setShowCelebration] = useState(false);
+  const [celebrationType, setCelebrationType] = useState<'correct' | 'incorrect'>('correct');
   const { recordAttempt } = useListeningStore();
 
   // Mixkit のフォールバックURL (CORS対応)
@@ -89,7 +92,16 @@ export default function ListeningQuestionScreen({
     setSelectedAnswer(answerIndex);
     const isCorrect = answerIndex === question.correctAnswer;
     recordAttempt(question.id, answerIndex, isCorrect);
-    setScreen('result');
+
+    // Trigger celebration animation
+    setCelebrationType(isCorrect ? 'correct' : 'incorrect');
+    setShowCelebration(true);
+
+    // Move to result screen after animation
+    setTimeout(() => {
+      setScreen('result');
+      setShowCelebration(false);
+    }, 1500);
   };
 
   if (screen === 'player') {
@@ -259,6 +271,13 @@ export default function ListeningQuestionScreen({
 
   return (
     <SafeAreaView style={styles.container}>
+      {/* Celebration Animation Overlay */}
+      <CelebrationAnimation
+        type={celebrationType}
+        trigger={showCelebration}
+        onComplete={() => setShowCelebration(false)}
+      />
+
       <ScrollView showsVerticalScrollIndicator={false}>
         {/* Result Header */}
         <View style={styles.resultHeader}>

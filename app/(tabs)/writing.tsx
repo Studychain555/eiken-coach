@@ -21,6 +21,7 @@ import { EnhancedProgressBar } from '@/components/EnhancedProgressBar';
 import { XPRewardSystem } from '@/src/components/XPRewardSystem';
 import { DailyGoal } from '@/src/components/DailyGoal';
 import { StreakBanner } from '@/src/components/StreakBanner';
+import { CelebrationAnimation } from '@/src/components/CelebrationAnimation';
 
 type Screen = 'prompt-select' | 'editor' | 'result';
 
@@ -58,6 +59,7 @@ export default function WritingScreen() {
 
   const [screen, setScreen] = useState<Screen>('prompt-select');
   const [isScoring, setIsScoring] = useState(false);
+  const [showCelebration, setShowCelebration] = useState(false);
 
   useEffect(() => {
     if (prompts.length === 0) {
