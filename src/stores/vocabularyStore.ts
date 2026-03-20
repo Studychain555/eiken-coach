@@ -89,6 +89,11 @@ interface VocabularyState {
   syncToSupabase: () => Promise<void>;
   loadFromSupabase: () => Promise<void>;
   initializeSync: (userId: string) => Promise<void>;
+
+  // Error handling
+  syncError: string | null;
+  setSyncError: (error: string | null) => void;
+  retry: () => Promise<void>;
 }
 
 // XP thresholds for levels (vocabulary)
@@ -356,7 +361,9 @@ export const useVocabularyStore = create<VocabularyState>((set, get) => ({
         })
       );
     } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'サーバーに接続できません';
       console.error('[VocabularyStore] Sync to Supabase failed:', error);
+      set({ syncError: errorMessage });
       realtimeSyncManager.queueChange('vocabulary_progress', 'UPDATE', {
         user_id: userId,
         progress,
@@ -429,5 +436,22 @@ export const useVocabularyStore = create<VocabularyState>((set, get) => ({
         }
       },
     });
+  },
+
+  // Error handling
+  syncError: null,
+  setSyncError: (error) => set({ syncError: error }),
+
+  retry: async () => {
+    const { syncError } = get();
+    if (syncError) {
+      set({ syncError: null });
+      try {
+        await get().syncToSupabase();
+      } catch (error) {
+        console.error('Retry failed:', error);
+        set({ syncError: error instanceof Error ? error.message : '再度お試しに失敗しました' });
+      }
+    }
   },
 }));
