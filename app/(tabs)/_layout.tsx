@@ -26,44 +26,44 @@ export default function TabLayout() {
           backgroundColor: '#FFFFFF',
           borderTopColor: '#E0E0E0',
           borderTopWidth: 1,
-          paddingBottom: Platform.OS === 'ios' ? Spacing.md : Spacing.sm,
-          paddingTop: Spacing.sm,
-          height: Platform.OS === 'ios' ? 60 : 56,
+          paddingBottom: Platform.OS === 'ios' ? 12 : 8,
+          paddingTop: 8,
+          height: Platform.OS === 'ios' ? 80 : 75,
           ...Shadows.md,
         },
         tabBarLabelStyle: {
-          fontSize: 10,
+          fontSize: 12,
           fontWeight: '600',
-          marginTop: 2,
-          display: 'none', // ラベル非表示
+          marginTop: 4,
+          marginBottom: 2,
         },
       }}>
       <Tabs.Screen
         name="index"
         options={{
           title: 'ホーム',
-          tabBarIcon: ({ color }) => <IconSymbol size={24} name="house.fill" color={color} />,
+          tabBarIcon: ({ color }) => <IconSymbol size={28} name="house.fill" color={color} />,
         }}
       />
       <Tabs.Screen
         name="listening"
         options={{
           title: 'リスニング',
-          tabBarIcon: ({ color }) => <IconSymbol size={24} name="headphones" color={color} />,
+          tabBarIcon: ({ color }) => <IconSymbol size={28} name="headphones" color={color} />,
         }}
       />
       <Tabs.Screen
         name="vocabulary"
         options={{
           title: '単語',
-          tabBarIcon: ({ color }) => <IconSymbol size={24} name="book.fill" color={color} />,
+          tabBarIcon: ({ color }) => <IconSymbol size={28} name="book.fill" color={color} />,
         }}
       />
       <Tabs.Screen
         name="writing"
         options={{
           title: 'ライティング',
-          tabBarIcon: ({ color }) => <IconSymbol size={24} name="pencil" color={color} />,
+          tabBarIcon: ({ color }) => <IconSymbol size={28} name="pencil" color={color} />,
         }}
       />
       {/* 講師タブは teacher/admin のみ表示 */}
@@ -72,7 +72,7 @@ export default function TabLayout() {
           name="teacher"
           options={{
             title: '講師',
-            tabBarIcon: ({ color }) => <IconSymbol size={24} name="person.fill" color={color} />,
+            tabBarIcon: ({ color }) => <IconSymbol size={28} name="person.fill" color={color} />,
           }}
         />
       )}
@@ -80,7 +80,7 @@ export default function TabLayout() {
         name="settings"
         options={{
           title: '設定',
-          tabBarIcon: ({ color }) => <IconSymbol size={24} name="gearshape.fill" color={color} />,
+          tabBarIcon: ({ color }) => <IconSymbol size={28} name="gearshape.fill" color={color} />,
         }}
       />
     </Tabs>
