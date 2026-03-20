@@ -98,6 +98,7 @@ export default function VocabularyScreen() {
 
   if (screen === 'stage-select') {
     const stats = getTodayStats();
+    const currentTab = STAGE_GROUPS[selectedTab];
 
     return (
       <SafeAreaView style={styles.container}>
@@ -218,7 +219,7 @@ export default function VocabularyScreen() {
           <View style={styles.section}>
             <Text style={styles.sectionTitle}>ステージを選択</Text>
             <View style={styles.stageGrid}>
-              {currentTab.stages.map((stage) => {
+              {currentTab.stages.map((stage: number) => {
                 const isLocked = stage > 3;
                 const isCompleted = stage <= 1;
 
