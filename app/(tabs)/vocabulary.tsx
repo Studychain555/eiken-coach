@@ -424,27 +424,32 @@ function VocabularyTestScreen({
         onComplete={() => setShowCelebration(false)}
       />
 
-      <ScrollView showsVerticalScrollIndicator={false}>
-        {/* Header */}
-        <View style={styles.testHeader}>
-          <TouchableOpacity onPress={onBack}>
-            <Text style={styles.backButton}>← 戻る</Text>
-          </TouchableOpacity>
-          <Text style={styles.stageTitle}>Stage {stage}</Text>
-          <Text style={styles.progressText}>
-            {questionIndex + 1} / {stageWords.length}
-          </Text>
-        </View>
+      {/* Fixed Header */}
+      <View style={styles.testHeader}>
+        <TouchableOpacity onPress={onBack}>
+          <Text style={styles.backButton}>← 戻る</Text>
+        </TouchableOpacity>
+        <Text style={styles.stageTitle}>Stage {stage}</Text>
+        <Text style={styles.progressText}>
+          {questionIndex + 1} / {stageWords.length}
+        </Text>
+      </View>
 
-        {/* Progress Bar */}
-        <View style={styles.progressBarContainer}>
-          <View style={styles.progressBar}>
-            <View
-              style={[styles.progressFill, { width: `${progress}%` }]}
-            />
-          </View>
+      {/* Fixed Progress Bar */}
+      <View style={styles.progressBarContainer}>
+        <View style={styles.progressBar}>
+          <View
+            style={[styles.progressFill, { width: `${progress}%` }]}
+          />
         </View>
+      </View>
 
+      {/* Scrollable Content Only */}
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        style={styles.scrollContent}
+        contentContainerStyle={styles.scrollContentContainer}
+      >
         {/* Question */}
         <View style={styles.questionContainer}>
           <Text style={styles.questionLabel}>英単語の意味は？</Text>
@@ -498,19 +503,19 @@ function VocabularyTestScreen({
             </Text>
           </View>
         )}
-
-        {/* Next Button */}
-        {answered && (
-          <TouchableOpacity
-            style={styles.nextButton}
-            onPress={handleNext}
-          >
-            <Text style={styles.nextButtonText}>
-              {questionIndex + 1 === stageWords.length ? '完了' : '次へ'}
-            </Text>
-          </TouchableOpacity>
-        )}
       </ScrollView>
+
+      {/* Fixed Button at Bottom */}
+      {answered && (
+        <TouchableOpacity
+          style={styles.nextButton}
+          onPress={handleNext}
+        >
+          <Text style={styles.nextButtonText}>
+            {questionIndex + 1 === stageWords.length ? '完了' : '次へ'}
+          </Text>
+        </TouchableOpacity>
+      )}
     </SafeAreaView>
   );
 }
@@ -743,10 +748,18 @@ const styles = StyleSheet.create({
     fontSize: 13,
     color: Colors.light.textSecondary,
   },
+  scrollContent: {
+    flex: 1,
+  },
+  scrollContentContainer: {
+    paddingHorizontal: Spacing.xl,
+    paddingVertical: Spacing.md,
+    gap: Spacing.md,
+  },
   progressBarContainer: {
-    marginHorizontal: Spacing.xl,
-    marginBottom: Spacing.xl,
-    marginTop: Spacing.lg,
+    paddingHorizontal: Spacing.xl,
+    paddingVertical: Spacing.sm,
+    paddingBottom: Spacing.md,
   },
   progressBar: {
     height: 8,
@@ -760,10 +773,8 @@ const styles = StyleSheet.create({
     borderRadius: 4,
   },
   questionContainer: {
-    marginHorizontal: Spacing.xl,
-    marginBottom: Spacing.xl,
     paddingHorizontal: Spacing.lg,
-    paddingVertical: Spacing.xl,
+    paddingVertical: Spacing.lg,
     backgroundColor: Colors.light.surfaceCard,
     borderRadius: BorderRadius.lg,
     alignItems: 'center',
@@ -787,9 +798,7 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
   optionsContainer: {
-    marginHorizontal: Spacing.xl,
-    marginBottom: Spacing.xl,
-    gap: Spacing.lg,
+    gap: Spacing.md,
   },
   optionButton: {
     minHeight: 56,
@@ -829,8 +838,6 @@ const styles = StyleSheet.create({
     fontSize: 20,
   },
   feedbackContainer: {
-    marginHorizontal: Spacing.xl,
-    marginBottom: Spacing.md,
     paddingHorizontal: Spacing.lg,
     paddingVertical: Spacing.md,
     backgroundColor: Colors.light.primaryLight,
@@ -858,7 +865,7 @@ const styles = StyleSheet.create({
   },
   nextButton: {
     marginHorizontal: Spacing.xl,
-    marginBottom: Spacing.xl,
+    marginBottom: Spacing.lg,
     minHeight: 48,
     backgroundColor: Colors.light.primary,
     borderRadius: BorderRadius.lg,
