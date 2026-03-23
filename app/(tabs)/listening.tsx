@@ -298,7 +298,8 @@ const styles = StyleSheet.create({
   },
   section: {
     marginHorizontal: Spacing.lg,
-    marginTop: Spacing.xs,
+    marginTop: Spacing.lg,
+    marginBottom: Spacing.md,
   },
   progressLabel: {
     fontSize: 13,
@@ -312,7 +313,7 @@ const styles = StyleSheet.create({
   },
   statBox: {
     flex: 1,
-    paddingVertical: Spacing.sm,
+    paddingVertical: Spacing.md,
     paddingHorizontal: Spacing.sm,
     backgroundColor: Colors.light.surfaceCard,
     borderRadius: BorderRadius.lg,
@@ -345,12 +346,13 @@ const styles = StyleSheet.create({
   questionCard: {
     flexDirection: 'row',
     paddingHorizontal: Spacing.md,
-    paddingVertical: Spacing.md,
+    paddingVertical: Spacing.lg,
     backgroundColor: Colors.light.surfaceCard,
     borderRadius: BorderRadius.lg,
     borderWidth: 2,
     borderColor: Colors.light.border,
     alignItems: 'flex-start',
+    marginBottom: Spacing.md,
     ...Shadows.xs,
   },
   questionCardCompleted: {

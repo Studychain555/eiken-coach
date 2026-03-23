@@ -482,7 +482,8 @@ const styles = StyleSheet.create({
   },
   section: {
     marginHorizontal: Spacing.lg,
-    marginTop: Spacing.xs,
+    marginTop: Spacing.lg,
+    marginBottom: Spacing.md,
   },
   sectionTitle: {
     fontSize: 18,
@@ -495,7 +496,7 @@ const styles = StyleSheet.create({
   },
   statBox: {
     flex: 1,
-    paddingVertical: Spacing.sm,
+    paddingVertical: Spacing.md,
     backgroundColor: Colors.light.surfaceCard,
     borderRadius: BorderRadius.lg,
     alignItems: 'center',
@@ -521,7 +522,7 @@ const styles = StyleSheet.create({
   difficultyTab: {
     flex: 1,
     paddingHorizontal: Spacing.sm,
-    paddingVertical: Spacing.md,
+    paddingVertical: Spacing.lg,
     backgroundColor: Colors.light.surfaceCard,
     borderRadius: BorderRadius.lg,
     alignItems: 'center',
@@ -560,6 +561,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderWidth: 2,
     borderColor: Colors.light.primary,
+    marginBottom: Spacing.sm,
     ...Shadows.xs,
   },
   stageButtonDisabled: {

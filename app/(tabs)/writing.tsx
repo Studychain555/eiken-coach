@@ -468,7 +468,8 @@ const styles = StyleSheet.create({
   },
   section: {
     marginHorizontal: Spacing.lg,
-    marginTop: Spacing.xs,
+    marginTop: Spacing.lg,
+    marginBottom: Spacing.md,
   },
   statsRow: {
     flexDirection: 'row',
@@ -476,7 +477,7 @@ const styles = StyleSheet.create({
   },
   statBox: {
     flex: 1,
-    paddingVertical: Spacing.sm,
+    paddingVertical: Spacing.md,
     backgroundColor: Colors.light.surfaceCard,
     borderRadius: BorderRadius.lg,
     alignItems: 'center',
@@ -509,7 +510,7 @@ const styles = StyleSheet.create({
   scoringItem: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    paddingVertical: Spacing.sm,
+    paddingVertical: Spacing.md,
     borderBottomWidth: 1,
     borderBottomColor: Colors.light.border,
   },
@@ -531,10 +532,11 @@ const styles = StyleSheet.create({
   promptCard: {
     flexDirection: 'row',
     paddingHorizontal: Spacing.md,
-    paddingVertical: Spacing.md,
+    paddingVertical: Spacing.lg,
     backgroundColor: Colors.light.surfaceCard,
     borderRadius: BorderRadius.lg,
     alignItems: 'flex-start',
+    marginBottom: Spacing.md,
     ...Shadows.xs,
   },
   promptNumber: {
