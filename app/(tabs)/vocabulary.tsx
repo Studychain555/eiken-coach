@@ -14,10 +14,6 @@ import { VOCABULARY_SAMPLE_DATA } from '@/src/lib/vocabularyData';
 import { Colors, Spacing, BorderRadius, Shadows, Typography, DuolingoColors, NaturalColors } from '@/constants/theme';
 import { EnhancedProgressBar, StepProgress, Milestone } from '@/components/EnhancedProgressBar';
 import { OptimizedButton } from '@/components/OptimizedButton';
-import { XPRewardSystem } from '@/src/components/XPRewardSystem';
-import { DailyGoal } from '@/src/components/DailyGoal';
-import { StreakBanner } from '@/src/components/StreakBanner';
-import { ComboCounter } from '@/src/components/ComboCounter';
 import { CelebrationAnimation } from '@/src/components/CelebrationAnimation';
 import { ErrorScreen } from '@/src/components/ErrorScreen';
 import { EmptyState } from '@/src/components/EmptyState';
@@ -47,15 +43,6 @@ export default function VocabularyScreen() {
     masteredCount,
     getTodayStats,
     isLoading,
-    // Gamification fields
-    hearts,
-    maxHearts,
-    currentLevel,
-    totalXP,
-    xpForNextLevel,
-    streakDays,
-    dailyGoal,
-    comboCount,
     // Error handling
     syncError,
     setSyncError,
@@ -143,16 +130,6 @@ export default function VocabularyScreen() {
 
     return (
       <SafeAreaView style={styles.container}>
-        {/* XP Reward System Header */}
-        <XPRewardSystem
-          hearts={hearts}
-          maxHearts={maxHearts}
-          currentLevel={currentLevel}
-          currentXP={totalXP}
-          xpForNextLevel={xpForNextLevel}
-          streakDays={streakDays}
-        />
-
         <ScrollView
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{ paddingBottom: 100 }}
@@ -489,7 +466,7 @@ const styles = StyleSheet.create({
     backgroundColor: NaturalColors.background,
   },
   header: {
-    paddingHorizontal: Spacing.lg,
+    paddingHorizontal: Spacing.md,
     paddingTop: Spacing.sm,
     paddingBottom: Spacing.xs,
   },
@@ -497,7 +474,6 @@ const styles = StyleSheet.create({
     fontSize: 22,
     fontWeight: '800',
     color: Colors.light.text,
-    marginBottom: Spacing.xs,
   },
   subtitle: {
     fontSize: 12,
@@ -506,21 +482,20 @@ const styles = StyleSheet.create({
   },
   section: {
     marginHorizontal: Spacing.lg,
-    marginTop: Spacing.md,
+    marginTop: Spacing.xs,
   },
   sectionTitle: {
     fontSize: 18,
     fontWeight: '700',
     color: Colors.light.text,
-    marginBottom: Spacing.lg,
   },
   statsRow: {
     flexDirection: 'row',
-    gap: Spacing.lg,
+    gap: Spacing.sm,
   },
   statBox: {
     flex: 1,
-    paddingVertical: Spacing.lg,
+    paddingVertical: Spacing.sm,
     backgroundColor: Colors.light.surfaceCard,
     borderRadius: BorderRadius.lg,
     alignItems: 'center',
@@ -528,13 +503,11 @@ const styles = StyleSheet.create({
   },
   statBoxEmoji: {
     fontSize: 24,
-    marginBottom: Spacing.sm,
   },
   statBoxValue: {
     fontSize: 20,
     fontWeight: '700',
     color: Colors.light.primary,
-    marginBottom: Spacing.xs,
   },
   statBoxLabel: {
     fontSize: 12,
@@ -543,7 +516,7 @@ const styles = StyleSheet.create({
   },
   difficultyTabs: {
     flexDirection: 'row',
-    gap: Spacing.lg,
+    gap: Spacing.sm,
   },
   difficultyTab: {
     flex: 1,
@@ -562,7 +535,6 @@ const styles = StyleSheet.create({
   },
   difficultyTabEmoji: {
     fontSize: 16,
-    marginBottom: Spacing.xs,
   },
   difficultyTabLabel: {
     fontSize: 11,
@@ -624,12 +596,11 @@ const styles = StyleSheet.create({
   },
   tipsBox: {
     flexDirection: 'row',
-    padding: Spacing.lg,
+    padding: Spacing.md,
     backgroundColor: Colors.light.primaryLight,
     borderLeftWidth: 4,
     borderLeftColor: Colors.light.warning,
     borderRadius: BorderRadius.lg,
-    marginBottom: Spacing.xl,
   },
   tipsEmoji: {
     fontSize: 24,
@@ -659,7 +630,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingHorizontal: Spacing.xl,
+    paddingHorizontal: Spacing.lg,
     paddingTop: Spacing.lg,
     paddingBottom: Spacing.md,
     backgroundColor: Colors.light.surfaceCard,
@@ -684,12 +655,12 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   scrollContentContainer: {
-    paddingHorizontal: Spacing.xl,
+    paddingHorizontal: Spacing.lg,
     paddingVertical: Spacing.md,
     gap: Spacing.md,
   },
   progressBarContainer: {
-    paddingHorizontal: Spacing.xl,
+    paddingHorizontal: Spacing.lg,
     paddingVertical: Spacing.sm,
     paddingBottom: Spacing.md,
   },
@@ -705,8 +676,8 @@ const styles = StyleSheet.create({
     borderRadius: 4,
   },
   questionContainer: {
-    paddingHorizontal: Spacing.lg,
-    paddingVertical: Spacing.lg,
+    paddingHorizontal: Spacing.md,
+    paddingVertical: Spacing.sm,
     backgroundColor: Colors.light.surfaceCard,
     borderRadius: BorderRadius.lg,
     alignItems: 'center',
@@ -715,14 +686,12 @@ const styles = StyleSheet.create({
   questionLabel: {
     fontSize: 14,
     color: Colors.light.textSecondary,
-    marginBottom: Spacing.lg,
     fontWeight: '500',
   },
   word: {
     fontSize: 36,
     fontWeight: '800',
     color: Colors.light.primary,
-    marginBottom: Spacing.sm,
   },
   wordReading: {
     fontSize: 15,
@@ -734,8 +703,8 @@ const styles = StyleSheet.create({
   },
   optionButton: {
     minHeight: 56,
-    paddingHorizontal: Spacing.lg,
-    paddingVertical: Spacing.lg,
+    paddingHorizontal: Spacing.md,
+    paddingVertical: Spacing.sm,
     backgroundColor: Colors.light.surfaceCard,
     borderRadius: BorderRadius.lg,
     borderWidth: 2,
@@ -770,7 +739,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
   },
   feedbackContainer: {
-    paddingHorizontal: Spacing.lg,
+    paddingHorizontal: Spacing.md,
     paddingVertical: Spacing.md,
     backgroundColor: Colors.light.primaryLight,
     borderLeftWidth: 4,
@@ -780,7 +749,6 @@ const styles = StyleSheet.create({
   feedbackLabel: {
     fontSize: 11,
     color: Colors.light.textSecondary,
-    marginBottom: Spacing.sm,
     fontWeight: '600',
   },
   exampleSentence: {
@@ -788,7 +756,6 @@ const styles = StyleSheet.create({
     color: Colors.light.text,
     fontWeight: '500',
     lineHeight: 20,
-    marginBottom: Spacing.sm,
   },
   exampleTranslation: {
     fontSize: 13,
@@ -796,8 +763,7 @@ const styles = StyleSheet.create({
     lineHeight: 18,
   },
   nextButton: {
-    marginHorizontal: Spacing.xl,
-    marginBottom: Spacing.lg,
+    marginHorizontal: Spacing.lg,
     minHeight: 48,
     backgroundColor: Colors.light.primary,
     borderRadius: BorderRadius.lg,
@@ -816,20 +782,18 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    paddingHorizontal: Spacing.xl,
+    paddingHorizontal: Spacing.lg,
     backgroundColor: NaturalColors.background,
   },
   resultTitle: {
     fontSize: 36,
     fontWeight: '800',
     color: Colors.light.text,
-    marginBottom: Spacing.xl,
     textAlign: 'center',
   },
   resultStats: {
     flexDirection: 'row',
-    gap: Spacing.lg,
-    marginBottom: Spacing.xl,
+    gap: Spacing.sm,
     width: '100%',
   },
   resultStatItem: {
@@ -844,7 +808,6 @@ const styles = StyleSheet.create({
     fontSize: 28,
     fontWeight: '800',
     color: Colors.light.primary,
-    marginBottom: Spacing.sm,
   },
   resultStatLabel: {
     fontSize: 12,

@@ -17,9 +17,6 @@ import WritingResultScreen from '@/src/components/WritingResultScreen';
 import { Colors, Spacing, BorderRadius, Shadows, Typography, DuolingoColors, NaturalColors } from '@/constants/theme';
 import { OptimizedButton, ButtonGroup } from '@/components/OptimizedButton';
 import { EnhancedProgressBar } from '@/components/EnhancedProgressBar';
-import { XPRewardSystem } from '@/src/components/XPRewardSystem';
-import { DailyGoal } from '@/src/components/DailyGoal';
-import { StreakBanner } from '@/src/components/StreakBanner';
 import { CelebrationAnimation } from '@/src/components/CelebrationAnimation';
 import { ErrorScreen } from '@/src/components/ErrorScreen';
 import { EmptyState } from '@/src/components/EmptyState';
@@ -53,14 +50,6 @@ export default function WritingScreen() {
     getAverageScore,
     isLoading,
     setIsLoading,
-    // Gamification fields
-    hearts,
-    maxHearts,
-    currentLevel,
-    totalXP,
-    xpForNextLevel,
-    streakDays,
-    dailyGoal,
     // Error handling
     syncError,
     setSyncError,
@@ -210,16 +199,6 @@ export default function WritingScreen() {
 
     return (
       <SafeAreaView style={styles.container}>
-        {/* XP Reward System Header */}
-        <XPRewardSystem
-          hearts={hearts}
-          maxHearts={maxHearts}
-          currentLevel={currentLevel}
-          currentXP={totalXP}
-          xpForNextLevel={xpForNextLevel}
-          streakDays={streakDays}
-        />
-
         <ScrollView
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{ paddingBottom: 100 }}
@@ -229,22 +208,6 @@ export default function WritingScreen() {
             <Text style={styles.title}>✍️ ライティング練習</Text>
             <Text style={styles.subtitle}>英検準1級形式</Text>
           </View>
-
-          {/* Daily Goal Banner */}
-          <View style={styles.section}>
-            <DailyGoal
-              target={dailyGoal.target}
-              completed={dailyGoal.completed}
-              xpReward={100}
-            />
-          </View>
-
-          {/* Streak Banner */}
-          {streakDays > 0 && (
-            <View style={styles.section}>
-              <StreakBanner streakDays={streakDays} xpBonus={100} />
-            </View>
-          )}
 
           {/* Stats */}
           <View style={styles.section}>
@@ -358,19 +321,6 @@ export default function WritingScreen() {
   if (screen === 'editor' && currentPrompt) {
     return (
       <SafeAreaView style={styles.container}>
-        {/* Confirmation Modals */}
-        <ConfirmationModal
-          visible={showConfirmSubmit}
-          title="AI採点に送信"
-          message="このエッセイを採点に送信します。よろしいですか？"
-          icon="✍️"
-          confirmText="送信"
-          cancelText="キャンセル"
-          isLoading={isScoring}
-          onConfirm={handleConfirmSubmit}
-          onCancel={() => setShowConfirmSubmit(false)}
-        />
-
         <ConfirmationModal
           visible={showConfirmUnsaved}
           title="未保存のデータ"
@@ -502,33 +452,31 @@ const styles = StyleSheet.create({
     backgroundColor: NaturalColors.background,
   },
   header: {
-    paddingHorizontal: Spacing.xl,
-    paddingTop: Spacing.lg,
-    paddingBottom: Spacing.md,
+    paddingHorizontal: Spacing.md,
+    paddingTop: Spacing.sm,
+    paddingBottom: Spacing.xs,
   },
   title: {
-    fontSize: 28,
+    fontSize: 22,
     fontWeight: '800',
     color: Colors.light.text,
-    marginBottom: Spacing.sm,
   },
   subtitle: {
-    fontSize: 14,
+    fontSize: 12,
     color: Colors.light.textSecondary,
-    fontWeight: '500',
+    fontWeight: '400',
   },
   section: {
-    marginHorizontal: Spacing.xl,
-    marginTop: Spacing.xl,
-    marginBottom: Spacing.lg,
+    marginHorizontal: Spacing.lg,
+    marginTop: Spacing.xs,
   },
   statsRow: {
     flexDirection: 'row',
-    gap: Spacing.lg,
+    gap: Spacing.sm,
   },
   statBox: {
     flex: 1,
-    paddingVertical: Spacing.lg,
+    paddingVertical: Spacing.sm,
     backgroundColor: Colors.light.surfaceCard,
     borderRadius: BorderRadius.lg,
     alignItems: 'center',
@@ -536,13 +484,11 @@ const styles = StyleSheet.create({
   },
   statEmoji: {
     fontSize: 24,
-    marginBottom: Spacing.sm,
   },
   statValue: {
     fontSize: 20,
     fontWeight: '700',
     color: Colors.light.primary,
-    marginBottom: Spacing.xs,
   },
   statLabel: {
     fontSize: 12,
@@ -550,16 +496,15 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
   scoringGuide: {
-    padding: Spacing.lg,
+    padding: Spacing.md,
     backgroundColor: Colors.light.surfaceCard,
     borderRadius: BorderRadius.lg,
     ...Shadows.xs,
   },
   scoringTitle: {
-    fontSize: 14,
+    fontSize: 13,
     fontWeight: '700',
     color: Colors.light.text,
-    marginBottom: Spacing.md,
   },
   scoringItem: {
     flexDirection: 'row',
@@ -579,29 +524,27 @@ const styles = StyleSheet.create({
     fontWeight: '700',
   },
   sectionTitle: {
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: '700',
     color: Colors.light.text,
-    marginBottom: Spacing.lg,
   },
   promptCard: {
     flexDirection: 'row',
-    paddingHorizontal: Spacing.lg,
-    paddingVertical: Spacing.lg,
+    paddingHorizontal: Spacing.md,
+    paddingVertical: Spacing.md,
     backgroundColor: Colors.light.surfaceCard,
     borderRadius: BorderRadius.lg,
-    marginBottom: Spacing.lg,
     alignItems: 'flex-start',
     ...Shadows.xs,
   },
   promptNumber: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
+    width: 36,
+    height: 36,
+    borderRadius: 18,
     backgroundColor: Colors.light.primaryLight,
     justifyContent: 'center',
     alignItems: 'center',
-    marginRight: Spacing.lg,
+    marginRight: Spacing.md,
   },
   promptNumberText: {
     fontSize: 12,
@@ -615,24 +558,22 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: Spacing.sm,
   },
   promptTopic: {
-    fontSize: 15,
+    fontSize: 14,
     fontWeight: '700',
     color: Colors.light.text,
     flex: 1,
   },
   difficulty: {
-    fontSize: 12,
+    fontSize: 11,
     color: Colors.light.textSecondary,
     fontWeight: '500',
   },
   promptDescription: {
-    fontSize: 14,
+    fontSize: 13,
     color: Colors.light.text,
-    lineHeight: 20,
-    marginBottom: Spacing.md,
+    lineHeight: 18,
   },
   promptCardFooter: {
     flexDirection: 'row',
@@ -656,11 +597,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingVertical: Spacing.lg,
-    marginTop: Spacing.lg,
+    paddingVertical: Spacing.md,
+    marginTop: Spacing.xs,
   },
   paginationButton: {
-    paddingHorizontal: Spacing.lg,
+    paddingHorizontal: Spacing.md,
     paddingVertical: Spacing.md,
     backgroundColor: Colors.light.primaryLight,
     borderRadius: BorderRadius.lg,
@@ -673,12 +614,12 @@ const styles = StyleSheet.create({
     opacity: 0.5,
   },
   paginationButtonText: {
-    fontSize: 13,
+    fontSize: 12,
     color: Colors.light.primary,
     fontWeight: '600',
   },
   paginationInfo: {
-    fontSize: 13,
+    fontSize: 12,
     color: Colors.light.textSecondary,
     fontWeight: '600',
   },

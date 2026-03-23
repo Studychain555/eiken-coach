@@ -25,18 +25,18 @@ export default function TabletHomeScreen({ onRefresh }: TabletHomeScreenProps) {
 
   return (
     <SafeAreaView style={styles.container}>
+      {/* Fixed Header */}
+      <View style={styles.fixedHeader}>
+        <Text style={styles.logoText}>EnglishNAVI</Text>
+      </View>
+
+      {/* Scrollable Main Content */}
       <ScrollView
+        style={styles.mainContent}
         showsVerticalScrollIndicator={false}
         scrollEnabled={true}
-        contentContainerStyle={{ paddingBottom: 100 }}
+        contentContainerStyle={{ paddingBottom: 20 }}
       >
-        {/* Welcome Header */}
-        <View style={styles.header}>
-          <Text style={styles.welcomeText}>おはよう！</Text>
-          <View style={styles.levelBadge}>
-            <Text style={styles.levelText}>⭐ Lv.5</Text>
-          </View>
-        </View>
 
         {/* Status Bar */}
         <View style={styles.statusBar}>
@@ -50,22 +50,37 @@ export default function TabletHomeScreen({ onRefresh }: TabletHomeScreenProps) {
           <Text style={styles.sectionTitle}>今日の目標</Text>
           <View style={styles.goalsContainer}>
             <View style={styles.goalCard}>
-              <Text style={styles.goalIcon}>🎧</Text>
-              <Text style={styles.goalTitle}>リスニング</Text>
+              <View style={styles.goalCardLeft}>
+                <Text style={styles.goalIcon}>🎧</Text>
+                <View>
+                  <Text style={styles.goalLevel}>英検準1級</Text>
+                  <Text style={styles.goalTitle}>リスニング</Text>
+                  <Text style={styles.goalXp}>+10XP</Text>
+                </View>
+              </View>
               <Text style={styles.goalCount}>1</Text>
-              <Text style={styles.goalXp}>+10XP</Text>
             </View>
             <View style={styles.goalCard}>
-              <Text style={styles.goalIcon}>📚</Text>
-              <Text style={styles.goalTitle}>英単語</Text>
+              <View style={styles.goalCardLeft}>
+                <Text style={styles.goalIcon}>📚</Text>
+                <View>
+                  <Text style={styles.goalLevel}>英検準1級</Text>
+                  <Text style={styles.goalTitle}>英単語</Text>
+                  <Text style={styles.goalXp}>+50XP</Text>
+                </View>
+              </View>
               <Text style={styles.goalCount}>50</Text>
-              <Text style={styles.goalXp}>+50XP</Text>
             </View>
             <View style={styles.goalCard}>
-              <Text style={styles.goalIcon}>✏️</Text>
-              <Text style={styles.goalTitle}>ライティング</Text>
+              <View style={styles.goalCardLeft}>
+                <Text style={styles.goalIcon}>✏️</Text>
+                <View>
+                  <Text style={styles.goalLevel}>英検準1級</Text>
+                  <Text style={styles.goalTitle}>ライティング</Text>
+                  <Text style={styles.goalXp}>+100XP</Text>
+                </View>
+              </View>
               <Text style={styles.goalCount}>1</Text>
-              <Text style={styles.goalXp}>+100XP</Text>
             </View>
           </View>
         </View>
@@ -130,100 +145,114 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: Colors.light.background,
+    flexDirection: 'column',
   },
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingHorizontal: Spacing.xl,
-    paddingVertical: Spacing.lg,
-  },
-  welcomeText: {
-    ...Typography.h4,
-    color: Colors.light.text,
-    fontWeight: '700',
-  },
-  levelBadge: {
-    backgroundColor: DuolingoColors.primary,
+  fixedHeader: {
     paddingHorizontal: Spacing.lg,
-    paddingVertical: Spacing.sm,
-    borderRadius: BorderRadius.lg,
+    paddingVertical: Spacing.md,
+    backgroundColor: Colors.light.background,
+    borderBottomWidth: 1,
+    borderBottomColor: Colors.light.border,
+    flexShrink: 0,
   },
-  levelText: {
-    color: '#fff',
-    fontWeight: '700',
-    fontSize: 14,
+  logoText: {
+    fontSize: 18,
+    fontWeight: '800',
+    color: DuolingoColors.primary,
+    letterSpacing: 0.5,
+  },
+  mainContent: {
+    flex: 1,
   },
   statusBar: {
     flexDirection: 'row',
     justifyContent: 'space-around',
-    paddingHorizontal: Spacing.xl,
-    paddingVertical: Spacing.md,
+    paddingHorizontal: Spacing.lg,
+    paddingVertical: Spacing.sm,
     backgroundColor: Colors.light.surfaceCard,
-    marginHorizontal: Spacing.xl,
-    marginVertical: Spacing.lg,
+    marginHorizontal: Spacing.lg,
+    marginVertical: Spacing.sm,
     borderRadius: BorderRadius.lg,
   },
   statusItem: {
     ...Typography.bodySmall,
     color: Colors.light.text,
     fontWeight: '600',
+    fontSize: 12,
   },
   section: {
-    paddingHorizontal: Spacing.xl,
-    paddingVertical: Spacing.lg,
+    paddingHorizontal: Spacing.lg,
+    paddingVertical: Spacing.md,
   },
   sectionTitle: {
     ...Typography.h5,
     color: Colors.light.text,
     fontWeight: '700',
-    marginBottom: Spacing.lg,
+    marginBottom: Spacing.md,
+    fontSize: 16,
   },
   goalsContainer: {
     flexDirection: 'row',
-    gap: Spacing.lg,
+    gap: Spacing.md,
   },
   goalCard: {
     flex: 1,
     backgroundColor: Colors.light.surfaceCard,
-    borderRadius: BorderRadius.lg,
-    padding: Spacing.lg,
+    borderRadius: BorderRadius.md,
+    padding: Spacing.sm,
     alignItems: 'center',
     borderWidth: 2,
     borderColor: DuolingoColors.primary,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  goalCardLeft: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: Spacing.sm,
+    flex: 1,
   },
   goalIcon: {
-    fontSize: 32,
-    marginBottom: Spacing.sm,
+    fontSize: 20,
+    marginBottom: 0,
+  },
+  goalLevel: {
+    fontSize: 10,
+    color: Colors.light.textMuted,
+    fontWeight: '500',
+    marginBottom: 2,
   },
   goalTitle: {
     ...Typography.caption,
-    color: Colors.light.textSecondary,
+    color: Colors.light.text,
     fontWeight: '600',
-    marginBottom: Spacing.xs,
+    marginBottom: 2,
+    fontSize: 12,
   },
   goalCount: {
     ...Typography.h4,
     color: Colors.light.text,
     fontWeight: '700',
-    marginBottom: Spacing.sm,
+    marginBottom: 0,
+    fontSize: 16,
   },
   goalXp: {
     ...Typography.caption,
     color: DuolingoColors.primary,
     fontWeight: '700',
+    fontSize: 10,
   },
   statsCard: {
     backgroundColor: Colors.light.surfaceCard,
     borderRadius: BorderRadius.lg,
-    padding: Spacing.lg,
+    padding: Spacing.md,
   },
   masteryCircle: {
     alignItems: 'center',
-    marginBottom: Spacing.lg,
+    marginBottom: Spacing.md,
   },
   masteryPercentage: {
-    fontSize: 48,
+    fontSize: 36,
     fontWeight: '900',
     color: DuolingoColors.primary,
   },
@@ -232,31 +261,32 @@ const styles = StyleSheet.create({
     color: Colors.light.textSecondary,
     fontWeight: '600',
     marginTop: Spacing.xs,
+    fontSize: 11,
   },
   statsItems: {
-    gap: Spacing.lg,
+    gap: Spacing.md,
   },
   statRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    paddingVertical: Spacing.sm,
+    paddingVertical: Spacing.xs,
     borderBottomWidth: 1,
     borderBottomColor: Colors.light.border,
   },
   buttonsContainer: {
     flexDirection: 'row',
-    gap: Spacing.lg,
+    gap: Spacing.md,
   },
   actionButton: {
     flex: 1,
     backgroundColor: DuolingoColors.primary,
     borderRadius: BorderRadius.lg,
-    paddingVertical: Spacing.lg,
+    paddingVertical: Spacing.md,
     alignItems: 'center',
   },
   buttonText: {
     color: '#fff',
     fontWeight: '700',
-    fontSize: 14,
+    fontSize: 13,
   },
 });
