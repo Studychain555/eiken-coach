@@ -91,7 +91,7 @@ export function isTimeoutError(error: any): boolean {
  * JSON パースエラーを判別
  */
 export function isJsonParseError(error: any): boolean {
-  return error instanceof SyntaxError && 'JSON' in error.toString();
+  return error instanceof SyntaxError && (error.toString() as string).includes('JSON');
 }
 
 /**

@@ -11,13 +11,27 @@ import {
 import { useRouter } from 'expo-router';
 import { useVocabularyStore } from '@/src/stores/vocabularyStore';
 import { VOCABULARY_SAMPLE_DATA } from '@/src/lib/vocabularyData';
-import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/theme';
+import { Colors, Spacing, BorderRadius, Shadows, Typography, DuolingoColors, NaturalColors } from '@/constants/theme';
 import { EnhancedProgressBar, StepProgress, Milestone } from '@/components/EnhancedProgressBar';
 import { OptimizedButton } from '@/components/OptimizedButton';
+import { CelebrationAnimation } from '@/src/components/CelebrationAnimation';
+import { ErrorScreen } from '@/src/components/ErrorScreen';
+import { EmptyState } from '@/src/components/EmptyState';
+import { EIKENLevelSelector } from '@/src/components/EIKENLevelSelector';
+import { useEIKENVocabStore } from '@/src/stores/eikenVocabularyStore';
+import { EIKENLevel, EIKENLevelLabels } from '@/src/lib/eiken-vocabulary-schema';
+import { SkeletonLoader } from '@/src/components/SkeletonLoader';
 
 const { width } = Dimensions.get('window');
 
-type Screen = 'stage-select' | 'test' | 'result';
+type Screen = 'level-select' | 'stage-select' | 'test' | 'result';
+type DifficultyTab = 'beginner' | 'intermediate' | 'advanced';
+
+const STAGE_GROUPS: Record<DifficultyTab, { label: string; emoji: string; stages: number[] }> = {
+  beginner: { label: '初級', emoji: '⭐', stages: Array.from({ length: 8 }, (_, i) => i + 1) },
+  intermediate: { label: '中級', emoji: '⭐⭐⭐', stages: Array.from({ length: 6 }, (_, i) => i + 9) },
+  advanced: { label: '上級', emoji: '⭐⭐⭐⭐⭐', stages: Array.from({ length: 6 }, (_, i) => i + 15) },
+};
 
 export default function VocabularyScreen() {
   const router = useRouter();
@@ -28,9 +42,16 @@ export default function VocabularyScreen() {
     setCurrentStage,
     masteredCount,
     getTodayStats,
+    isLoading,
+    // Error handling
+    syncError,
+    setSyncError,
+    retry,
   } = useVocabularyStore();
 
-  const [screen, setScreen] = useState<Screen>('stage-select');
+  const { selectedLevel, setSelectedLevel, loadWordsForLevel } = useEIKENVocabStore();
+  const [screen, setScreen] = useState<Screen>('level-select');
+  const [selectedTab, setSelectedTab] = useState<DifficultyTab>('beginner');
 
   useEffect(() => {
     // 初期化：単語データをロード
@@ -39,8 +60,44 @@ export default function VocabularyScreen() {
     }
   }, []);
 
-  const stagesCount = 20;
-  const wordsPerStage = 100;
+  // エラーハンドリング
+  if (syncError) {
+    return (
+      <SafeAreaView style={styles.container}>
+        <ErrorScreen
+          title="同期に失敗しました"
+          description={syncError}
+          retryFn={retry}
+        />
+      </SafeAreaView>
+    );
+  }
+
+  // ローディング中 - スケルトン表示
+  if (words.length === 0 || isLoading) {
+    return (
+      <SafeAreaView style={styles.container}>
+        <View style={styles.header}>
+          <Text style={styles.title}>📚 英単語マスター</Text>
+          <Text style={styles.subtitle}>単語を読み込み中...</Text>
+        </View>
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={{ paddingBottom: 100 }}
+        >
+          <View style={styles.section}>
+            <SkeletonLoader count={3} type="form" />
+          </View>
+        </ScrollView>
+      </SafeAreaView>
+    );
+  }
+
+  const handleSelectLevel = (level: EIKENLevel) => {
+    setSelectedLevel(level);
+    loadWordsForLevel(level);
+    setScreen('stage-select');
+  };
 
   const handleStartStage = (stage: number) => {
     setCurrentStage(stage);
@@ -51,115 +108,108 @@ export default function VocabularyScreen() {
     setScreen('stage-select');
   };
 
+  const handleBackToLevelSelect = () => {
+    setScreen('level-select');
+  };
+
+  // Level Selection Screen
+  if (screen === 'level-select') {
+    return (
+      <SafeAreaView style={styles.container}>
+        <EIKENLevelSelector
+          selectedLevel={selectedLevel}
+          onLevelSelect={handleSelectLevel}
+        />
+      </SafeAreaView>
+    );
+  }
+
   if (screen === 'stage-select') {
     const stats = getTodayStats();
+    const currentTab = STAGE_GROUPS[selectedTab];
 
     return (
       <SafeAreaView style={styles.container}>
-        <ScrollView showsVerticalScrollIndicator={false}>
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={{ paddingBottom: 100 }}
+        >
           {/* Header */}
           <View style={styles.header}>
-            <Text style={styles.title}>📚 英単語マスター</Text>
-            <Text style={styles.subtitle}>英検準1級 頻出単語</Text>
-          </View>
-
-          {/* Overall Progress */}
-          <View style={styles.section}>
-            <Milestone
-              milestone={2000}
-              current={masteredCount}
-              unit="単語"
-              icon="📚"
-              color={Colors.light.primary}
-            />
-          </View>
-
-          {/* Today's Stats */}
-          <View style={styles.section}>
-            <View style={styles.statsRow}>
-              <View style={styles.statBox}>
-                <Text style={styles.statBoxEmoji}>🎯</Text>
-                <Text style={styles.statBoxValue}>{stats.attempted}</Text>
-                <Text style={styles.statBoxLabel}>出題</Text>
+            <View style={styles.headerTop}>
+              <View>
+                <Text style={styles.title}>📚 英単語マスター</Text>
+                <Text style={styles.subtitle}>{EIKENLevelLabels[selectedLevel]}</Text>
               </View>
-              <View style={styles.statBox}>
-                <Text style={styles.statBoxEmoji}>✅</Text>
-                <Text style={styles.statBoxValue}>{stats.correct}</Text>
-                <Text style={styles.statBoxLabel}>正解</Text>
-              </View>
-              <View style={styles.statBox}>
-                <Text style={styles.statBoxEmoji}>📊</Text>
-                <Text style={[styles.statBoxValue, { color: Colors.light.success }]}>
-                  {stats.accuracy}%
-                </Text>
-                <Text style={styles.statBoxLabel}>正答率</Text>
-              </View>
+              <TouchableOpacity
+                style={styles.changeLevelButton}
+                onPress={handleBackToLevelSelect}
+              >
+                <Text style={styles.changeLevelButtonText}>レベル変更</Text>
+              </TouchableOpacity>
             </View>
           </View>
 
-          {/* Difficulty Guide */}
+          {/* Difficulty Tabs */}
           <View style={styles.section}>
-            <Text style={styles.sectionTitle}>難易度ガイド</Text>
-            <View style={styles.difficultyGuide}>
-              <View style={styles.difficultyItem}>
-                <Text style={styles.difficultyEmoji}>⭐</Text>
-                <Text style={styles.difficultyLabel}>初級</Text>
-              </View>
-              <View style={styles.difficultyItem}>
-                <Text style={styles.difficultyEmoji}>⭐⭐⭐</Text>
-                <Text style={styles.difficultyLabel}>中級</Text>
-              </View>
-              <View style={styles.difficultyItem}>
-                <Text style={styles.difficultyEmoji}>⭐⭐⭐⭐⭐</Text>
-                <Text style={styles.difficultyLabel}>上級</Text>
-              </View>
-            </View>
-          </View>
-
-          {/* Stages */}
-          <View style={styles.section}>
-            <Text style={styles.sectionTitle}>ステージを選択</Text>
-            <View style={styles.stageGrid}>
-              {Array.from({ length: stagesCount }, (_, i) => i + 1).map(
-                (stage) => {
-                  const isLocked = stage > 3;
-                  const isCompleted = stage <= 1;
-
-                  return (
-                    <TouchableOpacity
-                      key={stage}
+            <View style={styles.difficultyTabs}>
+              {(Object.entries(STAGE_GROUPS) as [DifficultyTab, typeof STAGE_GROUPS[DifficultyTab]][]).map(
+                ([key, group]) => (
+                  <TouchableOpacity
+                    key={key}
+                    style={[
+                      styles.difficultyTab,
+                      selectedTab === key && styles.difficultyTabActive,
+                    ]}
+                    onPress={() => setSelectedTab(key)}
+                  >
+                    <Text style={styles.difficultyTabEmoji}>{group.emoji}</Text>
+                    <Text
                       style={[
-                        styles.stageButton,
-                        isLocked && styles.stageButtonDisabled,
-                        isCompleted && styles.stageButtonCompleted,
+                        styles.difficultyTabLabel,
+                        selectedTab === key && styles.difficultyTabLabelActive,
                       ]}
-                      onPress={() => handleStartStage(stage)}
-                      disabled={isLocked}
-                      activeOpacity={0.7}
                     >
-                      {isCompleted && (
-                        <Text style={styles.stageBadge}>✓</Text>
-                      )}
-                      <Text style={styles.stageButtonNumber}>{stage}</Text>
-                      {isLocked && (
-                        <Text style={styles.stageLock}>🔒</Text>
-                      )}
-                    </TouchableOpacity>
-                  );
-                }
+                      {group.label}
+                    </Text>
+                  </TouchableOpacity>
+                )
               )}
             </View>
           </View>
 
-          {/* Tips Box */}
+          {/* Stages Grid */}
           <View style={styles.section}>
-            <View style={styles.tipsBox}>
-              <Text style={styles.tipsEmoji}>💡</Text>
-              <Text style={styles.tipsText}>
-                1ステージ = 100語。同じ単語を3回連続正解で「修得」になります。
-              </Text>
+            <View style={styles.stageGrid}>
+              {currentTab.stages.map((stage: number) => {
+                const isLocked = stage > 3;
+                const isCompleted = stage <= 1;
+
+                return (
+                  <TouchableOpacity
+                    key={stage}
+                    style={[
+                      styles.stageButton,
+                      isLocked && styles.stageButtonDisabled,
+                      isCompleted && styles.stageButtonCompleted,
+                    ]}
+                    onPress={() => handleStartStage(stage)}
+                    disabled={isLocked}
+                    activeOpacity={0.7}
+                  >
+                    {isCompleted && (
+                      <Text style={styles.stageBadge}>✓</Text>
+                    )}
+                    <Text style={styles.stageButtonNumber}>{stage}</Text>
+                    {isLocked && (
+                      <Text style={styles.stageLock}>🔒</Text>
+                    )}
+                  </TouchableOpacity>
+                );
+              })}
             </View>
           </View>
+
         </ScrollView>
       </SafeAreaView>
     );
@@ -198,6 +248,8 @@ function VocabularyTestScreen({
   const [answered, setAnswered] = useState(false);
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
   const [questionIndex, setQuestionIndex] = useState(0);
+  const [showCelebration, setShowCelebration] = useState(false);
+  const [celebrationType, setCelebrationType] = useState<'correct' | 'incorrect'>('correct');
 
   useEffect(() => {
     // ステージの単語を取得
@@ -215,7 +267,18 @@ function VocabularyTestScreen({
 
   const handleSelectAnswer = (answer: string) => {
     setSelectedAnswer(answer);
-    setAnswered(true);
+    const isCorrect = currentOptions.find((opt) => opt.word === answer)?.isCorrect || false;
+
+    // Trigger celebration animation
+    setCelebrationType(isCorrect ? 'correct' : 'incorrect');
+    setShowCelebration(true);
+
+    // After animation, set answered state
+    setTimeout(() => {
+      setAnswered(true);
+      setShowCelebration(false);
+    }, 1200);
+
     selectAnswer(answer);
   };
 
@@ -241,9 +304,17 @@ function VocabularyTestScreen({
 
   if (!currentWord) {
     return (
-      <View style={styles.loadingContainer}>
-        <Text style={styles.loadingText}>読み込み中...</Text>
-      </View>
+      <SafeAreaView style={styles.container}>
+        <View style={styles.testHeader}>
+          <TouchableOpacity onPress={onBack}>
+            <Text style={styles.backButton}>← 戻る</Text>
+          </TouchableOpacity>
+          <Text style={styles.stageTitle}>読み込み中...</Text>
+        </View>
+        <View style={styles.loadingContainer}>
+          <SkeletonLoader count={2} type="form" />
+        </View>
+      </SafeAreaView>
     );
   }
 
@@ -255,27 +326,39 @@ function VocabularyTestScreen({
 
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView showsVerticalScrollIndicator={false}>
-        {/* Header */}
-        <View style={styles.testHeader}>
-          <TouchableOpacity onPress={onBack}>
-            <Text style={styles.backButton}>← 戻る</Text>
-          </TouchableOpacity>
-          <Text style={styles.stageTitle}>Stage {stage}</Text>
-          <Text style={styles.progressText}>
-            {questionIndex + 1} / {stageWords.length}
-          </Text>
-        </View>
+      {/* Celebration Animation Overlay */}
+      <CelebrationAnimation
+        type={celebrationType}
+        trigger={showCelebration}
+        onComplete={() => setShowCelebration(false)}
+      />
 
-        {/* Progress Bar */}
-        <View style={styles.progressBarContainer}>
-          <View style={styles.progressBar}>
-            <View
-              style={[styles.progressFill, { width: `${progress}%` }]}
-            />
-          </View>
-        </View>
+      {/* Fixed Header */}
+      <View style={styles.testHeader}>
+        <TouchableOpacity onPress={onBack}>
+          <Text style={styles.backButton}>← 戻る</Text>
+        </TouchableOpacity>
+        <Text style={styles.stageTitle}>Stage {stage}</Text>
+        <Text style={styles.progressText}>
+          {questionIndex + 1} / {stageWords.length}
+        </Text>
+      </View>
 
+      {/* Fixed Progress Bar */}
+      <View style={styles.progressBarContainer}>
+        <View style={styles.progressBar}>
+          <View
+            style={[styles.progressFill, { width: `${progress}%` }]}
+          />
+        </View>
+      </View>
+
+      {/* Scrollable Content Only */}
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        style={styles.scrollContent}
+        contentContainerStyle={styles.scrollContentContainer}
+      >
         {/* Question */}
         <View style={styles.questionContainer}>
           <Text style={styles.questionLabel}>英単語の意味は？</Text>
@@ -329,19 +412,19 @@ function VocabularyTestScreen({
             </Text>
           </View>
         )}
-
-        {/* Next Button */}
-        {answered && (
-          <TouchableOpacity
-            style={styles.nextButton}
-            onPress={handleNext}
-          >
-            <Text style={styles.nextButtonText}>
-              {questionIndex + 1 === stageWords.length ? '完了' : '次へ'}
-            </Text>
-          </TouchableOpacity>
-        )}
       </ScrollView>
+
+      {/* Fixed Button at Bottom */}
+      {answered && (
+        <TouchableOpacity
+          style={styles.nextButton}
+          onPress={handleNext}
+        >
+          <Text style={styles.nextButtonText}>
+            {questionIndex + 1 === stageWords.length ? '完了' : '次へ'}
+          </Text>
+        </TouchableOpacity>
+      )}
     </SafeAreaView>
   );
 }
@@ -380,41 +463,40 @@ function VocabularyResultScreen({ onBack }: { onBack: () => void }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.light.background,
+    backgroundColor: NaturalColors.background,
   },
   header: {
-    paddingHorizontal: Spacing.xl,
-    paddingTop: Spacing.lg,
-    paddingBottom: Spacing.md,
+    paddingHorizontal: Spacing.md,
+    paddingTop: Spacing.sm,
+    paddingBottom: Spacing.xs,
   },
   title: {
-    fontSize: 28,
+    fontSize: 22,
     fontWeight: '800',
     color: Colors.light.text,
-    marginBottom: Spacing.sm,
   },
   subtitle: {
-    fontSize: 14,
+    fontSize: 12,
     color: Colors.light.textSecondary,
-    fontWeight: '500',
+    fontWeight: '400',
   },
   section: {
-    marginHorizontal: Spacing.xl,
-    marginTop: Spacing.xl,
+    marginHorizontal: Spacing.lg,
+    marginTop: Spacing.lg,
+    marginBottom: Spacing.md,
   },
   sectionTitle: {
     fontSize: 18,
     fontWeight: '700',
     color: Colors.light.text,
-    marginBottom: Spacing.lg,
   },
   statsRow: {
     flexDirection: 'row',
-    gap: Spacing.lg,
+    gap: Spacing.sm,
   },
   statBox: {
     flex: 1,
-    paddingVertical: Spacing.lg,
+    paddingVertical: Spacing.md,
     backgroundColor: Colors.light.surfaceCard,
     borderRadius: BorderRadius.lg,
     alignItems: 'center',
@@ -422,56 +504,64 @@ const styles = StyleSheet.create({
   },
   statBoxEmoji: {
     fontSize: 24,
-    marginBottom: Spacing.sm,
   },
   statBoxValue: {
     fontSize: 20,
     fontWeight: '700',
     color: Colors.light.primary,
-    marginBottom: Spacing.xs,
   },
   statBoxLabel: {
     fontSize: 12,
     color: Colors.light.textSecondary,
     fontWeight: '500',
   },
-  difficultyGuide: {
+  difficultyTabs: {
     flexDirection: 'row',
-    gap: Spacing.lg,
+    gap: Spacing.sm,
   },
-  difficultyItem: {
+  difficultyTab: {
     flex: 1,
-    paddingHorizontal: Spacing.md,
+    paddingHorizontal: Spacing.sm,
     paddingVertical: Spacing.lg,
     backgroundColor: Colors.light.surfaceCard,
     borderRadius: BorderRadius.lg,
     alignItems: 'center',
+    borderWidth: 2,
+    borderColor: Colors.light.border,
     ...Shadows.xs,
   },
-  difficultyEmoji: {
-    fontSize: 18,
-    marginBottom: Spacing.sm,
+  difficultyTabActive: {
+    backgroundColor: Colors.light.primaryLight,
+    borderColor: Colors.light.primary,
   },
-  difficultyLabel: {
-    fontSize: 12,
+  difficultyTabEmoji: {
+    fontSize: 16,
+  },
+  difficultyTabLabel: {
+    fontSize: 11,
     color: Colors.light.text,
-    fontWeight: '600',
+    fontWeight: '500',
     textAlign: 'center',
+  },
+  difficultyTabLabelActive: {
+    color: Colors.light.primary,
+    fontWeight: '700',
   },
   stageGrid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    gap: Spacing.lg,
+    gap: Spacing.sm,
   },
   stageButton: {
-    width: (width - 72) / 4,
+    width: (width - 56) / 5,
     aspectRatio: 1,
     backgroundColor: Colors.light.primaryLight,
-    borderRadius: BorderRadius.lg,
+    borderRadius: BorderRadius.md,
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 2,
     borderColor: Colors.light.primary,
+    marginBottom: Spacing.sm,
     ...Shadows.xs,
   },
   stageButtonDisabled: {
@@ -498,7 +588,7 @@ const styles = StyleSheet.create({
     lineHeight: 24,
   },
   stageButtonNumber: {
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: '700',
     color: Colors.light.primary,
   },
@@ -508,12 +598,11 @@ const styles = StyleSheet.create({
   },
   tipsBox: {
     flexDirection: 'row',
-    padding: Spacing.lg,
+    padding: Spacing.md,
     backgroundColor: Colors.light.primaryLight,
     borderLeftWidth: 4,
     borderLeftColor: Colors.light.warning,
     borderRadius: BorderRadius.lg,
-    marginBottom: Spacing.xl,
   },
   tipsEmoji: {
     fontSize: 24,
@@ -532,7 +621,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: Colors.light.background,
+    backgroundColor: NaturalColors.background,
   },
   loadingText: {
     fontSize: 16,
@@ -543,7 +632,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingHorizontal: Spacing.xl,
+    paddingHorizontal: Spacing.lg,
     paddingTop: Spacing.lg,
     paddingBottom: Spacing.md,
     backgroundColor: Colors.light.surfaceCard,
@@ -564,16 +653,33 @@ const styles = StyleSheet.create({
     fontSize: 13,
     color: Colors.light.textSecondary,
   },
+  scrollContent: {
+    flex: 1,
+  },
+  scrollContentContainer: {
+    paddingHorizontal: Spacing.lg,
+    paddingVertical: Spacing.md,
+    gap: Spacing.md,
+  },
   progressBarContainer: {
-    marginHorizontal: Spacing.xl,
-    marginBottom: Spacing.xl,
-    marginTop: Spacing.lg,
+    paddingHorizontal: Spacing.lg,
+    paddingVertical: Spacing.sm,
+    paddingBottom: Spacing.md,
+  },
+  progressBar: {
+    height: 8,
+    backgroundColor: Colors.light.border,
+    borderRadius: 4,
+    overflow: 'hidden',
+  },
+  progressFill: {
+    height: 8,
+    backgroundColor: Colors.light.success,
+    borderRadius: 4,
   },
   questionContainer: {
-    marginHorizontal: Spacing.xl,
-    marginBottom: Spacing.xl,
-    paddingHorizontal: Spacing.lg,
-    paddingVertical: Spacing.xl,
+    paddingHorizontal: Spacing.md,
+    paddingVertical: Spacing.sm,
     backgroundColor: Colors.light.surfaceCard,
     borderRadius: BorderRadius.lg,
     alignItems: 'center',
@@ -582,14 +688,12 @@ const styles = StyleSheet.create({
   questionLabel: {
     fontSize: 14,
     color: Colors.light.textSecondary,
-    marginBottom: Spacing.lg,
     fontWeight: '500',
   },
   word: {
     fontSize: 36,
     fontWeight: '800',
     color: Colors.light.primary,
-    marginBottom: Spacing.sm,
   },
   wordReading: {
     fontSize: 15,
@@ -597,14 +701,12 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
   optionsContainer: {
-    marginHorizontal: Spacing.xl,
-    marginBottom: Spacing.xl,
-    gap: Spacing.lg,
+    gap: Spacing.md,
   },
   optionButton: {
     minHeight: 56,
-    paddingHorizontal: Spacing.lg,
-    paddingVertical: Spacing.lg,
+    paddingHorizontal: Spacing.md,
+    paddingVertical: Spacing.sm,
     backgroundColor: Colors.light.surfaceCard,
     borderRadius: BorderRadius.lg,
     borderWidth: 2,
@@ -639,36 +741,31 @@ const styles = StyleSheet.create({
     fontSize: 20,
   },
   feedbackContainer: {
-    marginHorizontal: Spacing.xl,
-    marginBottom: Spacing.xl,
-    paddingHorizontal: Spacing.lg,
-    paddingVertical: Spacing.lg,
+    paddingHorizontal: Spacing.md,
+    paddingVertical: Spacing.md,
     backgroundColor: Colors.light.primaryLight,
     borderLeftWidth: 4,
     borderLeftColor: Colors.light.warning,
     borderRadius: BorderRadius.lg,
   },
   feedbackLabel: {
-    fontSize: 12,
+    fontSize: 11,
     color: Colors.light.textSecondary,
-    marginBottom: Spacing.md,
     fontWeight: '600',
   },
   exampleSentence: {
-    fontSize: 15,
+    fontSize: 14,
     color: Colors.light.text,
     fontWeight: '500',
-    lineHeight: 22,
-    marginBottom: Spacing.md,
-  },
-  exampleTranslation: {
-    fontSize: 14,
-    color: Colors.light.textSecondary,
     lineHeight: 20,
   },
+  exampleTranslation: {
+    fontSize: 13,
+    color: Colors.light.textSecondary,
+    lineHeight: 18,
+  },
   nextButton: {
-    marginHorizontal: Spacing.xl,
-    marginBottom: Spacing.xl,
+    marginHorizontal: Spacing.lg,
     minHeight: 48,
     backgroundColor: Colors.light.primary,
     borderRadius: BorderRadius.lg,
@@ -687,20 +784,18 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    paddingHorizontal: Spacing.xl,
-    backgroundColor: Colors.light.background,
+    paddingHorizontal: Spacing.lg,
+    backgroundColor: NaturalColors.background,
   },
   resultTitle: {
     fontSize: 36,
     fontWeight: '800',
     color: Colors.light.text,
-    marginBottom: Spacing.xl,
     textAlign: 'center',
   },
   resultStats: {
     flexDirection: 'row',
-    gap: Spacing.lg,
-    marginBottom: Spacing.xl,
+    gap: Spacing.sm,
     width: '100%',
   },
   resultStatItem: {
@@ -715,7 +810,6 @@ const styles = StyleSheet.create({
     fontSize: 28,
     fontWeight: '800',
     color: Colors.light.primary,
-    marginBottom: Spacing.sm,
   },
   resultStatLabel: {
     fontSize: 12,
@@ -734,6 +828,26 @@ const styles = StyleSheet.create({
   resultButtonText: {
     fontSize: 16,
     fontWeight: '700',
+    color: '#fff',
+  },
+
+  // Header enhancements for level selection
+  headerTop: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
+  },
+  changeLevelButton: {
+    paddingHorizontal: Spacing.sm,
+    paddingVertical: Spacing.xs,
+    backgroundColor: Colors.light.primary,
+    borderRadius: BorderRadius.full,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  changeLevelButtonText: {
+    fontSize: 11,
+    fontWeight: '600',
     color: '#fff',
   },
 });

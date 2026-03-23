@@ -12,6 +12,7 @@ import {
   Alert,
 } from 'react-native';
 import { useAuthStore } from '@/src/stores/authStore';
+import TeacherAccessGuard from '@/src/components/TeacherAccessGuard';
 import { useTeacherStore } from '@/src/stores/teacherStore';
 import { TeacherAnalytics } from '@/src/components/TeacherAnalytics';
 import { TeacherLayout, type TabType } from '@/src/components/TeacherLayout';
@@ -45,7 +46,7 @@ export default function TeacherDashboard() {
   const [assignmentForm, setAssignmentForm] = useState({
     title: '',
     description: '',
-    type: 'listening' as const,
+    type: 'listening' as 'listening' | 'vocabulary' | 'writing',
     dueDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
   });
 
@@ -296,7 +297,7 @@ export default function TeacherDashboard() {
                     <View
                       style={[
                         styles.progressBarFill,
-                        { width: student.progressRate + '%' },
+                        { width: `${student.progressRate}%` },
                       ]}
                     />
                   </View>
@@ -393,7 +394,10 @@ export default function TeacherDashboard() {
               </TouchableOpacity>
             </View>
 
-            <ScrollView style={styles.modalForm}>
+            <ScrollView
+              style={styles.modalForm}
+              contentContainerStyle={{ paddingBottom: 20 }}
+            >
               <View style={styles.formGroup}>
                 <Text style={styles.formLabel}>タイトル</Text>
                 <TextInput
@@ -482,7 +486,10 @@ export default function TeacherDashboard() {
                 </TouchableOpacity>
               </View>
 
-              <ScrollView style={styles.modalForm}>
+              <ScrollView
+              style={styles.modalForm}
+              contentContainerStyle={{ paddingBottom: 20 }}
+            >
                 <View style={styles.studentDetailCard}>
                   <View style={styles.detailRow}>
                     <Text style={styles.detailLabel}>リスニング:</Text>
@@ -839,8 +846,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     borderTopWidth: 1,
     borderTopColor: '#f0f0f0',
-    paddingTopWidth: 1,
-    paddingTopColor: '#f0f0f0',
+    paddingTop: 12,
   },
   dueDate: {
     fontSize: 11,

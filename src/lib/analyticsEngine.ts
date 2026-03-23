@@ -120,7 +120,7 @@ export class AnalyticsEngine {
       studentId: student.id,
       studentName: student.name,
       score: student.score,
-      change: 0, // TODO: Calculate from previous rankings
+      change: 0, // Change calculation requires historical ranking data
     }));
   }
 

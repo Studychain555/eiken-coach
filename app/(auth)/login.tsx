@@ -33,6 +33,30 @@ export default function LoginScreen() {
     }
   };
 
+  const handleDemoLogin = async () => {
+    // デモ用ダミーログイン（ゲーミフィケーション画面テスト用）
+    try {
+      console.log('📱 デモログイン開始...');
+
+      // ローカルストレージにダミーセッション作成
+      const demoData = {
+        id: 'demo-user-001',
+        email: 'demo@eigomaster.local',
+        name: 'デモユーザー',
+      };
+      localStorage.setItem('eigomaster_demo_user', JSON.stringify(demoData));
+      console.log('✅ デモユーザー保存完了:', demoData);
+
+      // 画面遷移
+      console.log('🔄 /(tabs) に遷移中...');
+      router.replace('/(tabs)');
+      console.log('✅ 遷移完了');
+    } catch (error) {
+      console.error('❌ デモログインエラー:', error);
+      Alert.alert('エラー', `デモログインに失敗しました: ${error instanceof Error ? error.message : 'Unknown error'}`);
+    }
+  };
+
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
@@ -80,6 +104,14 @@ export default function LoginScreen() {
             ) : (
               <Text style={styles.buttonText}>ログイン</Text>
             )}
+          </TouchableOpacity>
+
+          {/* Demo Login Button for Testing */}
+          <TouchableOpacity
+            style={[styles.demoButton]}
+            onPress={handleDemoLogin}
+          >
+            <Text style={styles.demoButtonText}>🎮 デモでテスト（ゲーミフィケーション画面確認）</Text>
           </TouchableOpacity>
         </View>
 
@@ -156,6 +188,20 @@ const styles = StyleSheet.create({
   buttonText: {
     color: '#fff',
     fontSize: 16,
+    fontWeight: '600',
+  },
+  demoButton: {
+    backgroundColor: '#f0ad4e',
+    borderRadius: 8,
+    paddingVertical: 12,
+    marginTop: 12,
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: '#ec971f',
+  },
+  demoButtonText: {
+    color: '#333',
+    fontSize: 14,
     fontWeight: '600',
   },
   footer: {

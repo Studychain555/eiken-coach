@@ -14,6 +14,7 @@ import { useListeningStore } from '@/src/stores/listeningStore';
 import { useAudioPlayer } from '@/hooks/useAudioPlayer';
 import { debugLog, debugError } from '@/src/lib/debugUtils';
 import { handleError } from '@/src/lib/errorHandler';
+import { CelebrationAnimation } from './CelebrationAnimation';
 
 const { width } = Dimensions.get('window');
 const TAG = 'ListeningQuestionScreen';
@@ -22,6 +23,7 @@ interface Props {
   question: ListeningQuestion;
   onComplete: () => void;
   onBack: () => void;
+  onShadowingStart?: (question: ListeningQuestion) => void;
 }
 
 type Screen = 'player' | 'answer' | 'result';
@@ -30,16 +32,19 @@ export default function ListeningQuestionScreen({
   question,
   onComplete,
   onBack,
+  onShadowingStart,
 }: Props) {
   const [screen, setScreen] = useState<Screen>('player');
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
+  const [showCelebration, setShowCelebration] = useState(false);
+  const [celebrationType, setCelebrationType] = useState<'correct' | 'incorrect'>('correct');
   const { recordAttempt } = useListeningStore();
 
-  // SoundHelix のフォールバックURL
+  // Mixkit のフォールバックURL (CORS対応)
   const SOUNDHELIX_FALLBACK_URLS = [
-    'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3',
-    'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3',
-    'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3',
+    '/audio/listening-sample-1.mp3',
+    '/audio/listening-sample-1.mp3',
+    '/audio/listening-sample-1.mp3',
   ];
 
   const audioPlayer = useAudioPlayer({
@@ -87,7 +92,16 @@ export default function ListeningQuestionScreen({
     setSelectedAnswer(answerIndex);
     const isCorrect = answerIndex === question.correctAnswer;
     recordAttempt(question.id, answerIndex, isCorrect);
-    setScreen('result');
+
+    // Trigger celebration animation
+    setCelebrationType(isCorrect ? 'correct' : 'incorrect');
+    setShowCelebration(true);
+
+    // Move to result screen after animation
+    setTimeout(() => {
+      setScreen('result');
+      setShowCelebration(false);
+    }, 1500);
   };
 
   if (screen === 'player') {
@@ -257,6 +271,13 @@ export default function ListeningQuestionScreen({
 
   return (
     <SafeAreaView style={styles.container}>
+      {/* Celebration Animation Overlay */}
+      <CelebrationAnimation
+        type={celebrationType}
+        trigger={showCelebration}
+        onComplete={() => setShowCelebration(false)}
+      />
+
       <ScrollView showsVerticalScrollIndicator={false}>
         {/* Result Header */}
         <View style={styles.resultHeader}>
@@ -310,7 +331,9 @@ export default function ListeningQuestionScreen({
             onPress={() => {
               // シャドーイング画面へ遷移
               debugLog(TAG, 'Shadowing started for question', { id: question.id });
-              // 実装時：ShadowingScreen を render
+              if (onShadowingStart) {
+                onShadowingStart(question);
+              }
             }}
           >
             <Text style={styles.shadowingButtonIcon}>🎤</Text>

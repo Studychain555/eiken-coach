@@ -6,7 +6,6 @@ import {
   SafeAreaView,
   TouchableOpacity,
   ScrollView,
-  TextInput,
   Alert,
   ActivityIndicator,
 } from 'react-native';
@@ -15,9 +14,15 @@ import { useWritingStore } from '@/src/stores/writingStore';
 import { WRITING_SAMPLE_PROMPTS } from '@/src/lib/writingData';
 import { scoreWritingSubmission } from '@/src/lib/aiScoringService';
 import WritingResultScreen from '@/src/components/WritingResultScreen';
-import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/theme';
+import { Colors, Spacing, BorderRadius, Shadows, Typography, DuolingoColors, NaturalColors } from '@/constants/theme';
 import { OptimizedButton, ButtonGroup } from '@/components/OptimizedButton';
 import { EnhancedProgressBar } from '@/components/EnhancedProgressBar';
+import { CelebrationAnimation } from '@/src/components/CelebrationAnimation';
+import { ErrorScreen } from '@/src/components/ErrorScreen';
+import { EmptyState } from '@/src/components/EmptyState';
+import { InputWithValidation } from '@/src/components/InputWithValidation';
+import { ConfirmationModal } from '@/src/components/ConfirmationModal';
+import { SkeletonLoader } from '@/src/components/SkeletonLoader';
 
 type Screen = 'prompt-select' | 'editor' | 'result';
 
@@ -43,10 +48,22 @@ export default function WritingScreen() {
     getTodayStats,
     getTotalSubmissions,
     getAverageScore,
+    isLoading,
+    setIsLoading,
+    // Error handling
+    syncError,
+    setSyncError,
+    retry,
   } = useWritingStore();
 
   const [screen, setScreen] = useState<Screen>('prompt-select');
   const [isScoring, setIsScoring] = useState(false);
+  const [showCelebration, setShowCelebration] = useState(false);
+  const [currentPage, setCurrentPage] = useState(0);
+  const [showConfirmSubmit, setShowConfirmSubmit] = useState(false);
+  const [showConfirmUnsaved, setShowConfirmUnsaved] = useState(false);
+  const [pendingBackNavigation, setPendingBackNavigation] = useState(false);
+  const ITEMS_PER_PAGE = 3;
 
   useEffect(() => {
     if (prompts.length === 0) {
@@ -86,7 +103,16 @@ export default function WritingScreen() {
       return;
     }
 
+    // Show confirmation modal
+    setShowConfirmSubmit(true);
+  };
+
+  const handleConfirmSubmit = async () => {
+    if (!currentPrompt) return;
+
     setIsScoring(true);
+    setIsLoading(true);
+    setShowConfirmSubmit(false);
 
     try {
       const apiKey = process.env.EXPO_PUBLIC_CLAUDE_API_KEY;
@@ -111,6 +137,17 @@ export default function WritingScreen() {
       Alert.alert('エラー', '採点に失敗しました');
     } finally {
       setIsScoring(false);
+      setIsLoading(false);
+    }
+  };
+
+  const handleBackToSelectWithCheck = () => {
+    const hasUnsavedData = (currentContent.trim().length > 0 || !!currentImageUrl);
+    if (hasUnsavedData) {
+      setPendingBackNavigation(true);
+      setShowConfirmUnsaved(true);
+    } else {
+      handleBackToSelect();
     }
   };
 
@@ -125,9 +162,47 @@ export default function WritingScreen() {
     const stats = getTodayStats();
     const totalSubmissions = getTotalSubmissions();
 
+    // Show error screen if sync failed
+    if (syncError) {
+      return (
+        <ErrorScreen
+          title="同期に失敗しました"
+          description={syncError}
+          retryFn={() => {
+            setSyncError(null);
+            retry();
+          }}
+          showHomeButton={true}
+        />
+      );
+    }
+
+    // Show skeleton loader while loading prompts
+    if (prompts.length === 0 || isLoading) {
+      return (
+        <SafeAreaView style={styles.container}>
+          <View style={styles.header}>
+            <Text style={styles.title}>✍️ ライティング練習</Text>
+            <Text style={styles.subtitle}>英検準1級形式</Text>
+          </View>
+          <ScrollView
+            showsVerticalScrollIndicator={false}
+            contentContainerStyle={{ paddingBottom: 100 }}
+          >
+            <View style={styles.section}>
+              <SkeletonLoader count={3} type="form" />
+            </View>
+          </ScrollView>
+        </SafeAreaView>
+      );
+    }
+
     return (
       <SafeAreaView style={styles.container}>
-        <ScrollView showsVerticalScrollIndicator={false}>
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={{ paddingBottom: 100 }}
+        >
           {/* Header */}
           <View style={styles.header}>
             <Text style={styles.title}>✍️ ライティング練習</Text>
@@ -178,10 +253,10 @@ export default function WritingScreen() {
             </View>
           </View>
 
-          {/* Prompts */}
+          {/* Prompts with Pagination */}
           <View style={styles.section}>
             <Text style={styles.sectionTitle}>問題を選択</Text>
-            {prompts.map((prompt, index) => (
+            {prompts.slice(currentPage * ITEMS_PER_PAGE, (currentPage + 1) * ITEMS_PER_PAGE).map((prompt, index) => (
               <TouchableOpacity
                 key={prompt.id}
                 style={styles.promptCard}
@@ -189,7 +264,7 @@ export default function WritingScreen() {
                 activeOpacity={0.7}
               >
                 <View style={styles.promptNumber}>
-                  <Text style={styles.promptNumberText}>{index + 1}</Text>
+                  <Text style={styles.promptNumberText}>{currentPage * ITEMS_PER_PAGE + index + 1}</Text>
                 </View>
                 <View style={styles.promptCardContent}>
                   <View style={styles.promptCardHeader}>
@@ -210,6 +285,33 @@ export default function WritingScreen() {
                 </View>
               </TouchableOpacity>
             ))}
+
+            {/* Pagination Controls */}
+            <View style={styles.paginationContainer}>
+              <TouchableOpacity
+                style={[
+                  styles.paginationButton,
+                  currentPage === 0 && styles.paginationButtonDisabled,
+                ]}
+                onPress={() => setCurrentPage(currentPage - 1)}
+                disabled={currentPage === 0}
+              >
+                <Text style={styles.paginationButtonText}>← 前へ</Text>
+              </TouchableOpacity>
+              <Text style={styles.paginationInfo}>
+                {currentPage + 1} / {Math.ceil(prompts.length / ITEMS_PER_PAGE)}
+              </Text>
+              <TouchableOpacity
+                style={[
+                  styles.paginationButton,
+                  currentPage >= Math.ceil(prompts.length / ITEMS_PER_PAGE) - 1 && styles.paginationButtonDisabled,
+                ]}
+                onPress={() => setCurrentPage(currentPage + 1)}
+                disabled={currentPage >= Math.ceil(prompts.length / ITEMS_PER_PAGE) - 1}
+              >
+                <Text style={styles.paginationButtonText}>次へ →</Text>
+              </TouchableOpacity>
+            </View>
           </View>
         </ScrollView>
       </SafeAreaView>
@@ -219,10 +321,33 @@ export default function WritingScreen() {
   if (screen === 'editor' && currentPrompt) {
     return (
       <SafeAreaView style={styles.container}>
-        <ScrollView showsVerticalScrollIndicator={false}>
+        <ConfirmationModal
+          visible={showConfirmUnsaved}
+          title="未保存のデータ"
+          message="入力されたエッセイが保存されません。よろしいですか？"
+          icon="⚠️"
+          confirmText="破棄"
+          cancelText="キャンセル"
+          isDestructive={true}
+          onConfirm={() => {
+            setShowConfirmUnsaved(false);
+            if (pendingBackNavigation) {
+              handleBackToSelect();
+            }
+          }}
+          onCancel={() => {
+            setShowConfirmUnsaved(false);
+            setPendingBackNavigation(false);
+          }}
+        />
+
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={{ paddingBottom: 100 }}
+        >
           {/* Header */}
           <View style={styles.editorHeader}>
-            <TouchableOpacity onPress={handleBackToSelect}>
+            <TouchableOpacity onPress={handleBackToSelectWithCheck}>
               <Text style={styles.backButton}>← 戻る</Text>
             </TouchableOpacity>
             <Text style={styles.editorTitle}>{currentPrompt.topic}</Text>
@@ -254,20 +379,13 @@ export default function WritingScreen() {
 
           {/* Text Editor */}
           <View style={styles.editorContainer}>
-            <View style={styles.editorHeader2}>
-              <Text style={styles.editorLabel}>エッセイを入力</Text>
-              <Text style={styles.wordCount}>
-                {currentContent.length} / {currentPrompt.wordLimit * 1.5}文字
-              </Text>
-            </View>
-            <TextInput
-              style={styles.textInput}
-              placeholder="ここにエッセイを入力してください..."
-              placeholderTextColor="#999"
-              multiline
+            <InputWithValidation
               value={currentContent}
               onChangeText={setCurrentContent}
+              minLength={currentPrompt.wordLimit * 0.8}
               maxLength={currentPrompt.wordLimit * 2}
+              placeholder="ここにエッセイを入力してください..."
+              label="エッセイを入力"
             />
           </View>
 
@@ -287,21 +405,21 @@ export default function WritingScreen() {
             </View>
           )}
 
-          {/* Submit Button */}
-          <TouchableOpacity
-            style={[styles.submitButton, isScoring && styles.submitButtonDisabled]}
-            onPress={handleSubmitEssay}
-            disabled={isScoring}
-          >
-            {isScoring ? (
-              <ActivityIndicator color="#fff" />
-            ) : (
-              <>
-                <Text style={styles.submitButtonIcon}>✓</Text>
-                <Text style={styles.submitButtonText}>AI 採点に送信</Text>
-              </>
-            )}
-          </TouchableOpacity>
+          {/* Submit Button with Loading State */}
+          {isScoring ? (
+            <View style={[styles.submitButton, styles.submitButtonDisabled]}>
+              <SkeletonLoader count={1} type="form" />
+            </View>
+          ) : (
+            <TouchableOpacity
+              style={styles.submitButton}
+              onPress={handleSubmitEssay}
+              disabled={isScoring}
+            >
+              <Text style={styles.submitButtonIcon}>✓</Text>
+              <Text style={styles.submitButtonText}>AI 採点に送信</Text>
+            </TouchableOpacity>
+          )}
 
           {/* Info */}
           <View style={styles.infoBox}>
@@ -331,36 +449,35 @@ export default function WritingScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.light.background,
+    backgroundColor: NaturalColors.background,
   },
   header: {
-    paddingHorizontal: Spacing.xl,
-    paddingTop: Spacing.lg,
-    paddingBottom: Spacing.md,
+    paddingHorizontal: Spacing.md,
+    paddingTop: Spacing.sm,
+    paddingBottom: Spacing.xs,
   },
   title: {
-    fontSize: 28,
+    fontSize: 22,
     fontWeight: '800',
     color: Colors.light.text,
-    marginBottom: Spacing.sm,
   },
   subtitle: {
-    fontSize: 14,
+    fontSize: 12,
     color: Colors.light.textSecondary,
-    fontWeight: '500',
+    fontWeight: '400',
   },
   section: {
-    marginHorizontal: Spacing.xl,
-    marginTop: Spacing.xl,
-    marginBottom: Spacing.lg,
+    marginHorizontal: Spacing.lg,
+    marginTop: Spacing.lg,
+    marginBottom: Spacing.md,
   },
   statsRow: {
     flexDirection: 'row',
-    gap: Spacing.lg,
+    gap: Spacing.sm,
   },
   statBox: {
     flex: 1,
-    paddingVertical: Spacing.lg,
+    paddingVertical: Spacing.md,
     backgroundColor: Colors.light.surfaceCard,
     borderRadius: BorderRadius.lg,
     alignItems: 'center',
@@ -368,13 +485,11 @@ const styles = StyleSheet.create({
   },
   statEmoji: {
     fontSize: 24,
-    marginBottom: Spacing.sm,
   },
   statValue: {
     fontSize: 20,
     fontWeight: '700',
     color: Colors.light.primary,
-    marginBottom: Spacing.xs,
   },
   statLabel: {
     fontSize: 12,
@@ -382,21 +497,20 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
   scoringGuide: {
-    padding: Spacing.lg,
+    padding: Spacing.md,
     backgroundColor: Colors.light.surfaceCard,
     borderRadius: BorderRadius.lg,
     ...Shadows.xs,
   },
   scoringTitle: {
-    fontSize: 14,
+    fontSize: 13,
     fontWeight: '700',
     color: Colors.light.text,
-    marginBottom: Spacing.md,
   },
   scoringItem: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    paddingVertical: Spacing.sm,
+    paddingVertical: Spacing.md,
     borderBottomWidth: 1,
     borderBottomColor: Colors.light.border,
   },
@@ -411,29 +525,28 @@ const styles = StyleSheet.create({
     fontWeight: '700',
   },
   sectionTitle: {
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: '700',
     color: Colors.light.text,
-    marginBottom: Spacing.lg,
   },
   promptCard: {
     flexDirection: 'row',
-    paddingHorizontal: Spacing.lg,
+    paddingHorizontal: Spacing.md,
     paddingVertical: Spacing.lg,
     backgroundColor: Colors.light.surfaceCard,
     borderRadius: BorderRadius.lg,
-    marginBottom: Spacing.lg,
     alignItems: 'flex-start',
+    marginBottom: Spacing.md,
     ...Shadows.xs,
   },
   promptNumber: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
+    width: 36,
+    height: 36,
+    borderRadius: 18,
     backgroundColor: Colors.light.primaryLight,
     justifyContent: 'center',
     alignItems: 'center',
-    marginRight: Spacing.lg,
+    marginRight: Spacing.md,
   },
   promptNumberText: {
     fontSize: 12,
@@ -447,24 +560,22 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: Spacing.sm,
   },
   promptTopic: {
-    fontSize: 15,
+    fontSize: 14,
     fontWeight: '700',
     color: Colors.light.text,
     flex: 1,
   },
   difficulty: {
-    fontSize: 12,
+    fontSize: 11,
     color: Colors.light.textSecondary,
     fontWeight: '500',
   },
   promptDescription: {
-    fontSize: 14,
+    fontSize: 13,
     color: Colors.light.text,
-    lineHeight: 20,
-    marginBottom: Spacing.md,
+    lineHeight: 18,
   },
   promptCardFooter: {
     flexDirection: 'row',
@@ -481,6 +592,38 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: Colors.light.primary,
     fontWeight: '700',
+  },
+
+  // Pagination
+  paginationContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingVertical: Spacing.md,
+    marginTop: Spacing.xs,
+  },
+  paginationButton: {
+    paddingHorizontal: Spacing.md,
+    paddingVertical: Spacing.md,
+    backgroundColor: Colors.light.primaryLight,
+    borderRadius: BorderRadius.lg,
+    borderWidth: 1,
+    borderColor: Colors.light.primary,
+  },
+  paginationButtonDisabled: {
+    backgroundColor: Colors.light.backgroundAlt,
+    borderColor: Colors.light.border,
+    opacity: 0.5,
+  },
+  paginationButtonText: {
+    fontSize: 12,
+    color: Colors.light.primary,
+    fontWeight: '600',
+  },
+  paginationInfo: {
+    fontSize: 12,
+    color: Colors.light.textSecondary,
+    fontWeight: '600',
   },
 
   // Editor Screen
@@ -548,33 +691,6 @@ const styles = StyleSheet.create({
   editorContainer: {
     marginHorizontal: 24,
     marginTop: 16,
-  },
-  editorHeader2: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 8,
-  },
-  editorLabel: {
-    fontSize: 13,
-    fontWeight: '600',
-    color: '#333',
-  },
-  wordCount: {
-    fontSize: 12,
-    color: '#999',
-  },
-  textInput: {
-    backgroundColor: '#fff',
-    borderRadius: 8,
-    paddingHorizontal: 16,
-    paddingVertical: 14,
-    fontSize: 14,
-    color: '#333',
-    minHeight: 200,
-    textAlignVertical: 'top',
-    borderWidth: 1,
-    borderColor: '#ddd',
   },
   imagePreviewContainer: {
     marginHorizontal: 24,

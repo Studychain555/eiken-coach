@@ -1,0 +1,11 @@
+id,word,reading,part_of_speech,meaning_jp,example_sentence,example_translation,difficulty,frequency,choice1_meaning,choice1_is_correct,choice2_meaning,choice2_is_correct,choice3_meaning,choice3_is_correct,choice4_meaning,choice4_is_correct,eiken_level
+20f6f901-24d4-438e-8d54-f69a4bd40142,aberration,ˌæbəˈreɪʃən,noun,逸脱,This behavior is an aberration from the norm.,この振る舞いは規範からの逸脱です。,3,2,逸脱,True,抽象化,False,誤謬,False,偏差,False,pre_1st
+88bc1097-2035-4715-9c63-e6a15278c93b,ambiguous,æmˈbɪɡjuəs,adjective,曖昧な,The statement is ambiguous and can be interpreted in multiple ways.,その声明は曖昧で、複数の方法で解釈できます。,3,3,曖昧な,True,不明確な,False,複雑な,False,疑わしい,False,pre_1st
+be9e28f7-a529-48e2-a9f8-7d6d9ba2046a,analogous,əˈnæləɡəs,adjective,類似の,This situation is analogous to what happened last year.,この状況は昨年起こったことに類似しています。,3,2,類似の,True,平行の,False,正確な,False,均等な,False,pre_1st
+c91b4355-c9b4-4e4d-9078-bca78724b1ef,antagonism,ænˈtæɡənɪzəm,noun,対抗,There is deep antagonism between the two groups.,2つのグループ間に深い敵意があります。,3,2,対抗,True,対比,False,矛盾,False,対立,False,pre_1st
+a2689dea-6a53-482a-beaf-37528149ea0b,arbitrary,ˈɑrbɪˌtreri,adjective,恣意的な,The decision seemed arbitrary and unfair.,その決定は恣意的で不公平に見えました。,3,2,恣意的な,True,根拠のない,False,不合理な,False,専断的な,False,pre_1st
+37dcda15-6d9a-4866-ab33-fc934807945c,articulate,ɑrˈtɪkjələt,verb,表現する,She articulated her concerns clearly.,彼女は彼女の懸念を明確に表現しました。,3,2,表現する,True,関連させる,False,区別する,False,証明する,False,pre_1st
+e76a952c-df39-4f03-afda-06c351e4cdfd,ascertain,ˌæsərˈteɪn,verb,確認する,We need to ascertain the facts before proceeding.,進める前に事実を確認する必要があります。,3,2,確認する,True,仮定する,False,計算する,False,検査する,False,pre_1st
+235f5da2-2bcc-4358-8aaa-5e20b4979324,astonish,əˈstɑnɪʃ,verb,驚かす,The news astonished everyone in the room.,ニュースは部屋の誰もが驚きました。,2,2,驚かす,True,混乱させる,False,怒らせる,False,説得する,False,pre_1st
+b4df1ceb-c4db-4577-b6c0-40ee1c4a8e9a,attain,əˈteɪn,verb,達成する,She worked hard to attain her goals.,彼女は彼女の目標を達成するために懸命に働きました。,2,2,達成する,True,理解する,False,探す,False,支援する,False,pre_1st
+f5445a68-ba92-4ab7-a4ac-92a0fc65f21a,attest,əˈtest,verb,証言する,Multiple witnesses can attest to his innocence.,複数の証人が彼の無実を証言できます。,3,2,証言する,True,反対する,False,検査する,False,文句を言う,False,pre_1st

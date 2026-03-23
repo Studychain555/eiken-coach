@@ -1,0 +1,21 @@
+id,word,reading,part_of_speech,meaning_jp,example_sentence,example_translation,difficulty,frequency,choice1_meaning,choice1_is_correct,choice2_meaning,choice2_is_correct,choice3_meaning,choice3_is_correct,choice4_meaning,choice4_is_correct
+5745b6a9-a484-4aea-95c0-be028efb845c,ability,əˈbɪləti,noun,能力、才能,She has the ability to speak three languages.,彼女は3言語を話す能力があります。,1,5,能力、才能,True,可能性、見込み,False,責任、義務,False,知識、学問,False
+16b1cf3b-19c2-4a9f-bc82-73b2d5a6538b,accommodate,əˈkɑmədeɪt,verb,宿泊させる、対応する,The hotel can accommodate 500 guests.,ホテルは500人の客を受け入れることができます。,2,3,宿泊させる、対応する,True,装備する、備える,False,見守る、監視する,False,飾る、装飾する,False
+21d60b57-6ba3-4d80-a5d3-48db1c73f64d,achievement,əˈtʃiːvmənt,noun,成果、達成,His academic achievement was impressive.,彼の学業成果は印象的でした。,1,4,成果、達成,True,努力、試み,False,富、資産,False,計画、構想,False
+32b149e7-5b44-4937-b009-34784e0db721,acquire,əˈkwaɪər,verb,取得する、習得する,You can acquire new skills through practice.,練習を通じて新しいスキルを習得できます。,2,4,取得する、習得する,True,求める、要求する,False,応じる、答える,False,認める、承認する,False
+a5e1b961-7e69-4038-a8e1-4e81267ec46a,adapt,əˈdæpt,verb,適応する、順応する,People adapt to new environments over time.,人々は時間とともに新しい環境に適応します。,1,4,適応する、順応する,True,採用する、取り入れる,False,装着する、取り付ける,False,調整する、修正する,False
+066bdc2b-a46d-4d28-b77b-56f60093814c,adequate,ˈædɪkwət,adjective,十分な、妥当な,The budget is adequate for the project., 予算はプロジェクトに十分です。,2,3,十分な、妥当な,True,適切な、ふさわしい,False,完全な、完璧な,False,素晴らしい、素敵な,False
+e86a419d-8424-4c25-b0f6-6ccdc908607d,advantage,ədˈvæntɪdʒ,noun,利点、有利な立場,Technology gives us many advantages.,技術は私たちに多くの利点をもたらします。,1,4,利点、有利な立場,True,進歩、改善,False,許可、同意,False,進展、発展,False
+53970922-1851-4177-9776-b2e46ea35bd0,advise,ədˈvaɪz,verb,忠告する、助言する,I advise you to study harder.,もっと一生懸命勉強することをお勧めします。,1,4,忠告する、助言する,True,宣伝する、告知する,False,激励する、勇気付ける,False,推奨する、提案する,False
+a4206d5b-784b-487d-845f-9a2fe1eccba4,afford,əˈfɔrd,verb,余裕がある、負担できる,Can you afford this car?,この車を買う余裕がありますか？,1,3,余裕がある、負担できる,True,提供する、与える,False,得る、獲得する,False,見つける、発見する,False
+2f8d6469-ea00-4c89-b47f-115e4691fbf9,agreement,əˈɡriːmənt,noun,同意、合意,They reached an agreement on the contract.,彼らは契約について合意に達しました。,1,4,同意、合意,True,議論、討論,False,不満、不平,False,確認、検証,False
+4659d334-ad8b-43bc-9151-5ac879def6f8,abundance,əˈbʌndəns,noun,豊富、大量,The abundance of resources in the region is remarkable.,その地域の豊富なリソースは注目に値します。,2,3,豊富、大量,True,増加、上昇,False,富、財産,False,存在、存在物,False
+33b4b94b-133b-4beb-b381-4ecf90521093,abstract,ˈæbstrækt,adjective,抽象的な、理論的な,Mathematics deals with abstract concepts.,数学は抽象的な概念を扱っています。,2,3,抽象的な、理論的な,True,漠然とした、曖昧な,False,難しい、複雑な,False,簡潔な、要約した,False
+d82479bb-64b0-4bf8-9485-9add90300ace,accelerate,ækˈseləreɪt,verb,加速する、速める,The car accelerated on the highway.,車は高速道路で加速しました。,2,3,加速する、速める,True,上昇する、登る,False,始まる、開始する,False,完了する、終わる,False
+20ce1163-bf98-41de-961f-e7d4b0df1a6e,accommodate,əˈkɑmədeɪt,verb,宿泊させる、対応する,The hotel accommodates 500 guests per night.,ホテルは1晩に500人の客を受け入れます。,2,3,宿泊させる、対応する,True,一致する、合致する,False,補足する、付け加える,False,逆らう、反対する,False
+c49744a6-9f6e-445a-a964-79e71fcbb493,accomplish,əˈkɑmplɪʃ,verb,成し遂げる、達成する,He accomplished his goals through hard work.,彼は懸命な努力を通じて目標を達成しました。,2,3,成し遂げる、達成する,True,補完する、補う,False,計算する、算出する,True,伴う、付き添う,False
+8fae1842-6a45-46a9-b629-ae1381504ccb,ambiguous,æmˈbɪɡjuəs,adjective,曖昧な、あいまいな,The statement is ambiguous and can be interpreted in multiple ways.,その声明は曖昧で、複数の方法で解釈できます。,3,3,曖昧な、あいまいな,True,不明確な、はっきりしない,False,複雑な、難しい,False,疑わしい、怪しい,False
+f6dcfdab-99d3-447c-b134-d636a0073f11,analogous,əˈnæləɡəs,adjective,類似の、相当する,This situation is analogous to what happened last year.,この状況は昨年起こったことに類似しています。,3,2,類似の、相当する,True,平行の、並行の,False,正確な、精密な,False,均等な、公平な,False
+99c3be57-f915-483e-af41-3c5a789cc12d,antagonism,ænˈtæɡənɪzəm,noun,対抗、敵意,There is deep antagonism between the two groups.,2つのグループ間に深い敵意があります。,3,2,対抗、敵意,True,対比、比較,False,矛盾、不一致,False,対立、紛争,False
+c3df9ddc-685f-4089-a2be-246685b25c56,arbitrary,ˈɑrbɪˌtrer i,adjective,恣意的な、気ままな,The decision seemed arbitrary and unfair.,その決定は恣意的で不公平に見えました。,3,2,恣意的な、気ままな,True,根拠のない、無根拠な,False,不合理な、理不尽な,False,専断的な、独裁的な,False
+19970d47-625d-4917-8912-d2c48ff36214,articulate,ɑrˈtɪkjələt,verb/adjective,表現する、明確に述べる,She articulated her concerns clearly and persuasively.,彼女は彼女の懸念を明確かつ説得力を持って表現しました。,3,2,表現する、明確に述べる,True,関連させる、つなげる,False,区別する、区分する,False,証明する、立証する,False

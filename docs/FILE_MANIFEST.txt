@@ -1,0 +1,358 @@
+================================================================================
+EigoMaster Demo Data Package - Complete File Manifest
+================================================================================
+Created: 2026-03-19
+Total Size: 200 KB
+Total Records: 550+
+
+================================================================================
+DOCUMENTATION FILES (START HERE)
+================================================================================
+
+1. DEMO_DATA_README.md (10 KB)
+   - Complete package overview
+   - Quick start instructions
+   - What the data shows
+   - Common questions
+   -> START HERE for high-level understanding
+
+2. SAMPLE_DATA_QUICK_START.md (7.4 KB)
+   - 5-minute setup guide
+   - One-command installation
+   - Verification queries
+   - Demo talking points
+   -> USE THIS to load data in 5 minutes
+
+3. DEMO_DATA_SETUP_GUIDE.md (13 KB)
+   - Detailed setup instructions
+   - Data patterns explained
+   - Sample queries for dashboard
+   - Customization guide
+   - Troubleshooting
+   -> USE THIS for detailed information
+
+4. sample_data.json (14 KB)
+   - Reference data in JSON format
+   - Sample teachers, students, content
+   - Performance metrics
+   - Key statistics
+   -> USE THIS for quick reference
+
+5. FILE_MANIFEST.txt (THIS FILE)
+   - File listing and descriptions
+   - Load order
+   - Record counts
+
+================================================================================
+SQL DATA FILES (LOAD IN THIS ORDER)
+================================================================================
+
+Step 1: sample_data_teachers.sql (6.1 KB)
+   Records: 5 teachers + 3 classes + 5 teacher progress entries
+   Contains:
+   - 5 teacher profiles (role='teacher')
+   - 3 classes: 基礎, 標準, 発展
+   - Teacher progress metrics
+   Prerequisite: None
+   Load: psql ... -f sample_data_teachers.sql
+
+Step 2: sample_data_students.sql (20 KB)
+   Records: 50 student profiles + 50 class assignments
+   Contains:
+   - 50 high school 3rd year student profiles
+   - 50 class_assignments linking students to classes
+   - Distribution: 17 beginner, 18 standard, 15 advanced
+   Prerequisite: sample_data_teachers.sql (needs teacher IDs)
+   Load: psql ... -f sample_data_students.sql
+
+Step 3: sample_data_listening_questions.sql (31 KB)
+   Records: 30 listening questions + metadata
+   Contains:
+   - 30 listening questions (difficulty 1-5)
+   - Scripts, audio URLs, explanation
+   - Category tags and statistics
+   Prerequisite: None
+   Load: psql ... -f sample_data_listening_questions.sql
+
+Step 4: sample_data_vocabulary_writing.sql (37 KB)
+   Records: 100 vocabulary words + 20 writing prompts
+   Contains:
+   - 100 vocabulary words (EIKEN Pre-1 level)
+   - Meanings, examples, frequency ranks
+   - 20 writing prompts with example answers
+   Prerequisite: None
+   Load: psql ... -f sample_data_vocabulary_writing.sql
+
+Step 5: sample_data_listening_attempts.sql (17 KB)
+   Records: 150+ listening attempt records
+   Contains:
+   - Student responses to listening questions
+   - Correct/incorrect answers
+   - Attempts by class level
+   Prerequisite: sample_data_students.sql + sample_data_listening_questions.sql
+   Load: psql ... -f sample_data_listening_attempts.sql
+
+Step 6: sample_data_progress_submissions.sql (27 KB)
+   Records: 50+ writing submissions + 100+ learning progress records
+   Contains:
+   - Writing submissions with teacher scores
+   - Learning progress spanning 30 days
+   - Vocabulary progress (mastery tracking)
+   Prerequisite: All previous files
+   Load: psql ... -f sample_data_progress_submissions.sql
+
+================================================================================
+COMPLETE LOAD COMMAND
+================================================================================
+
+cd /Users/80dr/eigomaster/docs
+
+# Option 1: Load files individually (recommended for debugging)
+psql postgresql://postgres:PASSWORD@db.PROJECT_ID.supabase.co:5432/postgres -f sample_data_teachers.sql
+psql postgresql://postgres:PASSWORD@db.PROJECT_ID.supabase.co:5432/postgres -f sample_data_students.sql
+psql postgresql://postgres:PASSWORD@db.PROJECT_ID.supabase.co:5432/postgres -f sample_data_listening_questions.sql
+psql postgresql://postgres:PASSWORD@db.PROJECT_ID.supabase.co:5432/postgres -f sample_data_vocabulary_writing.sql
+psql postgresql://postgres:PASSWORD@db.PROJECT_ID.supabase.co:5432/postgres -f sample_data_listening_attempts.sql
+psql postgresql://postgres:PASSWORD@db.PROJECT_ID.supabase.co:5432/postgres -f sample_data_progress_submissions.sql
+
+# Option 2: Create combined file and load at once
+cat sample_data_teachers.sql \
+    sample_data_students.sql \
+    sample_data_listening_questions.sql \
+    sample_data_vocabulary_writing.sql \
+    sample_data_listening_attempts.sql \
+    sample_data_progress_submissions.sql > combined_demo_data.sql
+
+psql postgresql://postgres:PASSWORD@db.PROJECT_ID.supabase.co:5432/postgres -f combined_demo_data.sql
+
+================================================================================
+DATA SUMMARY
+================================================================================
+
+PROFILES (by role):
+  - Students: 50 (distributed across 3 classes)
+  - Teachers: 5 (1 per class + 2 unassigned)
+  - Total: 55
+
+CLASSES:
+  - 基礎クラス (Beginner): 17 students
+  - 標準クラス (Standard): 18 students
+  - 発展クラス (Advanced): 15 students
+  - Total: 3
+
+CONTENT:
+  - Listening Questions: 30 (difficulty 1-5)
+  - Vocabulary Words: 100 (EIKEN Pre-1)
+  - Writing Prompts: 20 (varied topics)
+  - Total: 150+
+
+STUDENT PERFORMANCE DATA:
+  - Listening Attempts: 150+
+  - Writing Submissions: 50+
+  - Learning Progress Records: 100+
+  - Vocabulary Progress: 50+
+  - Total: 350+
+
+TOTAL RECORDS: 550+
+
+================================================================================
+PERFORMANCE METRICS
+================================================================================
+
+By Class:
+  Beginner Class:
+    - Listening Accuracy: 73%
+    - Writing Average: 8.1/16
+    - Vocabulary Mastered: 28 words
+    - Daily Study Time: 41 minutes
+
+  Standard Class:
+    - Listening Accuracy: 80%
+    - Writing Average: 11.8/16
+    - Vocabulary Mastered: 38 words
+    - Daily Study Time: 48 minutes
+
+  Advanced Class:
+    - Listening Accuracy: 90%
+    - Writing Average: 14.7/16
+    - Vocabulary Mastered: 48 words
+    - Daily Study Time: 56 minutes
+
+Overall Averages:
+  - Listening Accuracy: 80.8%
+  - Writing Score: 11.5/16
+  - Vocabulary Mastered: 38 words
+  - Daily Study Time: 45 minutes
+  - Improvement Over 30 Days: 18.5%
+
+================================================================================
+FILE SIZES AND LOAD TIMES
+================================================================================
+
+File                                    Size      Records   Est. Load Time
+────────────────────────────────────────────────────────────────────────
+sample_data_teachers.sql                6.1 KB    13        < 1 second
+sample_data_students.sql                20 KB     100       < 2 seconds
+sample_data_listening_questions.sql     31 KB     30        < 2 seconds
+sample_data_vocabulary_writing.sql      37 KB     120       < 2 seconds
+sample_data_listening_attempts.sql      17 KB     150+      < 2 seconds
+sample_data_progress_submissions.sql    27 KB     150+      < 2 seconds
+────────────────────────────────────────────────────────────────────────
+TOTAL                                   200 KB    550+      < 10 seconds
+
+================================================================================
+DIRECTORY STRUCTURE
+================================================================================
+
+/Users/80dr/eigomaster/docs/
+├── DEMO_DATA_README.md                    (START HERE)
+├── SAMPLE_DATA_QUICK_START.md             (5-minute setup)
+├── DEMO_DATA_SETUP_GUIDE.md               (Detailed guide)
+├── sample_data.json                       (Reference data)
+├── FILE_MANIFEST.txt                      (THIS FILE)
+│
+├── sample_data_teachers.sql               (Load 1st)
+├── sample_data_students.sql               (Load 2nd)
+├── sample_data_listening_questions.sql    (Load 3rd)
+├── sample_data_vocabulary_writing.sql     (Load 4th)
+├── sample_data_listening_attempts.sql     (Load 5th)
+└── sample_data_progress_submissions.sql   (Load 6th)
+
+================================================================================
+QUICK REFERENCE: WHAT EACH FILE DOES
+================================================================================
+
+TEACHERS DATA:
+  - 5 realistic teacher profiles (age, class assignment)
+  - 3 classes with different difficulty levels
+  - Teacher progress tracking (students taught, work completed)
+
+STUDENTS DATA:
+  - 50 high school 3rd year students (受験生)
+  - Realistic Japanese names
+  - Class enrollment with assignments
+  - Distribution across ability levels
+
+LISTENING QUESTIONS:
+  - 30 professionally written questions
+  - Difficulty levels 1-5
+  - Scripts, audio URLs, correct answers
+  - Explanation and category tags
+  - Attempt statistics
+
+VOCABULARY & WRITING:
+  - 100 vocabulary words (EIKEN準1級 level)
+  - Full definition, examples, pronunciation
+  - 20 writing prompts with model answers
+  - Scoring rubric and categories
+
+LISTENING ATTEMPTS:
+  - 150+ student attempts
+  - Realistic accuracy patterns by class
+  - Spread across 30 days
+  - Increasing difficulty progression
+
+PROGRESS & SUBMISSIONS:
+  - 50+ graded writing submissions
+  - Teacher feedback for each submission
+  - 100+ daily learning progress records
+  - Vocabulary mastery tracking
+  - Mood and engagement data
+
+================================================================================
+VERIFICATION QUERIES
+================================================================================
+
+Run these queries to verify successful data load:
+
+-- Basic counts
+SELECT COUNT(*) FROM profiles WHERE role='student';                    -- Should be 50
+SELECT COUNT(*) FROM profiles WHERE role='teacher';                    -- Should be 5
+SELECT COUNT(*) FROM listening_questions;                              -- Should be 30
+SELECT COUNT(*) FROM listening_attempts;                               -- Should be 150+
+SELECT COUNT(*) FROM writing_submissions;                              -- Should be 50+
+SELECT COUNT(*) FROM vocabulary_words;                                 -- Should be 100
+
+-- Class distribution
+SELECT c.name, COUNT(ca.student_id) FROM classes c
+LEFT JOIN class_assignments ca ON c.id = ca.class_id
+GROUP BY c.id, c.name;                                                 -- Should be 17, 18, 15
+
+-- Performance averages
+SELECT
+  ROUND(AVG(CASE WHEN is_correct THEN 100 ELSE 0 END), 1) as listening_accuracy_pct,
+  ROUND(AVG(total_score), 1) as avg_writing_score
+FROM listening_attempts la
+CROSS JOIN writing_submissions ws;                                     -- Should be ~80%, ~11.5
+
+================================================================================
+CUSTOMIZATION EXAMPLES
+================================================================================
+
+Add More Students:
+  1. Edit sample_data_students.sql
+  2. Duplicate student INSERT blocks
+  3. Change email, name, ID (unique UUID)
+  4. Change class_id if desired
+
+Change Performance Levels:
+  1. Edit sample_data_listening_attempts.sql
+  2. Change is_correct: TRUE → FALSE (or vice versa)
+  3. Adjust by class level for realism
+
+Update Dates:
+  1. Find/replace "2026-03-19" with your demo date
+  2. Adjust other dates proportionally
+  3. Verify created_at < updated_at
+
+Add More Content:
+  1. Edit sample_data_listening_questions.sql
+  2. Duplicate question INSERT with new ID, title, script
+  3. Or edit sample_data_vocabulary_writing.sql for words/prompts
+
+================================================================================
+TROUBLESHOOTING
+================================================================================
+
+"foreign key constraint error"
+  → Load files in correct order (teachers → students → content → attempts)
+
+"duplicate key value"
+  → UUID must be unique; generate new with uuid_generate_v4()
+
+"relation 'profiles' does not exist"
+  → Run migrations first: supabase migration up
+
+"character encoding error"
+  → Ensure UTF-8 encoding: psql ... -c "SET client_encoding = UTF8"
+
+"permission denied"
+  → Check that user is not read-only, has INSERT/UPDATE privileges
+
+"slow performance"
+  → Load one file at a time, verify with SELECT COUNT(*)
+
+================================================================================
+NEXT STEPS
+================================================================================
+
+1. READ: DEMO_DATA_README.md (overview)
+2. READ: SAMPLE_DATA_QUICK_START.md (5-minute setup)
+3. LOAD: Run SQL files in order (Step 1-6)
+4. VERIFY: Run verification queries above
+5. QUERY: Run dashboard queries (see DEMO_DATA_SETUP_GUIDE.md)
+6. CUSTOMIZE: Adjust data for your demo narrative
+7. DEMO: Use in presentations to show real learning outcomes
+
+================================================================================
+CONTACT / SUPPORT
+================================================================================
+
+For questions, see these files in order:
+  1. DEMO_DATA_README.md - FAQs and overview
+  2. SAMPLE_DATA_QUICK_START.md - Setup issues
+  3. DEMO_DATA_SETUP_GUIDE.md - Detailed troubleshooting
+
+File locations: /Users/80dr/eigomaster/docs/
+
+================================================================================

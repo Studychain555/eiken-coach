@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -9,6 +9,7 @@ import {
   Dimensions,
 } from 'react-native';
 import { useWritingStore } from '@/src/stores/writingStore';
+import { CelebrationAnimation } from './CelebrationAnimation';
 
 interface Props {
   onBack: () => void;
@@ -22,6 +23,13 @@ export default function WritingResultScreen({ onBack, onResubmit }: Props) {
   const [expandedSection, setExpandedSection] = useState<string | null>(
     'feedback'
   );
+  const [showCelebration, setShowCelebration] = useState(true);
+
+  // Auto-hide celebration after mount
+  useEffect(() => {
+    const timer = setTimeout(() => setShowCelebration(false), 3000);
+    return () => clearTimeout(timer);
+  }, []);
 
   // 最新の提出を取得
   const latestSubmission = submissions[submissions.length - 1];
@@ -56,6 +64,13 @@ export default function WritingResultScreen({ onBack, onResubmit }: Props) {
 
   return (
     <SafeAreaView style={styles.container}>
+      {/* Celebration Animation Overlay */}
+      <CelebrationAnimation
+        type="confetti"
+        trigger={showCelebration}
+        onComplete={() => setShowCelebration(false)}
+      />
+
       <ScrollView showsVerticalScrollIndicator={false}>
         {/* Header */}
         <View style={styles.header}>

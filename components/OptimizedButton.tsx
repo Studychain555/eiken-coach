@@ -8,7 +8,7 @@ import {
   ViewStyle,
   TextStyle,
 } from 'react-native';
-import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/theme';
+import { Colors, Spacing, BorderRadius, Shadows, Typography, NaturalColors } from '@/constants/theme';
 
 interface OptimizedButtonProps {
   label: string;
@@ -64,34 +64,39 @@ export function OptimizedButton({
 
   const variantStyles = {
     primary: {
-      background: Colors.light.primary,
+      background: NaturalColors.primary,
       text: '#ffffff',
-      shadow: Shadows.md,
+      border: NaturalColors.primary,
+      shadow: { width: 0, height: 2, opacity: 0.15, radius: 8 },
     },
     secondary: {
-      background: Colors.light.backgroundAlt,
-      text: Colors.light.primary,
-      shadow: Shadows.sm,
+      background: NaturalColors.cardBg,
+      text: NaturalColors.primary,
+      border: NaturalColors.secondary,
+      shadow: { width: 0, height: 1, opacity: 0.08, radius: 4 },
     },
     success: {
-      background: Colors.light.success,
+      background: NaturalColors.success,
       text: '#ffffff',
-      shadow: Shadows.md,
+      border: NaturalColors.success,
+      shadow: { width: 0, height: 2, opacity: 0.15, radius: 8 },
     },
     warning: {
-      background: Colors.light.warning,
+      background: NaturalColors.warning,
       text: '#ffffff',
-      shadow: Shadows.md,
+      border: NaturalColors.warning,
+      shadow: { width: 0, height: 2, opacity: 0.15, radius: 8 },
     },
     danger: {
-      background: Colors.light.error,
+      background: NaturalColors.error,
       text: '#ffffff',
-      shadow: Shadows.md,
+      border: NaturalColors.error,
+      shadow: { width: 0, height: 2, opacity: 0.15, radius: 8 },
     },
     outline: {
       background: 'transparent',
-      text: Colors.light.primary,
-      border: Colors.light.primary,
+      text: NaturalColors.primary,
+      border: NaturalColors.primary,
       shadow: null,
     },
   };

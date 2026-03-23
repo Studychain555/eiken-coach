@@ -39,7 +39,7 @@ export function initSentry(environment: 'production' | 'staging' | 'development'
 
     // パフォーマンスモニタリング
     integrations: [
-      new Sentry.ReactNativeTracing({
+      new (Sentry as any).ReactNativeTracing({
         enableNativeFramesTracking: true,
         enableStallTracking: true,
         enableAppStartTracking: true,
@@ -124,7 +124,7 @@ export function captureMessage(message: string, level: Sentry.SeverityLevel = 'i
  * @param name メトリクス名
  */
 export function startPerformanceTrace(name: string) {
-  return Sentry.startTransaction({
+  return (Sentry as any).startTransaction({
     name,
     op: 'measure',
   });
@@ -134,7 +134,7 @@ export function startPerformanceTrace(name: string) {
  * パフォーマンスメトリクスの計測終了
  * @param transaction トランザクション
  */
-export function finishPerformanceTrace(transaction: Sentry.Transaction) {
+export function finishPerformanceTrace(transaction: any) {
   transaction.finish();
 }
 

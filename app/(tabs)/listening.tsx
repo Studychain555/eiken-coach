@@ -12,10 +12,15 @@ import { useListeningStore } from '@/src/stores/listeningStore';
 import { LISTENING_SAMPLE_DATA } from '@/src/lib/listeningData';
 import ListeningQuestionScreen from '@/src/components/ListeningQuestionScreen';
 import ListeningResultScreen from '@/src/components/ListeningResultScreen';
-import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/theme';
+import ShadowingScreen from '@/src/components/ShadowingScreen';
+import type { ListeningQuestion } from '@/src/lib/listeningData';
+import { Colors, Spacing, BorderRadius, Shadows, Typography, DuolingoColors, NaturalColors } from '@/constants/theme';
 import { EnhancedProgressBar } from '@/components/EnhancedProgressBar';
+import { ErrorScreen } from '@/src/components/ErrorScreen';
+import { EmptyState } from '@/src/components/EmptyState';
+import { SkeletonLoader } from '@/src/components/SkeletonLoader';
 
-type Screen = 'list' | 'question' | 'result';
+type Screen = 'list' | 'question' | 'result' | 'shadowing';
 
 const DIFFICULTY_LABELS: Record<number, string> = {
   1: '★☆☆☆☆',
@@ -36,13 +41,32 @@ export default function ListeningScreen() {
     getTodayStats,
     completedCount,
     totalCount,
+    isLoading,
+    // Error handling
+    syncError,
+    setSyncError,
+    retry,
   } = useListeningStore();
 
   const [screen, setScreen] = useState<Screen>('list');
+  const [shadowingQuestion, setShadowingQuestion] = useState<ListeningQuestion | null>(null);
 
   useEffect(() => {
     if (questions.length === 0) {
       setQuestions(LISTENING_SAMPLE_DATA);
+    }
+
+    // デモモード: ゲーミフィケーション画面用のダミーデータ投入
+    const demoUser = localStorage.getItem('eigomaster_demo_user');
+    if (demoUser) {
+      // ストア内のゲーミフィケーション状態を初期化（デモ用）
+      try {
+        // (既存の状態は保持し、ゲーミフィケーション値のみ設定)
+        // useListeningStore の内部状態が初期化されているので、ここでは何もしない
+        console.log('✅ デモモード: ゲーミフィケーション画面を表示');
+      } catch (error) {
+        console.error('デモモード初期化エラー:', error);
+      }
     }
   }, []);
 
@@ -59,18 +83,64 @@ export default function ListeningScreen() {
     setScreen('result');
   };
 
+  const handleShadowingStart = (question: ListeningQuestion) => {
+    setShadowingQuestion(question);
+    setScreen('shadowing');
+  };
+
+  const handleShadowingComplete = () => {
+    setShadowingQuestion(null);
+    setScreen('list');
+  };
+
   const handleBackToList = () => {
     resetCurrentQuestion();
     setScreen('list');
   };
 
   if (screen === 'list') {
+    // エラーハンドリング
+    if (syncError) {
+      return (
+        <SafeAreaView style={styles.container}>
+          <ErrorScreen
+            title="同期に失敗しました"
+            description={syncError}
+            retryFn={retry}
+          />
+        </SafeAreaView>
+      );
+    }
+
+    // ローディング中 - スケルトン表示
+    if (questions.length === 0 || isLoading) {
+      return (
+        <SafeAreaView style={styles.container}>
+          <View style={styles.header}>
+            <Text style={styles.title}>🎧 リスニング練習</Text>
+            <Text style={styles.subtitle}>英検準1級形式</Text>
+          </View>
+          <ScrollView
+            showsVerticalScrollIndicator={false}
+            contentContainerStyle={{ paddingBottom: 100 }}
+          >
+            <View style={styles.section}>
+              <SkeletonLoader count={4} type="form" />
+            </View>
+          </ScrollView>
+        </SafeAreaView>
+      );
+    }
+
     const stats = getTodayStats();
     const completionRate = (completedCount / totalCount) * 100;
 
     return (
       <SafeAreaView style={styles.container}>
-        <ScrollView showsVerticalScrollIndicator={false}>
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={{ paddingBottom: 100 }}
+        >
           {/* Header */}
           <View style={styles.header}>
             <Text style={styles.title}>🎧 リスニング練習</Text>
@@ -84,7 +154,6 @@ export default function ListeningScreen() {
               label="進捗"
               showPercentage={true}
               color={Colors.light.info}
-              style={{ marginBottom: Spacing.xl }}
             />
             <Text style={styles.progressLabel}>
               {completedCount} / {totalCount} 完了
@@ -119,7 +188,7 @@ export default function ListeningScreen() {
             <Text style={styles.sectionTitle}>問題を選択</Text>
             {questions.length === 0 ? (
               <View style={styles.loadingContainer}>
-                <ActivityIndicator size="large" color={Colors.light.primary} />
+                <SkeletonLoader count={3} type="list" />
               </View>
             ) : (
               questions.map((question, index) => {
@@ -179,6 +248,23 @@ export default function ListeningScreen() {
         question={currentQuestion}
         onComplete={handleQuestionComplete}
         onBack={handleBackToList}
+        onShadowingStart={handleShadowingStart}
+      />
+    );
+  }
+
+  if (screen === 'shadowing' && shadowingQuestion) {
+    return (
+      <ShadowingScreen
+        questionId={shadowingQuestion.id}
+        attemptId={`attempt_${shadowingQuestion.id}_${Date.now()}`}
+        script={shadowingQuestion.script}
+        audioUrl={shadowingQuestion.audioUrl}
+        onComplete={handleShadowingComplete}
+        onBack={() => {
+          setShadowingQuestion(null);
+          setScreen('result');
+        }}
       />
     );
   }
@@ -193,28 +279,27 @@ export default function ListeningScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.light.background,
+    backgroundColor: NaturalColors.background,
   },
   header: {
-    paddingHorizontal: Spacing.xl,
-    paddingTop: Spacing.lg,
-    paddingBottom: Spacing.md,
+    paddingHorizontal: Spacing.md,
+    paddingTop: Spacing.sm,
+    paddingBottom: Spacing.xs,
   },
   title: {
-    fontSize: 28,
+    fontSize: 22,
     fontWeight: '800',
     color: Colors.light.text,
-    marginBottom: Spacing.sm,
   },
   subtitle: {
-    fontSize: 14,
+    fontSize: 12,
     color: Colors.light.textSecondary,
-    fontWeight: '500',
+    fontWeight: '400',
   },
   section: {
-    marginHorizontal: Spacing.xl,
-    marginTop: Spacing.xl,
-    marginBottom: Spacing.lg,
+    marginHorizontal: Spacing.lg,
+    marginTop: Spacing.lg,
+    marginBottom: Spacing.md,
   },
   progressLabel: {
     fontSize: 13,
@@ -224,11 +309,12 @@ const styles = StyleSheet.create({
   },
   statsRow: {
     flexDirection: 'row',
-    gap: Spacing.lg,
+    gap: Spacing.sm,
   },
   statBox: {
     flex: 1,
-    paddingVertical: Spacing.lg,
+    paddingVertical: Spacing.md,
+    paddingHorizontal: Spacing.sm,
     backgroundColor: Colors.light.surfaceCard,
     borderRadius: BorderRadius.lg,
     alignItems: 'center',
@@ -236,13 +322,11 @@ const styles = StyleSheet.create({
   },
   statEmoji: {
     fontSize: 24,
-    marginBottom: Spacing.sm,
   },
   statValue: {
     fontSize: 20,
     fontWeight: '700',
     color: Colors.light.primary,
-    marginBottom: Spacing.xs,
   },
   statLabel: {
     fontSize: 12,
@@ -250,10 +334,9 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
   sectionTitle: {
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: '700',
     color: Colors.light.text,
-    marginBottom: Spacing.lg,
   },
   loadingContainer: {
     paddingVertical: Spacing.xl,
@@ -262,28 +345,30 @@ const styles = StyleSheet.create({
   },
   questionCard: {
     flexDirection: 'row',
-    paddingHorizontal: Spacing.lg,
+    paddingHorizontal: Spacing.md,
     paddingVertical: Spacing.lg,
     backgroundColor: Colors.light.surfaceCard,
     borderRadius: BorderRadius.lg,
-    marginBottom: Spacing.lg,
-    borderLeftWidth: 4,
-    borderLeftColor: Colors.light.border,
+    borderWidth: 2,
+    borderColor: Colors.light.border,
     alignItems: 'flex-start',
+    marginBottom: Spacing.md,
     ...Shadows.xs,
   },
   questionCardCompleted: {
     backgroundColor: Colors.light.primaryLight,
-    borderLeftColor: Colors.light.success,
+    borderColor: Colors.light.primary,
   },
   questionCardNumber: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
+    width: 36,
+    height: 36,
+    borderRadius: 18,
     backgroundColor: Colors.light.primaryLight,
+    borderWidth: 2,
+    borderColor: Colors.light.primary,
     justifyContent: 'center',
     alignItems: 'center',
-    marginRight: Spacing.lg,
+    marginRight: Spacing.md,
   },
   numberText: {
     fontSize: 12,
@@ -297,13 +382,13 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: Spacing.md,
   },
   questionTitle: {
-    fontSize: 15,
+    fontSize: 14,
     fontWeight: '600',
     color: Colors.light.text,
     flex: 1,
+    lineHeight: 18,
   },
   resultIcon: {
     fontSize: 20,
@@ -312,15 +397,15 @@ const styles = StyleSheet.create({
   questionCardFooter: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    gap: Spacing.lg,
+    gap: Spacing.sm,
   },
   difficulty: {
-    fontSize: 12,
+    fontSize: 11,
     color: Colors.light.textSecondary,
     fontWeight: '500',
   },
   status: {
-    fontSize: 12,
+    fontSize: 11,
     color: Colors.light.warning,
     fontWeight: '600',
   },

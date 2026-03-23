@@ -1,0 +1,3614 @@
+{
+  "vocabulary": [
+    {
+      "id": "5bc2b409-e676-4200-a798-abd74ea79824",
+      "word": "ability",
+      "reading": "",
+      "partOfSpeech": "noun",
+      "meaningJP": "能力",
+      "exampleSentence": "He has the ability to learn quickly.",
+      "exampleTranslation": "彼は速く学べます",
+      "difficulty": 1,
+      "frequency": 5,
+      "eikenLevel": "pre_2nd",
+      "category": "名詞",
+      "choices": [
+        {
+          "id": "5bc2b409-e676-4200-a798-abd74ea79824_3",
+          "meaning": "正反対の意味",
+          "isCorrect": false
+        },
+        {
+          "id": "5bc2b409-e676-4200-a798-abd74ea79824_0",
+          "meaning": "能力",
+          "isCorrect": true
+        },
+        {
+          "id": "5bc2b409-e676-4200-a798-abd74ea79824_2",
+          "meaning": "関連する概念",
+          "isCorrect": false
+        },
+        {
+          "id": "5bc2b409-e676-4200-a798-abd74ea79824_1",
+          "meaning": "異なる意味",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "id": "d1c0d935-ab3b-4031-a47f-0b2ed7203cb0",
+      "word": "absence",
+      "reading": "",
+      "partOfSpeech": "noun",
+      "meaningJP": "不在",
+      "exampleSentence": "His absence was noticed.",
+      "exampleTranslation": "彼の欠席に気付きました",
+      "difficulty": 1,
+      "frequency": 4,
+      "eikenLevel": "pre_2nd",
+      "category": "名詞",
+      "choices": [
+        {
+          "id": "d1c0d935-ab3b-4031-a47f-0b2ed7203cb0_0",
+          "meaning": "不在",
+          "isCorrect": true
+        },
+        {
+          "id": "d1c0d935-ab3b-4031-a47f-0b2ed7203cb0_3",
+          "meaning": "正反対の意味",
+          "isCorrect": false
+        },
+        {
+          "id": "d1c0d935-ab3b-4031-a47f-0b2ed7203cb0_1",
+          "meaning": "異なる意味",
+          "isCorrect": false
+        },
+        {
+          "id": "d1c0d935-ab3b-4031-a47f-0b2ed7203cb0_2",
+          "meaning": "関連する概念",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "id": "16a70ba0-4bd3-44ba-9a8d-8ae4f491ed31",
+      "word": "accept",
+      "reading": "",
+      "partOfSpeech": "verb",
+      "meaningJP": "受け入れる",
+      "exampleSentence": "I accept your offer.",
+      "exampleTranslation": "あなたの申し出を受け入れます",
+      "difficulty": 1,
+      "frequency": 5,
+      "eikenLevel": "pre_2nd",
+      "category": "動詞",
+      "choices": [
+        {
+          "id": "16a70ba0-4bd3-44ba-9a8d-8ae4f491ed31_0",
+          "meaning": "受け入れる",
+          "isCorrect": true
+        },
+        {
+          "id": "16a70ba0-4bd3-44ba-9a8d-8ae4f491ed31_1",
+          "meaning": "異なる意味",
+          "isCorrect": false
+        },
+        {
+          "id": "16a70ba0-4bd3-44ba-9a8d-8ae4f491ed31_2",
+          "meaning": "関連する概念",
+          "isCorrect": false
+        },
+        {
+          "id": "16a70ba0-4bd3-44ba-9a8d-8ae4f491ed31_3",
+          "meaning": "正反対の意味",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "id": "68f86e94-f0c7-4c9a-b592-6554941965b8",
+      "word": "access",
+      "reading": "",
+      "partOfSpeech": "noun",
+      "meaningJP": "アクセス",
+      "exampleSentence": "Do you have access?",
+      "exampleTranslation": "アクセスできますか",
+      "difficulty": 2,
+      "frequency": 4,
+      "eikenLevel": "pre_2nd",
+      "category": "名詞",
+      "choices": [
+        {
+          "id": "68f86e94-f0c7-4c9a-b592-6554941965b8_3",
+          "meaning": "正反対の意味",
+          "isCorrect": false
+        },
+        {
+          "id": "68f86e94-f0c7-4c9a-b592-6554941965b8_1",
+          "meaning": "異なる意味",
+          "isCorrect": false
+        },
+        {
+          "id": "68f86e94-f0c7-4c9a-b592-6554941965b8_0",
+          "meaning": "アクセス",
+          "isCorrect": true
+        },
+        {
+          "id": "68f86e94-f0c7-4c9a-b592-6554941965b8_2",
+          "meaning": "関連する概念",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "id": "da3376d8-1441-4ca2-99d5-fb5440d11d69",
+      "word": "accident",
+      "reading": "",
+      "partOfSpeech": "noun",
+      "meaningJP": "事故",
+      "exampleSentence": "There was an accident.",
+      "exampleTranslation": "事故がありました",
+      "difficulty": 1,
+      "frequency": 4,
+      "eikenLevel": "pre_2nd",
+      "category": "名詞",
+      "choices": [
+        {
+          "id": "da3376d8-1441-4ca2-99d5-fb5440d11d69_1",
+          "meaning": "異なる意味",
+          "isCorrect": false
+        },
+        {
+          "id": "da3376d8-1441-4ca2-99d5-fb5440d11d69_0",
+          "meaning": "事故",
+          "isCorrect": true
+        },
+        {
+          "id": "da3376d8-1441-4ca2-99d5-fb5440d11d69_2",
+          "meaning": "関連する概念",
+          "isCorrect": false
+        },
+        {
+          "id": "da3376d8-1441-4ca2-99d5-fb5440d11d69_3",
+          "meaning": "正反対の意味",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "id": "962b5e29-ce5e-4960-b0fb-a20248a2604b",
+      "word": "accommodate",
+      "reading": "",
+      "partOfSpeech": "verb",
+      "meaningJP": "宿泊させる",
+      "exampleSentence": "We can accommodate 500 people.",
+      "exampleTranslation": "500人を受け入れられます",
+      "difficulty": 2,
+      "frequency": 3,
+      "eikenLevel": "pre_2nd",
+      "category": "動詞",
+      "choices": [
+        {
+          "id": "962b5e29-ce5e-4960-b0fb-a20248a2604b_3",
+          "meaning": "正反対の意味",
+          "isCorrect": false
+        },
+        {
+          "id": "962b5e29-ce5e-4960-b0fb-a20248a2604b_2",
+          "meaning": "関連する概念",
+          "isCorrect": false
+        },
+        {
+          "id": "962b5e29-ce5e-4960-b0fb-a20248a2604b_1",
+          "meaning": "異なる意味",
+          "isCorrect": false
+        },
+        {
+          "id": "962b5e29-ce5e-4960-b0fb-a20248a2604b_0",
+          "meaning": "宿泊させる",
+          "isCorrect": true
+        }
+      ]
+    },
+    {
+      "id": "4d9891a2-7b28-449f-930c-96ff1d171ff8",
+      "word": "achieve",
+      "reading": "",
+      "partOfSpeech": "verb",
+      "meaningJP": "達成する",
+      "exampleSentence": "We achieved our goal.",
+      "exampleTranslation": "目標を達成しました",
+      "difficulty": 2,
+      "frequency": 4,
+      "eikenLevel": "pre_2nd",
+      "category": "動詞",
+      "choices": [
+        {
+          "id": "4d9891a2-7b28-449f-930c-96ff1d171ff8_1",
+          "meaning": "異なる意味",
+          "isCorrect": false
+        },
+        {
+          "id": "4d9891a2-7b28-449f-930c-96ff1d171ff8_3",
+          "meaning": "正反対の意味",
+          "isCorrect": false
+        },
+        {
+          "id": "4d9891a2-7b28-449f-930c-96ff1d171ff8_2",
+          "meaning": "関連する概念",
+          "isCorrect": false
+        },
+        {
+          "id": "4d9891a2-7b28-449f-930c-96ff1d171ff8_0",
+          "meaning": "達成する",
+          "isCorrect": true
+        }
+      ]
+    },
+    {
+      "id": "21c1481f-abef-4444-abe4-5d32d97eaae6",
+      "word": "acid",
+      "reading": "",
+      "partOfSpeech": "noun",
+      "meaningJP": "酸",
+      "exampleSentence": "This is acidic.",
+      "exampleTranslation": "酸性です",
+      "difficulty": 2,
+      "frequency": 3,
+      "eikenLevel": "pre_2nd",
+      "category": "名詞",
+      "choices": [
+        {
+          "id": "21c1481f-abef-4444-abe4-5d32d97eaae6_0",
+          "meaning": "酸",
+          "isCorrect": true
+        },
+        {
+          "id": "21c1481f-abef-4444-abe4-5d32d97eaae6_2",
+          "meaning": "関連する概念",
+          "isCorrect": false
+        },
+        {
+          "id": "21c1481f-abef-4444-abe4-5d32d97eaae6_3",
+          "meaning": "正反対の意味",
+          "isCorrect": false
+        },
+        {
+          "id": "21c1481f-abef-4444-abe4-5d32d97eaae6_1",
+          "meaning": "異なる意味",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "id": "7b6ccfb5-4f65-4b1d-acbd-193a28ebe191",
+      "word": "across",
+      "reading": "",
+      "partOfSpeech": "preposition",
+      "meaningJP": "〜を横切って",
+      "exampleSentence": "Walk across the street.",
+      "exampleTranslation": "通りを横切りなさい",
+      "difficulty": 1,
+      "frequency": 5,
+      "eikenLevel": "pre_2nd",
+      "category": "前置詞",
+      "choices": [
+        {
+          "id": "7b6ccfb5-4f65-4b1d-acbd-193a28ebe191_1",
+          "meaning": "異なる意味",
+          "isCorrect": false
+        },
+        {
+          "id": "7b6ccfb5-4f65-4b1d-acbd-193a28ebe191_2",
+          "meaning": "関連する概念",
+          "isCorrect": false
+        },
+        {
+          "id": "7b6ccfb5-4f65-4b1d-acbd-193a28ebe191_0",
+          "meaning": "〜を横切って",
+          "isCorrect": true
+        },
+        {
+          "id": "7b6ccfb5-4f65-4b1d-acbd-193a28ebe191_3",
+          "meaning": "正反対の意味",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "id": "3110acb8-9f32-4ba1-9e65-f4803776b6df",
+      "word": "act",
+      "reading": "",
+      "partOfSpeech": "verb",
+      "meaningJP": "行動する",
+      "exampleSentence": "Act quickly.",
+      "exampleTranslation": "素早く行動しなさい",
+      "difficulty": 1,
+      "frequency": 5,
+      "eikenLevel": "pre_2nd",
+      "category": "動詞",
+      "choices": [
+        {
+          "id": "3110acb8-9f32-4ba1-9e65-f4803776b6df_2",
+          "meaning": "関連する概念",
+          "isCorrect": false
+        },
+        {
+          "id": "3110acb8-9f32-4ba1-9e65-f4803776b6df_1",
+          "meaning": "異なる意味",
+          "isCorrect": false
+        },
+        {
+          "id": "3110acb8-9f32-4ba1-9e65-f4803776b6df_3",
+          "meaning": "正反対の意味",
+          "isCorrect": false
+        },
+        {
+          "id": "3110acb8-9f32-4ba1-9e65-f4803776b6df_0",
+          "meaning": "行動する",
+          "isCorrect": true
+        }
+      ]
+    },
+    {
+      "id": "8546cbf9-99e5-4dc5-a936-012497d7e7d6",
+      "word": "action",
+      "reading": "",
+      "partOfSpeech": "noun",
+      "meaningJP": "行動",
+      "exampleSentence": "Quick action is needed.",
+      "exampleTranslation": "素早い行動が必要です",
+      "difficulty": 1,
+      "frequency": 5,
+      "eikenLevel": "pre_2nd",
+      "category": "名詞",
+      "choices": [
+        {
+          "id": "8546cbf9-99e5-4dc5-a936-012497d7e7d6_3",
+          "meaning": "正反対の意味",
+          "isCorrect": false
+        },
+        {
+          "id": "8546cbf9-99e5-4dc5-a936-012497d7e7d6_2",
+          "meaning": "関連する概念",
+          "isCorrect": false
+        },
+        {
+          "id": "8546cbf9-99e5-4dc5-a936-012497d7e7d6_1",
+          "meaning": "異なる意味",
+          "isCorrect": false
+        },
+        {
+          "id": "8546cbf9-99e5-4dc5-a936-012497d7e7d6_0",
+          "meaning": "行動",
+          "isCorrect": true
+        }
+      ]
+    },
+    {
+      "id": "ee1fbdf7-7cd8-4be3-81c7-426d5a350e98",
+      "word": "active",
+      "reading": "",
+      "partOfSpeech": "adjective",
+      "meaningJP": "活発な",
+      "exampleSentence": "She is very active.",
+      "exampleTranslation": "彼女は活発です",
+      "difficulty": 1,
+      "frequency": 4,
+      "eikenLevel": "pre_2nd",
+      "category": "形容詞",
+      "choices": [
+        {
+          "id": "ee1fbdf7-7cd8-4be3-81c7-426d5a350e98_3",
+          "meaning": "正反対の意味",
+          "isCorrect": false
+        },
+        {
+          "id": "ee1fbdf7-7cd8-4be3-81c7-426d5a350e98_0",
+          "meaning": "活発な",
+          "isCorrect": true
+        },
+        {
+          "id": "ee1fbdf7-7cd8-4be3-81c7-426d5a350e98_2",
+          "meaning": "関連する概念",
+          "isCorrect": false
+        },
+        {
+          "id": "ee1fbdf7-7cd8-4be3-81c7-426d5a350e98_1",
+          "meaning": "異なる意味",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "id": "8e98e66d-4075-4e7a-93a4-957faf3c54b1",
+      "word": "activity",
+      "reading": "",
+      "partOfSpeech": "noun",
+      "meaningJP": "活動",
+      "exampleSentence": "What is your favorite activity?",
+      "exampleTranslation": "好きな活動は何?",
+      "difficulty": 1,
+      "frequency": 5,
+      "eikenLevel": "pre_2nd",
+      "category": "名詞",
+      "choices": [
+        {
+          "id": "8e98e66d-4075-4e7a-93a4-957faf3c54b1_0",
+          "meaning": "活動",
+          "isCorrect": true
+        },
+        {
+          "id": "8e98e66d-4075-4e7a-93a4-957faf3c54b1_1",
+          "meaning": "異なる意味",
+          "isCorrect": false
+        },
+        {
+          "id": "8e98e66d-4075-4e7a-93a4-957faf3c54b1_3",
+          "meaning": "正反対の意味",
+          "isCorrect": false
+        },
+        {
+          "id": "8e98e66d-4075-4e7a-93a4-957faf3c54b1_2",
+          "meaning": "関連する概念",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "id": "1a25c531-06d4-47df-bcca-287528206527",
+      "word": "actual",
+      "reading": "",
+      "partOfSpeech": "adjective",
+      "meaningJP": "実際の",
+      "exampleSentence": "The actual situation is complex.",
+      "exampleTranslation": "実際の状況は複雑です",
+      "difficulty": 2,
+      "frequency": 4,
+      "eikenLevel": "pre_2nd",
+      "category": "形容詞",
+      "choices": [
+        {
+          "id": "1a25c531-06d4-47df-bcca-287528206527_3",
+          "meaning": "正反対の意味",
+          "isCorrect": false
+        },
+        {
+          "id": "1a25c531-06d4-47df-bcca-287528206527_0",
+          "meaning": "実際の",
+          "isCorrect": true
+        },
+        {
+          "id": "1a25c531-06d4-47df-bcca-287528206527_1",
+          "meaning": "異なる意味",
+          "isCorrect": false
+        },
+        {
+          "id": "1a25c531-06d4-47df-bcca-287528206527_2",
+          "meaning": "関連する概念",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "id": "20169394-9c7c-4915-8fd4-325ac2d8268c",
+      "word": "add",
+      "reading": "",
+      "partOfSpeech": "verb",
+      "meaningJP": "加える",
+      "exampleSentence": "Add milk to tea.",
+      "exampleTranslation": "紅茶にミルクを加えます",
+      "difficulty": 1,
+      "frequency": 5,
+      "eikenLevel": "pre_2nd",
+      "category": "動詞",
+      "choices": [
+        {
+          "id": "20169394-9c7c-4915-8fd4-325ac2d8268c_3",
+          "meaning": "正反対の意味",
+          "isCorrect": false
+        },
+        {
+          "id": "20169394-9c7c-4915-8fd4-325ac2d8268c_0",
+          "meaning": "加える",
+          "isCorrect": true
+        },
+        {
+          "id": "20169394-9c7c-4915-8fd4-325ac2d8268c_1",
+          "meaning": "異なる意味",
+          "isCorrect": false
+        },
+        {
+          "id": "20169394-9c7c-4915-8fd4-325ac2d8268c_2",
+          "meaning": "関連する概念",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "id": "e7c15284-cf93-420c-acf1-86a921dabef9",
+      "word": "additional",
+      "reading": "",
+      "partOfSpeech": "adjective",
+      "meaningJP": "追加の",
+      "exampleSentence": "We need additional staff.",
+      "exampleTranslation": "追加スタッフが必要です",
+      "difficulty": 2,
+      "frequency": 4,
+      "eikenLevel": "pre_2nd",
+      "category": "形容詞",
+      "choices": [
+        {
+          "id": "e7c15284-cf93-420c-acf1-86a921dabef9_1",
+          "meaning": "異なる意味",
+          "isCorrect": false
+        },
+        {
+          "id": "e7c15284-cf93-420c-acf1-86a921dabef9_0",
+          "meaning": "追加の",
+          "isCorrect": true
+        },
+        {
+          "id": "e7c15284-cf93-420c-acf1-86a921dabef9_2",
+          "meaning": "関連する概念",
+          "isCorrect": false
+        },
+        {
+          "id": "e7c15284-cf93-420c-acf1-86a921dabef9_3",
+          "meaning": "正反対の意味",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "id": "59634a76-b75e-4ca0-b49e-c91465a16d0a",
+      "word": "address",
+      "reading": "",
+      "partOfSpeech": "noun",
+      "meaningJP": "住所",
+      "exampleSentence": "What is your address?",
+      "exampleTranslation": "住所は何?",
+      "difficulty": 1,
+      "frequency": 5,
+      "eikenLevel": "pre_2nd",
+      "category": "名詞",
+      "choices": [
+        {
+          "id": "59634a76-b75e-4ca0-b49e-c91465a16d0a_0",
+          "meaning": "住所",
+          "isCorrect": true
+        },
+        {
+          "id": "59634a76-b75e-4ca0-b49e-c91465a16d0a_3",
+          "meaning": "正反対の意味",
+          "isCorrect": false
+        },
+        {
+          "id": "59634a76-b75e-4ca0-b49e-c91465a16d0a_1",
+          "meaning": "異なる意味",
+          "isCorrect": false
+        },
+        {
+          "id": "59634a76-b75e-4ca0-b49e-c91465a16d0a_2",
+          "meaning": "関連する概念",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "id": "311a89c5-b757-47c1-97a9-07dbc063c795",
+      "word": "adequately",
+      "reading": "",
+      "partOfSpeech": "adverb",
+      "meaningJP": "十分に",
+      "exampleSentence": "This works adequately.",
+      "exampleTranslation": "十分に機能します",
+      "difficulty": 2,
+      "frequency": 3,
+      "eikenLevel": "pre_2nd",
+      "category": "副詞",
+      "choices": [
+        {
+          "id": "311a89c5-b757-47c1-97a9-07dbc063c795_3",
+          "meaning": "正反対の意味",
+          "isCorrect": false
+        },
+        {
+          "id": "311a89c5-b757-47c1-97a9-07dbc063c795_0",
+          "meaning": "十分に",
+          "isCorrect": true
+        },
+        {
+          "id": "311a89c5-b757-47c1-97a9-07dbc063c795_1",
+          "meaning": "異なる意味",
+          "isCorrect": false
+        },
+        {
+          "id": "311a89c5-b757-47c1-97a9-07dbc063c795_2",
+          "meaning": "関連する概念",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "id": "b737391b-e228-4631-93f2-ad08b369cc65",
+      "word": "adjust",
+      "reading": "",
+      "partOfSpeech": "verb",
+      "meaningJP": "調整する",
+      "exampleSentence": "Adjust the volume.",
+      "exampleTranslation": "音量を調整しなさい",
+      "difficulty": 2,
+      "frequency": 4,
+      "eikenLevel": "pre_2nd",
+      "category": "動詞",
+      "choices": [
+        {
+          "id": "b737391b-e228-4631-93f2-ad08b369cc65_2",
+          "meaning": "関連する概念",
+          "isCorrect": false
+        },
+        {
+          "id": "b737391b-e228-4631-93f2-ad08b369cc65_1",
+          "meaning": "異なる意味",
+          "isCorrect": false
+        },
+        {
+          "id": "b737391b-e228-4631-93f2-ad08b369cc65_0",
+          "meaning": "調整する",
+          "isCorrect": true
+        },
+        {
+          "id": "b737391b-e228-4631-93f2-ad08b369cc65_3",
+          "meaning": "正反対の意味",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "id": "406a387c-9d95-4fe3-bae5-a5dc40de6cb3",
+      "word": "admire",
+      "reading": "",
+      "partOfSpeech": "verb",
+      "meaningJP": "称賛する",
+      "exampleSentence": "I admire your courage.",
+      "exampleTranslation": "あなたの勇気を称賛します",
+      "difficulty": 2,
+      "frequency": 4,
+      "eikenLevel": "pre_2nd",
+      "category": "動詞",
+      "choices": [
+        {
+          "id": "406a387c-9d95-4fe3-bae5-a5dc40de6cb3_1",
+          "meaning": "異なる意味",
+          "isCorrect": false
+        },
+        {
+          "id": "406a387c-9d95-4fe3-bae5-a5dc40de6cb3_0",
+          "meaning": "称賛する",
+          "isCorrect": true
+        },
+        {
+          "id": "406a387c-9d95-4fe3-bae5-a5dc40de6cb3_3",
+          "meaning": "正反対の意味",
+          "isCorrect": false
+        },
+        {
+          "id": "406a387c-9d95-4fe3-bae5-a5dc40de6cb3_2",
+          "meaning": "関連する概念",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "id": "f8f10962-fa1f-4d49-8976-4e093bc33f1b",
+      "word": "admit",
+      "reading": "",
+      "partOfSpeech": "verb",
+      "meaningJP": "認める",
+      "exampleSentence": "He admitted his mistake.",
+      "exampleTranslation": "彼は間違いを認めました",
+      "difficulty": 2,
+      "frequency": 4,
+      "eikenLevel": "pre_2nd",
+      "category": "動詞",
+      "choices": [
+        {
+          "id": "f8f10962-fa1f-4d49-8976-4e093bc33f1b_3",
+          "meaning": "正反対の意味",
+          "isCorrect": false
+        },
+        {
+          "id": "f8f10962-fa1f-4d49-8976-4e093bc33f1b_2",
+          "meaning": "関連する概念",
+          "isCorrect": false
+        },
+        {
+          "id": "f8f10962-fa1f-4d49-8976-4e093bc33f1b_1",
+          "meaning": "異なる意味",
+          "isCorrect": false
+        },
+        {
+          "id": "f8f10962-fa1f-4d49-8976-4e093bc33f1b_0",
+          "meaning": "認める",
+          "isCorrect": true
+        }
+      ]
+    },
+    {
+      "id": "ac5ff44f-2b3d-49b1-9839-433c7543609d",
+      "word": "adopt",
+      "reading": "",
+      "partOfSpeech": "verb",
+      "meaningJP": "採用する",
+      "exampleSentence": "They adopted a child.",
+      "exampleTranslation": "彼らは子どもを養子にしました",
+      "difficulty": 2,
+      "frequency": 3,
+      "eikenLevel": "pre_2nd",
+      "category": "動詞",
+      "choices": [
+        {
+          "id": "ac5ff44f-2b3d-49b1-9839-433c7543609d_3",
+          "meaning": "正反対の意味",
+          "isCorrect": false
+        },
+        {
+          "id": "ac5ff44f-2b3d-49b1-9839-433c7543609d_2",
+          "meaning": "関連する概念",
+          "isCorrect": false
+        },
+        {
+          "id": "ac5ff44f-2b3d-49b1-9839-433c7543609d_0",
+          "meaning": "採用する",
+          "isCorrect": true
+        },
+        {
+          "id": "ac5ff44f-2b3d-49b1-9839-433c7543609d_1",
+          "meaning": "異なる意味",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "id": "5c3aa8af-1f55-4bd6-a461-d64af479e29c",
+      "word": "adult",
+      "reading": "",
+      "partOfSpeech": "noun",
+      "meaningJP": "大人",
+      "exampleSentence": "Adults should be responsible.",
+      "exampleTranslation": "大人は責任的です",
+      "difficulty": 1,
+      "frequency": 4,
+      "eikenLevel": "pre_2nd",
+      "category": "名詞",
+      "choices": [
+        {
+          "id": "5c3aa8af-1f55-4bd6-a461-d64af479e29c_1",
+          "meaning": "異なる意味",
+          "isCorrect": false
+        },
+        {
+          "id": "5c3aa8af-1f55-4bd6-a461-d64af479e29c_0",
+          "meaning": "大人",
+          "isCorrect": true
+        },
+        {
+          "id": "5c3aa8af-1f55-4bd6-a461-d64af479e29c_2",
+          "meaning": "関連する概念",
+          "isCorrect": false
+        },
+        {
+          "id": "5c3aa8af-1f55-4bd6-a461-d64af479e29c_3",
+          "meaning": "正反対の意味",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "id": "8069ea61-38b1-487c-833e-c8b2c591dd4b",
+      "word": "advance",
+      "reading": "",
+      "partOfSpeech": "verb",
+      "meaningJP": "進む",
+      "exampleSentence": "Technology advances quickly.",
+      "exampleTranslation": "技術は急速に進歩します",
+      "difficulty": 2,
+      "frequency": 4,
+      "eikenLevel": "pre_2nd",
+      "category": "動詞",
+      "choices": [
+        {
+          "id": "8069ea61-38b1-487c-833e-c8b2c591dd4b_0",
+          "meaning": "進む",
+          "isCorrect": true
+        },
+        {
+          "id": "8069ea61-38b1-487c-833e-c8b2c591dd4b_1",
+          "meaning": "異なる意味",
+          "isCorrect": false
+        },
+        {
+          "id": "8069ea61-38b1-487c-833e-c8b2c591dd4b_2",
+          "meaning": "関連する概念",
+          "isCorrect": false
+        },
+        {
+          "id": "8069ea61-38b1-487c-833e-c8b2c591dd4b_3",
+          "meaning": "正反対の意味",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "id": "d37c7b77-8bb8-4abc-8714-098f2f797605",
+      "word": "advantage",
+      "reading": "",
+      "partOfSpeech": "noun",
+      "meaningJP": "利点",
+      "exampleSentence": "There are many advantages.",
+      "exampleTranslation": "多くの利点があります",
+      "difficulty": 2,
+      "frequency": 5,
+      "eikenLevel": "pre_2nd",
+      "category": "名詞",
+      "choices": [
+        {
+          "id": "d37c7b77-8bb8-4abc-8714-098f2f797605_3",
+          "meaning": "正反対の意味",
+          "isCorrect": false
+        },
+        {
+          "id": "d37c7b77-8bb8-4abc-8714-098f2f797605_2",
+          "meaning": "関連する概念",
+          "isCorrect": false
+        },
+        {
+          "id": "d37c7b77-8bb8-4abc-8714-098f2f797605_0",
+          "meaning": "利点",
+          "isCorrect": true
+        },
+        {
+          "id": "d37c7b77-8bb8-4abc-8714-098f2f797605_1",
+          "meaning": "異なる意味",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "id": "ceba4507-1f5f-4751-b576-82470a73726b",
+      "word": "advertise",
+      "reading": "",
+      "partOfSpeech": "verb",
+      "meaningJP": "広告する",
+      "exampleSentence": "We advertise online.",
+      "exampleTranslation": "オンラインで宣伝します",
+      "difficulty": 2,
+      "frequency": 4,
+      "eikenLevel": "pre_2nd",
+      "category": "動詞",
+      "choices": [
+        {
+          "id": "ceba4507-1f5f-4751-b576-82470a73726b_0",
+          "meaning": "広告する",
+          "isCorrect": true
+        },
+        {
+          "id": "ceba4507-1f5f-4751-b576-82470a73726b_1",
+          "meaning": "異なる意味",
+          "isCorrect": false
+        },
+        {
+          "id": "ceba4507-1f5f-4751-b576-82470a73726b_2",
+          "meaning": "関連する概念",
+          "isCorrect": false
+        },
+        {
+          "id": "ceba4507-1f5f-4751-b576-82470a73726b_3",
+          "meaning": "正反対の意味",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "id": "b0146cb8-bd1b-4a42-b178-41f1d19d0c96",
+      "word": "advice",
+      "reading": "",
+      "partOfSpeech": "noun",
+      "meaningJP": "助言",
+      "exampleSentence": "I need your advice.",
+      "exampleTranslation": "あなたのアドバイスが必要です",
+      "difficulty": 1,
+      "frequency": 5,
+      "eikenLevel": "pre_2nd",
+      "category": "名詞",
+      "choices": [
+        {
+          "id": "b0146cb8-bd1b-4a42-b178-41f1d19d0c96_2",
+          "meaning": "関連する概念",
+          "isCorrect": false
+        },
+        {
+          "id": "b0146cb8-bd1b-4a42-b178-41f1d19d0c96_3",
+          "meaning": "正反対の意味",
+          "isCorrect": false
+        },
+        {
+          "id": "b0146cb8-bd1b-4a42-b178-41f1d19d0c96_1",
+          "meaning": "異なる意味",
+          "isCorrect": false
+        },
+        {
+          "id": "b0146cb8-bd1b-4a42-b178-41f1d19d0c96_0",
+          "meaning": "助言",
+          "isCorrect": true
+        }
+      ]
+    },
+    {
+      "id": "47f95c0d-0f4b-431f-829a-7b888010b459",
+      "word": "advise",
+      "reading": "",
+      "partOfSpeech": "verb",
+      "meaningJP": "助言する",
+      "exampleSentence": "I advise you to study.",
+      "exampleTranslation": "勉強することをお勧めします",
+      "difficulty": 2,
+      "frequency": 4,
+      "eikenLevel": "pre_2nd",
+      "category": "動詞",
+      "choices": [
+        {
+          "id": "47f95c0d-0f4b-431f-829a-7b888010b459_2",
+          "meaning": "関連する概念",
+          "isCorrect": false
+        },
+        {
+          "id": "47f95c0d-0f4b-431f-829a-7b888010b459_0",
+          "meaning": "助言する",
+          "isCorrect": true
+        },
+        {
+          "id": "47f95c0d-0f4b-431f-829a-7b888010b459_1",
+          "meaning": "異なる意味",
+          "isCorrect": false
+        },
+        {
+          "id": "47f95c0d-0f4b-431f-829a-7b888010b459_3",
+          "meaning": "正反対の意味",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "id": "4ce19c5c-0acf-4c72-833d-f7727d6a95de",
+      "word": "affair",
+      "reading": "",
+      "partOfSpeech": "noun",
+      "meaningJP": "事件",
+      "exampleSentence": "This is a serious affair.",
+      "exampleTranslation": "これは深刻な事件です",
+      "difficulty": 2,
+      "frequency": 3,
+      "eikenLevel": "pre_2nd",
+      "category": "名詞",
+      "choices": [
+        {
+          "id": "4ce19c5c-0acf-4c72-833d-f7727d6a95de_2",
+          "meaning": "関連する概念",
+          "isCorrect": false
+        },
+        {
+          "id": "4ce19c5c-0acf-4c72-833d-f7727d6a95de_1",
+          "meaning": "異なる意味",
+          "isCorrect": false
+        },
+        {
+          "id": "4ce19c5c-0acf-4c72-833d-f7727d6a95de_3",
+          "meaning": "正反対の意味",
+          "isCorrect": false
+        },
+        {
+          "id": "4ce19c5c-0acf-4c72-833d-f7727d6a95de_0",
+          "meaning": "事件",
+          "isCorrect": true
+        }
+      ]
+    },
+    {
+      "id": "b58fe656-c786-4705-b5ec-182d5f8d7603",
+      "word": "affect",
+      "reading": "",
+      "partOfSpeech": "verb",
+      "meaningJP": "影響する",
+      "exampleSentence": "Weather affects mood.",
+      "exampleTranslation": "天気は気分に影響します",
+      "difficulty": 2,
+      "frequency": 4,
+      "eikenLevel": "pre_2nd",
+      "category": "動詞",
+      "choices": [
+        {
+          "id": "b58fe656-c786-4705-b5ec-182d5f8d7603_2",
+          "meaning": "関連する概念",
+          "isCorrect": false
+        },
+        {
+          "id": "b58fe656-c786-4705-b5ec-182d5f8d7603_1",
+          "meaning": "異なる意味",
+          "isCorrect": false
+        },
+        {
+          "id": "b58fe656-c786-4705-b5ec-182d5f8d7603_3",
+          "meaning": "正反対の意味",
+          "isCorrect": false
+        },
+        {
+          "id": "b58fe656-c786-4705-b5ec-182d5f8d7603_0",
+          "meaning": "影響する",
+          "isCorrect": true
+        }
+      ]
+    },
+    {
+      "id": "8bd8cfaf-4f6a-40db-bff7-51c1ad8753b4",
+      "word": "afford",
+      "reading": "",
+      "partOfSpeech": "verb",
+      "meaningJP": "余裕がある",
+      "exampleSentence": "Can you afford this?",
+      "exampleTranslation": "これを買う余裕があります",
+      "difficulty": 1,
+      "frequency": 4,
+      "eikenLevel": "pre_2nd",
+      "category": "動詞",
+      "choices": [
+        {
+          "id": "8bd8cfaf-4f6a-40db-bff7-51c1ad8753b4_2",
+          "meaning": "関連する概念",
+          "isCorrect": false
+        },
+        {
+          "id": "8bd8cfaf-4f6a-40db-bff7-51c1ad8753b4_0",
+          "meaning": "余裕がある",
+          "isCorrect": true
+        },
+        {
+          "id": "8bd8cfaf-4f6a-40db-bff7-51c1ad8753b4_1",
+          "meaning": "異なる意味",
+          "isCorrect": false
+        },
+        {
+          "id": "8bd8cfaf-4f6a-40db-bff7-51c1ad8753b4_3",
+          "meaning": "正反対の意味",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "id": "d30a341e-ea14-41e4-85fe-695b535c283f",
+      "word": "afraid",
+      "reading": "",
+      "partOfSpeech": "adjective",
+      "meaningJP": "怖い",
+      "exampleSentence": "I am afraid of heights.",
+      "exampleTranslation": "高所恐怖症です",
+      "difficulty": 1,
+      "frequency": 5,
+      "eikenLevel": "pre_2nd",
+      "category": "形容詞",
+      "choices": [
+        {
+          "id": "d30a341e-ea14-41e4-85fe-695b535c283f_0",
+          "meaning": "怖い",
+          "isCorrect": true
+        },
+        {
+          "id": "d30a341e-ea14-41e4-85fe-695b535c283f_1",
+          "meaning": "異なる意味",
+          "isCorrect": false
+        },
+        {
+          "id": "d30a341e-ea14-41e4-85fe-695b535c283f_2",
+          "meaning": "関連する概念",
+          "isCorrect": false
+        },
+        {
+          "id": "d30a341e-ea14-41e4-85fe-695b535c283f_3",
+          "meaning": "正反対の意味",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "id": "781619c6-4548-4602-9497-7563045c617d",
+      "word": "after",
+      "reading": "",
+      "partOfSpeech": "preposition",
+      "meaningJP": "〜の後",
+      "exampleSentence": "After lunch we'll meet.",
+      "exampleTranslation": "昼食後に会いましょう",
+      "difficulty": 1,
+      "frequency": 5,
+      "eikenLevel": "pre_2nd",
+      "category": "前置詞",
+      "choices": [
+        {
+          "id": "781619c6-4548-4602-9497-7563045c617d_2",
+          "meaning": "関連する概念",
+          "isCorrect": false
+        },
+        {
+          "id": "781619c6-4548-4602-9497-7563045c617d_1",
+          "meaning": "異なる意味",
+          "isCorrect": false
+        },
+        {
+          "id": "781619c6-4548-4602-9497-7563045c617d_3",
+          "meaning": "正反対の意味",
+          "isCorrect": false
+        },
+        {
+          "id": "781619c6-4548-4602-9497-7563045c617d_0",
+          "meaning": "〜の後",
+          "isCorrect": true
+        }
+      ]
+    },
+    {
+      "id": "8c03cca2-d861-42c7-8159-10d449075302",
+      "word": "afternoon",
+      "reading": "",
+      "partOfSpeech": "noun",
+      "meaningJP": "午後",
+      "exampleSentence": "Meet this afternoon.",
+      "exampleTranslation": "今日の午後に会いましょう",
+      "difficulty": 1,
+      "frequency": 5,
+      "eikenLevel": "pre_2nd",
+      "category": "名詞",
+      "choices": [
+        {
+          "id": "8c03cca2-d861-42c7-8159-10d449075302_2",
+          "meaning": "関連する概念",
+          "isCorrect": false
+        },
+        {
+          "id": "8c03cca2-d861-42c7-8159-10d449075302_3",
+          "meaning": "正反対の意味",
+          "isCorrect": false
+        },
+        {
+          "id": "8c03cca2-d861-42c7-8159-10d449075302_1",
+          "meaning": "異なる意味",
+          "isCorrect": false
+        },
+        {
+          "id": "8c03cca2-d861-42c7-8159-10d449075302_0",
+          "meaning": "午後",
+          "isCorrect": true
+        }
+      ]
+    },
+    {
+      "id": "d438e856-86e2-4c58-83eb-1d6fd984e95f",
+      "word": "again",
+      "reading": "",
+      "partOfSpeech": "adverb",
+      "meaningJP": "再び",
+      "exampleSentence": "Say it again.",
+      "exampleTranslation": "もう一度言いなさい",
+      "difficulty": 1,
+      "frequency": 5,
+      "eikenLevel": "pre_2nd",
+      "category": "副詞",
+      "choices": [
+        {
+          "id": "d438e856-86e2-4c58-83eb-1d6fd984e95f_2",
+          "meaning": "関連する概念",
+          "isCorrect": false
+        },
+        {
+          "id": "d438e856-86e2-4c58-83eb-1d6fd984e95f_3",
+          "meaning": "正反対の意味",
+          "isCorrect": false
+        },
+        {
+          "id": "d438e856-86e2-4c58-83eb-1d6fd984e95f_1",
+          "meaning": "異なる意味",
+          "isCorrect": false
+        },
+        {
+          "id": "d438e856-86e2-4c58-83eb-1d6fd984e95f_0",
+          "meaning": "再び",
+          "isCorrect": true
+        }
+      ]
+    },
+    {
+      "id": "a2c49168-6b83-4140-a1d6-9f05424058aa",
+      "word": "against",
+      "reading": "",
+      "partOfSpeech": "preposition",
+      "meaningJP": "〜に対して",
+      "exampleSentence": "This is against the rules.",
+      "exampleTranslation": "これはルール違反です",
+      "difficulty": 1,
+      "frequency": 5,
+      "eikenLevel": "pre_2nd",
+      "category": "前置詞",
+      "choices": [
+        {
+          "id": "a2c49168-6b83-4140-a1d6-9f05424058aa_2",
+          "meaning": "関連する概念",
+          "isCorrect": false
+        },
+        {
+          "id": "a2c49168-6b83-4140-a1d6-9f05424058aa_3",
+          "meaning": "正反対の意味",
+          "isCorrect": false
+        },
+        {
+          "id": "a2c49168-6b83-4140-a1d6-9f05424058aa_1",
+          "meaning": "異なる意味",
+          "isCorrect": false
+        },
+        {
+          "id": "a2c49168-6b83-4140-a1d6-9f05424058aa_0",
+          "meaning": "〜に対して",
+          "isCorrect": true
+        }
+      ]
+    },
+    {
+      "id": "0019ac7b-9853-47a5-b28c-bb4bc56e906d",
+      "word": "age",
+      "reading": "",
+      "partOfSpeech": "noun",
+      "meaningJP": "年齢",
+      "exampleSentence": "What is your age?",
+      "exampleTranslation": "年齢は何?",
+      "difficulty": 1,
+      "frequency": 5,
+      "eikenLevel": "pre_2nd",
+      "category": "名詞",
+      "choices": [
+        {
+          "id": "0019ac7b-9853-47a5-b28c-bb4bc56e906d_0",
+          "meaning": "年齢",
+          "isCorrect": true
+        },
+        {
+          "id": "0019ac7b-9853-47a5-b28c-bb4bc56e906d_1",
+          "meaning": "異なる意味",
+          "isCorrect": false
+        },
+        {
+          "id": "0019ac7b-9853-47a5-b28c-bb4bc56e906d_2",
+          "meaning": "関連する概念",
+          "isCorrect": false
+        },
+        {
+          "id": "0019ac7b-9853-47a5-b28c-bb4bc56e906d_3",
+          "meaning": "正反対の意味",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "id": "bdcecf9b-6c70-4da5-8cba-b210c5998bea",
+      "word": "agency",
+      "reading": "",
+      "partOfSpeech": "noun",
+      "meaningJP": "機関",
+      "exampleSentence": "She works for an agency.",
+      "exampleTranslation": "機関で働いています",
+      "difficulty": 2,
+      "frequency": 3,
+      "eikenLevel": "pre_2nd",
+      "category": "名詞",
+      "choices": [
+        {
+          "id": "bdcecf9b-6c70-4da5-8cba-b210c5998bea_1",
+          "meaning": "異なる意味",
+          "isCorrect": false
+        },
+        {
+          "id": "bdcecf9b-6c70-4da5-8cba-b210c5998bea_0",
+          "meaning": "機関",
+          "isCorrect": true
+        },
+        {
+          "id": "bdcecf9b-6c70-4da5-8cba-b210c5998bea_3",
+          "meaning": "正反対の意味",
+          "isCorrect": false
+        },
+        {
+          "id": "bdcecf9b-6c70-4da5-8cba-b210c5998bea_2",
+          "meaning": "関連する概念",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "id": "25727e84-23fe-4c10-94c9-20fd052dccc4",
+      "word": "agenda",
+      "reading": "",
+      "partOfSpeech": "noun",
+      "meaningJP": "議題",
+      "exampleSentence": "What is on the agenda?",
+      "exampleTranslation": "議題は何?",
+      "difficulty": 2,
+      "frequency": 4,
+      "eikenLevel": "pre_2nd",
+      "category": "名詞",
+      "choices": [
+        {
+          "id": "25727e84-23fe-4c10-94c9-20fd052dccc4_3",
+          "meaning": "正反対の意味",
+          "isCorrect": false
+        },
+        {
+          "id": "25727e84-23fe-4c10-94c9-20fd052dccc4_0",
+          "meaning": "議題",
+          "isCorrect": true
+        },
+        {
+          "id": "25727e84-23fe-4c10-94c9-20fd052dccc4_1",
+          "meaning": "異なる意味",
+          "isCorrect": false
+        },
+        {
+          "id": "25727e84-23fe-4c10-94c9-20fd052dccc4_2",
+          "meaning": "関連する概念",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "id": "c859dbbb-cb1e-480f-bd15-bb290b1b0bc5",
+      "word": "agent",
+      "reading": "",
+      "partOfSpeech": "noun",
+      "meaningJP": "代理人",
+      "exampleSentence": "The agent helped us.",
+      "exampleTranslation": "代理人が助けてくれました",
+      "difficulty": 2,
+      "frequency": 4,
+      "eikenLevel": "pre_2nd",
+      "category": "名詞",
+      "choices": [
+        {
+          "id": "c859dbbb-cb1e-480f-bd15-bb290b1b0bc5_0",
+          "meaning": "代理人",
+          "isCorrect": true
+        },
+        {
+          "id": "c859dbbb-cb1e-480f-bd15-bb290b1b0bc5_3",
+          "meaning": "正反対の意味",
+          "isCorrect": false
+        },
+        {
+          "id": "c859dbbb-cb1e-480f-bd15-bb290b1b0bc5_1",
+          "meaning": "異なる意味",
+          "isCorrect": false
+        },
+        {
+          "id": "c859dbbb-cb1e-480f-bd15-bb290b1b0bc5_2",
+          "meaning": "関連する概念",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "id": "8bc4ed84-cce7-4875-9062-cb46ab236595",
+      "word": "aggressive",
+      "reading": "",
+      "partOfSpeech": "adjective",
+      "meaningJP": "攻撃的な",
+      "exampleSentence": "His behavior was aggressive.",
+      "exampleTranslation": "彼の行動は攻撃的でした",
+      "difficulty": 2,
+      "frequency": 4,
+      "eikenLevel": "pre_2nd",
+      "category": "形容詞",
+      "choices": [
+        {
+          "id": "8bc4ed84-cce7-4875-9062-cb46ab236595_3",
+          "meaning": "正反対の意味",
+          "isCorrect": false
+        },
+        {
+          "id": "8bc4ed84-cce7-4875-9062-cb46ab236595_0",
+          "meaning": "攻撃的な",
+          "isCorrect": true
+        },
+        {
+          "id": "8bc4ed84-cce7-4875-9062-cb46ab236595_1",
+          "meaning": "異なる意味",
+          "isCorrect": false
+        },
+        {
+          "id": "8bc4ed84-cce7-4875-9062-cb46ab236595_2",
+          "meaning": "関連する概念",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "id": "256df952-30d2-46b9-aead-8962078fd2a8",
+      "word": "ago",
+      "reading": "",
+      "partOfSpeech": "adverb",
+      "meaningJP": "〜前に",
+      "exampleSentence": "Two weeks ago I saw him.",
+      "exampleTranslation": "2週間前に彼を見ました",
+      "difficulty": 1,
+      "frequency": 5,
+      "eikenLevel": "pre_2nd",
+      "category": "副詞",
+      "choices": [
+        {
+          "id": "256df952-30d2-46b9-aead-8962078fd2a8_3",
+          "meaning": "正反対の意味",
+          "isCorrect": false
+        },
+        {
+          "id": "256df952-30d2-46b9-aead-8962078fd2a8_2",
+          "meaning": "関連する概念",
+          "isCorrect": false
+        },
+        {
+          "id": "256df952-30d2-46b9-aead-8962078fd2a8_0",
+          "meaning": "〜前に",
+          "isCorrect": true
+        },
+        {
+          "id": "256df952-30d2-46b9-aead-8962078fd2a8_1",
+          "meaning": "異なる意味",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "id": "01cda271-85c9-4aa3-8d31-dfeb33baf376",
+      "word": "agree",
+      "reading": "",
+      "partOfSpeech": "verb",
+      "meaningJP": "同意する",
+      "exampleSentence": "Do you agree with me?",
+      "exampleTranslation": "あなたは同意しますか",
+      "difficulty": 1,
+      "frequency": 5,
+      "eikenLevel": "pre_2nd",
+      "category": "動詞",
+      "choices": [
+        {
+          "id": "01cda271-85c9-4aa3-8d31-dfeb33baf376_0",
+          "meaning": "同意する",
+          "isCorrect": true
+        },
+        {
+          "id": "01cda271-85c9-4aa3-8d31-dfeb33baf376_1",
+          "meaning": "異なる意味",
+          "isCorrect": false
+        },
+        {
+          "id": "01cda271-85c9-4aa3-8d31-dfeb33baf376_3",
+          "meaning": "正反対の意味",
+          "isCorrect": false
+        },
+        {
+          "id": "01cda271-85c9-4aa3-8d31-dfeb33baf376_2",
+          "meaning": "関連する概念",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "id": "19d505e5-d4cd-4910-aed7-defc78193239",
+      "word": "agreement",
+      "reading": "",
+      "partOfSpeech": "noun",
+      "meaningJP": "合意",
+      "exampleSentence": "We reached an agreement.",
+      "exampleTranslation": "合意に達しました",
+      "difficulty": 2,
+      "frequency": 4,
+      "eikenLevel": "pre_2nd",
+      "category": "名詞",
+      "choices": [
+        {
+          "id": "19d505e5-d4cd-4910-aed7-defc78193239_2",
+          "meaning": "関連する概念",
+          "isCorrect": false
+        },
+        {
+          "id": "19d505e5-d4cd-4910-aed7-defc78193239_0",
+          "meaning": "合意",
+          "isCorrect": true
+        },
+        {
+          "id": "19d505e5-d4cd-4910-aed7-defc78193239_1",
+          "meaning": "異なる意味",
+          "isCorrect": false
+        },
+        {
+          "id": "19d505e5-d4cd-4910-aed7-defc78193239_3",
+          "meaning": "正反対の意味",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "id": "51b38a0f-489c-4051-9787-6934ddbba6f4",
+      "word": "agriculture",
+      "reading": "",
+      "partOfSpeech": "noun",
+      "meaningJP": "農業",
+      "exampleSentence": "Agriculture is important.",
+      "exampleTranslation": "農業は重要です",
+      "difficulty": 2,
+      "frequency": 3,
+      "eikenLevel": "pre_2nd",
+      "category": "名詞",
+      "choices": [
+        {
+          "id": "51b38a0f-489c-4051-9787-6934ddbba6f4_3",
+          "meaning": "正反対の意味",
+          "isCorrect": false
+        },
+        {
+          "id": "51b38a0f-489c-4051-9787-6934ddbba6f4_1",
+          "meaning": "異なる意味",
+          "isCorrect": false
+        },
+        {
+          "id": "51b38a0f-489c-4051-9787-6934ddbba6f4_2",
+          "meaning": "関連する概念",
+          "isCorrect": false
+        },
+        {
+          "id": "51b38a0f-489c-4051-9787-6934ddbba6f4_0",
+          "meaning": "農業",
+          "isCorrect": true
+        }
+      ]
+    },
+    {
+      "id": "d58fd393-a757-471f-8487-e7c54c419a0d",
+      "word": "ahead",
+      "reading": "",
+      "partOfSpeech": "adverb",
+      "meaningJP": "前方に",
+      "exampleSentence": "Look ahead.",
+      "exampleTranslation": "前を見なさい",
+      "difficulty": 1,
+      "frequency": 4,
+      "eikenLevel": "pre_2nd",
+      "category": "副詞",
+      "choices": [
+        {
+          "id": "d58fd393-a757-471f-8487-e7c54c419a0d_3",
+          "meaning": "正反対の意味",
+          "isCorrect": false
+        },
+        {
+          "id": "d58fd393-a757-471f-8487-e7c54c419a0d_0",
+          "meaning": "前方に",
+          "isCorrect": true
+        },
+        {
+          "id": "d58fd393-a757-471f-8487-e7c54c419a0d_1",
+          "meaning": "異なる意味",
+          "isCorrect": false
+        },
+        {
+          "id": "d58fd393-a757-471f-8487-e7c54c419a0d_2",
+          "meaning": "関連する概念",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "id": "44d1ed61-6410-4e28-9eed-06dc5d8b0b04",
+      "word": "aid",
+      "reading": "",
+      "partOfSpeech": "noun",
+      "meaningJP": "援助",
+      "exampleSentence": "We need your aid.",
+      "exampleTranslation": "あなたの援助が必要です",
+      "difficulty": 2,
+      "frequency": 4,
+      "eikenLevel": "pre_2nd",
+      "category": "名詞",
+      "choices": [
+        {
+          "id": "44d1ed61-6410-4e28-9eed-06dc5d8b0b04_0",
+          "meaning": "援助",
+          "isCorrect": true
+        },
+        {
+          "id": "44d1ed61-6410-4e28-9eed-06dc5d8b0b04_1",
+          "meaning": "異なる意味",
+          "isCorrect": false
+        },
+        {
+          "id": "44d1ed61-6410-4e28-9eed-06dc5d8b0b04_3",
+          "meaning": "正反対の意味",
+          "isCorrect": false
+        },
+        {
+          "id": "44d1ed61-6410-4e28-9eed-06dc5d8b0b04_2",
+          "meaning": "関連する概念",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "id": "fa609da6-edd1-4815-8110-9bfc3c440679",
+      "word": "aim",
+      "reading": "",
+      "partOfSpeech": "verb",
+      "meaningJP": "狙う",
+      "exampleSentence": "Aim for success.",
+      "exampleTranslation": "成功を狙いなさい",
+      "difficulty": 1,
+      "frequency": 5,
+      "eikenLevel": "pre_2nd",
+      "category": "動詞",
+      "choices": [
+        {
+          "id": "fa609da6-edd1-4815-8110-9bfc3c440679_0",
+          "meaning": "狙う",
+          "isCorrect": true
+        },
+        {
+          "id": "fa609da6-edd1-4815-8110-9bfc3c440679_1",
+          "meaning": "異なる意味",
+          "isCorrect": false
+        },
+        {
+          "id": "fa609da6-edd1-4815-8110-9bfc3c440679_3",
+          "meaning": "正反対の意味",
+          "isCorrect": false
+        },
+        {
+          "id": "fa609da6-edd1-4815-8110-9bfc3c440679_2",
+          "meaning": "関連する概念",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "id": "6706128d-ecdc-4725-b986-fb4f1fe3140c",
+      "word": "air",
+      "reading": "",
+      "partOfSpeech": "noun",
+      "meaningJP": "空気",
+      "exampleSentence": "The air is fresh.",
+      "exampleTranslation": "空気は爽やかです",
+      "difficulty": 1,
+      "frequency": 5,
+      "eikenLevel": "pre_2nd",
+      "category": "名詞",
+      "choices": [
+        {
+          "id": "6706128d-ecdc-4725-b986-fb4f1fe3140c_3",
+          "meaning": "正反対の意味",
+          "isCorrect": false
+        },
+        {
+          "id": "6706128d-ecdc-4725-b986-fb4f1fe3140c_0",
+          "meaning": "空気",
+          "isCorrect": true
+        },
+        {
+          "id": "6706128d-ecdc-4725-b986-fb4f1fe3140c_2",
+          "meaning": "関連する概念",
+          "isCorrect": false
+        },
+        {
+          "id": "6706128d-ecdc-4725-b986-fb4f1fe3140c_1",
+          "meaning": "異なる意味",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "id": "1c5273a3-efcf-4229-b014-362f90e86986",
+      "word": "airline",
+      "reading": "",
+      "partOfSpeech": "noun",
+      "meaningJP": "航空会社",
+      "exampleSentence": "Which airline do you prefer?",
+      "exampleTranslation": "どの航空会社が好き?",
+      "difficulty": 1,
+      "frequency": 4,
+      "eikenLevel": "pre_2nd",
+      "category": "名詞",
+      "choices": [
+        {
+          "id": "1c5273a3-efcf-4229-b014-362f90e86986_3",
+          "meaning": "正反対の意味",
+          "isCorrect": false
+        },
+        {
+          "id": "1c5273a3-efcf-4229-b014-362f90e86986_2",
+          "meaning": "関連する概念",
+          "isCorrect": false
+        },
+        {
+          "id": "1c5273a3-efcf-4229-b014-362f90e86986_0",
+          "meaning": "航空会社",
+          "isCorrect": true
+        },
+        {
+          "id": "1c5273a3-efcf-4229-b014-362f90e86986_1",
+          "meaning": "異なる意味",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "id": "5e68aae4-e3ef-4f8d-93d3-2571117a5746",
+      "word": "airplane",
+      "reading": "",
+      "partOfSpeech": "noun",
+      "meaningJP": "飛行機",
+      "exampleSentence": "The airplane landed.",
+      "exampleTranslation": "飛行機が着陸しました",
+      "difficulty": 1,
+      "frequency": 4,
+      "eikenLevel": "pre_2nd",
+      "category": "名詞",
+      "choices": [
+        {
+          "id": "5e68aae4-e3ef-4f8d-93d3-2571117a5746_3",
+          "meaning": "正反対の意味",
+          "isCorrect": false
+        },
+        {
+          "id": "5e68aae4-e3ef-4f8d-93d3-2571117a5746_1",
+          "meaning": "異なる意味",
+          "isCorrect": false
+        },
+        {
+          "id": "5e68aae4-e3ef-4f8d-93d3-2571117a5746_2",
+          "meaning": "関連する概念",
+          "isCorrect": false
+        },
+        {
+          "id": "5e68aae4-e3ef-4f8d-93d3-2571117a5746_0",
+          "meaning": "飛行機",
+          "isCorrect": true
+        }
+      ]
+    },
+    {
+      "id": "30e5d7fe-304a-48b7-9295-d9d3bd6c8282",
+      "word": "airport",
+      "reading": "",
+      "partOfSpeech": "noun",
+      "meaningJP": "空港",
+      "exampleSentence": "The airport is busy.",
+      "exampleTranslation": "空港は混雑しています",
+      "difficulty": 1,
+      "frequency": 5,
+      "eikenLevel": "pre_2nd",
+      "category": "名詞",
+      "choices": [
+        {
+          "id": "30e5d7fe-304a-48b7-9295-d9d3bd6c8282_1",
+          "meaning": "異なる意味",
+          "isCorrect": false
+        },
+        {
+          "id": "30e5d7fe-304a-48b7-9295-d9d3bd6c8282_2",
+          "meaning": "関連する概念",
+          "isCorrect": false
+        },
+        {
+          "id": "30e5d7fe-304a-48b7-9295-d9d3bd6c8282_3",
+          "meaning": "正反対の意味",
+          "isCorrect": false
+        },
+        {
+          "id": "30e5d7fe-304a-48b7-9295-d9d3bd6c8282_0",
+          "meaning": "空港",
+          "isCorrect": true
+        }
+      ]
+    },
+    {
+      "id": "d19647a1-2ccd-4820-b1d1-e3613c1614e1",
+      "word": "album",
+      "reading": "",
+      "partOfSpeech": "noun",
+      "meaningJP": "アルバム",
+      "exampleSentence": "I bought a new album.",
+      "exampleTranslation": "新しいアルバムを買いました",
+      "difficulty": 1,
+      "frequency": 4,
+      "eikenLevel": "pre_2nd",
+      "category": "名詞",
+      "choices": [
+        {
+          "id": "d19647a1-2ccd-4820-b1d1-e3613c1614e1_3",
+          "meaning": "正反対の意味",
+          "isCorrect": false
+        },
+        {
+          "id": "d19647a1-2ccd-4820-b1d1-e3613c1614e1_0",
+          "meaning": "アルバム",
+          "isCorrect": true
+        },
+        {
+          "id": "d19647a1-2ccd-4820-b1d1-e3613c1614e1_1",
+          "meaning": "異なる意味",
+          "isCorrect": false
+        },
+        {
+          "id": "d19647a1-2ccd-4820-b1d1-e3613c1614e1_2",
+          "meaning": "関連する概念",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "id": "9b0d0fbc-835c-4a0f-9b87-dc21ae04191f",
+      "word": "alcohol",
+      "reading": "",
+      "partOfSpeech": "noun",
+      "meaningJP": "アルコール",
+      "exampleSentence": "This contains alcohol.",
+      "exampleTranslation": "これはアルコール含有です",
+      "difficulty": 1,
+      "frequency": 4,
+      "eikenLevel": "pre_2nd",
+      "category": "名詞",
+      "choices": [
+        {
+          "id": "9b0d0fbc-835c-4a0f-9b87-dc21ae04191f_3",
+          "meaning": "正反対の意味",
+          "isCorrect": false
+        },
+        {
+          "id": "9b0d0fbc-835c-4a0f-9b87-dc21ae04191f_0",
+          "meaning": "アルコール",
+          "isCorrect": true
+        },
+        {
+          "id": "9b0d0fbc-835c-4a0f-9b87-dc21ae04191f_2",
+          "meaning": "関連する概念",
+          "isCorrect": false
+        },
+        {
+          "id": "9b0d0fbc-835c-4a0f-9b87-dc21ae04191f_1",
+          "meaning": "異なる意味",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "id": "b53d887b-e100-4b78-827e-83b04dbb2b2e",
+      "word": "alert",
+      "reading": "",
+      "partOfSpeech": "adjective",
+      "meaningJP": "注意深い",
+      "exampleSentence": "Stay alert.",
+      "exampleTranslation": "注意深くいなさい",
+      "difficulty": 2,
+      "frequency": 4,
+      "eikenLevel": "pre_2nd",
+      "category": "形容詞",
+      "choices": [
+        {
+          "id": "b53d887b-e100-4b78-827e-83b04dbb2b2e_0",
+          "meaning": "注意深い",
+          "isCorrect": true
+        },
+        {
+          "id": "b53d887b-e100-4b78-827e-83b04dbb2b2e_1",
+          "meaning": "異なる意味",
+          "isCorrect": false
+        },
+        {
+          "id": "b53d887b-e100-4b78-827e-83b04dbb2b2e_3",
+          "meaning": "正反対の意味",
+          "isCorrect": false
+        },
+        {
+          "id": "b53d887b-e100-4b78-827e-83b04dbb2b2e_2",
+          "meaning": "関連する概念",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "id": "3c07f9f1-b4fd-4634-b4f4-c2d243df2b56",
+      "word": "algebra",
+      "reading": "",
+      "partOfSpeech": "noun",
+      "meaningJP": "代数学",
+      "exampleSentence": "Algebra is challenging.",
+      "exampleTranslation": "代数学は難しいです",
+      "difficulty": 2,
+      "frequency": 3,
+      "eikenLevel": "pre_2nd",
+      "category": "名詞",
+      "choices": [
+        {
+          "id": "3c07f9f1-b4fd-4634-b4f4-c2d243df2b56_2",
+          "meaning": "関連する概念",
+          "isCorrect": false
+        },
+        {
+          "id": "3c07f9f1-b4fd-4634-b4f4-c2d243df2b56_3",
+          "meaning": "正反対の意味",
+          "isCorrect": false
+        },
+        {
+          "id": "3c07f9f1-b4fd-4634-b4f4-c2d243df2b56_0",
+          "meaning": "代数学",
+          "isCorrect": true
+        },
+        {
+          "id": "3c07f9f1-b4fd-4634-b4f4-c2d243df2b56_1",
+          "meaning": "異なる意味",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "id": "7db4fdc2-2514-42b4-ab3f-c3c3d7ed4e7f",
+      "word": "alike",
+      "reading": "",
+      "partOfSpeech": "adjective",
+      "meaningJP": "似ている",
+      "exampleSentence": "They look alike.",
+      "exampleTranslation": "彼らは似ています",
+      "difficulty": 2,
+      "frequency": 3,
+      "eikenLevel": "pre_2nd",
+      "category": "形容詞",
+      "choices": [
+        {
+          "id": "7db4fdc2-2514-42b4-ab3f-c3c3d7ed4e7f_1",
+          "meaning": "異なる意味",
+          "isCorrect": false
+        },
+        {
+          "id": "7db4fdc2-2514-42b4-ab3f-c3c3d7ed4e7f_3",
+          "meaning": "正反対の意味",
+          "isCorrect": false
+        },
+        {
+          "id": "7db4fdc2-2514-42b4-ab3f-c3c3d7ed4e7f_0",
+          "meaning": "似ている",
+          "isCorrect": true
+        },
+        {
+          "id": "7db4fdc2-2514-42b4-ab3f-c3c3d7ed4e7f_2",
+          "meaning": "関連する概念",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "id": "01e29a62-bace-4492-8e73-3840e869b3ba",
+      "word": "alive",
+      "reading": "",
+      "partOfSpeech": "adjective",
+      "meaningJP": "生きている",
+      "exampleSentence": "The tradition is alive.",
+      "exampleTranslation": "伝統は生きています",
+      "difficulty": 1,
+      "frequency": 4,
+      "eikenLevel": "pre_2nd",
+      "category": "形容詞",
+      "choices": [
+        {
+          "id": "01e29a62-bace-4492-8e73-3840e869b3ba_0",
+          "meaning": "生きている",
+          "isCorrect": true
+        },
+        {
+          "id": "01e29a62-bace-4492-8e73-3840e869b3ba_1",
+          "meaning": "異なる意味",
+          "isCorrect": false
+        },
+        {
+          "id": "01e29a62-bace-4492-8e73-3840e869b3ba_3",
+          "meaning": "正反対の意味",
+          "isCorrect": false
+        },
+        {
+          "id": "01e29a62-bace-4492-8e73-3840e869b3ba_2",
+          "meaning": "関連する概念",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "id": "6c4b9bfc-69aa-4232-bc46-22567cc610af",
+      "word": "allow",
+      "reading": "",
+      "partOfSpeech": "verb",
+      "meaningJP": "許す",
+      "exampleSentence": "Does the school allow phones?",
+      "exampleTranslation": "学校は携帯電話を許可しますか",
+      "difficulty": 1,
+      "frequency": 5,
+      "eikenLevel": "pre_2nd",
+      "category": "動詞",
+      "choices": [
+        {
+          "id": "6c4b9bfc-69aa-4232-bc46-22567cc610af_2",
+          "meaning": "関連する概念",
+          "isCorrect": false
+        },
+        {
+          "id": "6c4b9bfc-69aa-4232-bc46-22567cc610af_0",
+          "meaning": "許す",
+          "isCorrect": true
+        },
+        {
+          "id": "6c4b9bfc-69aa-4232-bc46-22567cc610af_3",
+          "meaning": "正反対の意味",
+          "isCorrect": false
+        },
+        {
+          "id": "6c4b9bfc-69aa-4232-bc46-22567cc610af_1",
+          "meaning": "異なる意味",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "id": "e1c58807-cc8f-4ad1-a3c4-ea5e1cb348b9",
+      "word": "allowance",
+      "reading": "",
+      "partOfSpeech": "noun",
+      "meaningJP": "小遣い",
+      "exampleSentence": "I get an allowance.",
+      "exampleTranslation": "小遣いをもらいます",
+      "difficulty": 2,
+      "frequency": 3,
+      "eikenLevel": "pre_2nd",
+      "category": "名詞",
+      "choices": [
+        {
+          "id": "e1c58807-cc8f-4ad1-a3c4-ea5e1cb348b9_1",
+          "meaning": "異なる意味",
+          "isCorrect": false
+        },
+        {
+          "id": "e1c58807-cc8f-4ad1-a3c4-ea5e1cb348b9_0",
+          "meaning": "小遣い",
+          "isCorrect": true
+        },
+        {
+          "id": "e1c58807-cc8f-4ad1-a3c4-ea5e1cb348b9_2",
+          "meaning": "関連する概念",
+          "isCorrect": false
+        },
+        {
+          "id": "e1c58807-cc8f-4ad1-a3c4-ea5e1cb348b9_3",
+          "meaning": "正反対の意味",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "id": "c9f24f1b-9999-410e-910f-520e6f44e7d9",
+      "word": "almost",
+      "reading": "",
+      "partOfSpeech": "adverb",
+      "meaningJP": "ほぼ",
+      "exampleSentence": "I'm almost done.",
+      "exampleTranslation": "ほぼ終わりました",
+      "difficulty": 1,
+      "frequency": 5,
+      "eikenLevel": "pre_2nd",
+      "category": "副詞",
+      "choices": [
+        {
+          "id": "c9f24f1b-9999-410e-910f-520e6f44e7d9_3",
+          "meaning": "正反対の意味",
+          "isCorrect": false
+        },
+        {
+          "id": "c9f24f1b-9999-410e-910f-520e6f44e7d9_1",
+          "meaning": "異なる意味",
+          "isCorrect": false
+        },
+        {
+          "id": "c9f24f1b-9999-410e-910f-520e6f44e7d9_0",
+          "meaning": "ほぼ",
+          "isCorrect": true
+        },
+        {
+          "id": "c9f24f1b-9999-410e-910f-520e6f44e7d9_2",
+          "meaning": "関連する概念",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "id": "6c6767dc-993c-4065-a3ac-e59c2f5ee8ec",
+      "word": "alone",
+      "reading": "",
+      "partOfSpeech": "adjective",
+      "meaningJP": "一人で",
+      "exampleSentence": "I prefer to work alone.",
+      "exampleTranslation": "一人で仕事するのが好きです",
+      "difficulty": 1,
+      "frequency": 4,
+      "eikenLevel": "pre_2nd",
+      "category": "形容詞",
+      "choices": [
+        {
+          "id": "6c6767dc-993c-4065-a3ac-e59c2f5ee8ec_3",
+          "meaning": "正反対の意味",
+          "isCorrect": false
+        },
+        {
+          "id": "6c6767dc-993c-4065-a3ac-e59c2f5ee8ec_0",
+          "meaning": "一人で",
+          "isCorrect": true
+        },
+        {
+          "id": "6c6767dc-993c-4065-a3ac-e59c2f5ee8ec_2",
+          "meaning": "関連する概念",
+          "isCorrect": false
+        },
+        {
+          "id": "6c6767dc-993c-4065-a3ac-e59c2f5ee8ec_1",
+          "meaning": "異なる意味",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "id": "c4453673-9fbe-4b06-9d7b-7282517483dd",
+      "word": "along",
+      "reading": "",
+      "partOfSpeech": "preposition",
+      "meaningJP": "〜に沿って",
+      "exampleSentence": "Walk along the beach.",
+      "exampleTranslation": "ビーチに沿って歩きなさい",
+      "difficulty": 1,
+      "frequency": 5,
+      "eikenLevel": "pre_2nd",
+      "category": "前置詞",
+      "choices": [
+        {
+          "id": "c4453673-9fbe-4b06-9d7b-7282517483dd_0",
+          "meaning": "〜に沿って",
+          "isCorrect": true
+        },
+        {
+          "id": "c4453673-9fbe-4b06-9d7b-7282517483dd_1",
+          "meaning": "異なる意味",
+          "isCorrect": false
+        },
+        {
+          "id": "c4453673-9fbe-4b06-9d7b-7282517483dd_2",
+          "meaning": "関連する概念",
+          "isCorrect": false
+        },
+        {
+          "id": "c4453673-9fbe-4b06-9d7b-7282517483dd_3",
+          "meaning": "正反対の意味",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "id": "0d9284b8-ac0a-434d-90ea-70d83be0055a",
+      "word": "aloud",
+      "reading": "",
+      "partOfSpeech": "adverb",
+      "meaningJP": "大声で",
+      "exampleSentence": "Read it aloud.",
+      "exampleTranslation": "大声で読みなさい",
+      "difficulty": 1,
+      "frequency": 4,
+      "eikenLevel": "pre_2nd",
+      "category": "副詞",
+      "choices": [
+        {
+          "id": "0d9284b8-ac0a-434d-90ea-70d83be0055a_1",
+          "meaning": "異なる意味",
+          "isCorrect": false
+        },
+        {
+          "id": "0d9284b8-ac0a-434d-90ea-70d83be0055a_2",
+          "meaning": "関連する概念",
+          "isCorrect": false
+        },
+        {
+          "id": "0d9284b8-ac0a-434d-90ea-70d83be0055a_0",
+          "meaning": "大声で",
+          "isCorrect": true
+        },
+        {
+          "id": "0d9284b8-ac0a-434d-90ea-70d83be0055a_3",
+          "meaning": "正反対の意味",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "id": "19ac445e-7ef7-4443-800b-909a0a0d04bc",
+      "word": "alphabet",
+      "reading": "",
+      "partOfSpeech": "noun",
+      "meaningJP": "アルファベット",
+      "exampleSentence": "The alphabet has 26 letters.",
+      "exampleTranslation": "アルファベットは26文字です",
+      "difficulty": 1,
+      "frequency": 4,
+      "eikenLevel": "pre_2nd",
+      "category": "名詞",
+      "choices": [
+        {
+          "id": "19ac445e-7ef7-4443-800b-909a0a0d04bc_1",
+          "meaning": "異なる意味",
+          "isCorrect": false
+        },
+        {
+          "id": "19ac445e-7ef7-4443-800b-909a0a0d04bc_2",
+          "meaning": "関連する概念",
+          "isCorrect": false
+        },
+        {
+          "id": "19ac445e-7ef7-4443-800b-909a0a0d04bc_0",
+          "meaning": "アルファベット",
+          "isCorrect": true
+        },
+        {
+          "id": "19ac445e-7ef7-4443-800b-909a0a0d04bc_3",
+          "meaning": "正反対の意味",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "id": "29980028-92b3-430c-9b03-35fe370613e6",
+      "word": "already",
+      "reading": "",
+      "partOfSpeech": "adverb",
+      "meaningJP": "すでに",
+      "exampleSentence": "Have you already finished?",
+      "exampleTranslation": "もう終わりましたか",
+      "difficulty": 1,
+      "frequency": 5,
+      "eikenLevel": "pre_2nd",
+      "category": "副詞",
+      "choices": [
+        {
+          "id": "29980028-92b3-430c-9b03-35fe370613e6_2",
+          "meaning": "関連する概念",
+          "isCorrect": false
+        },
+        {
+          "id": "29980028-92b3-430c-9b03-35fe370613e6_3",
+          "meaning": "正反対の意味",
+          "isCorrect": false
+        },
+        {
+          "id": "29980028-92b3-430c-9b03-35fe370613e6_1",
+          "meaning": "異なる意味",
+          "isCorrect": false
+        },
+        {
+          "id": "29980028-92b3-430c-9b03-35fe370613e6_0",
+          "meaning": "すでに",
+          "isCorrect": true
+        }
+      ]
+    },
+    {
+      "id": "59436a40-388c-4999-8944-8728073197e7",
+      "word": "also",
+      "reading": "",
+      "partOfSpeech": "adverb",
+      "meaningJP": "また",
+      "exampleSentence": "I also want to go.",
+      "exampleTranslation": "私も行きたいです",
+      "difficulty": 1,
+      "frequency": 5,
+      "eikenLevel": "pre_2nd",
+      "category": "副詞",
+      "choices": [
+        {
+          "id": "59436a40-388c-4999-8944-8728073197e7_0",
+          "meaning": "また",
+          "isCorrect": true
+        },
+        {
+          "id": "59436a40-388c-4999-8944-8728073197e7_2",
+          "meaning": "関連する概念",
+          "isCorrect": false
+        },
+        {
+          "id": "59436a40-388c-4999-8944-8728073197e7_1",
+          "meaning": "異なる意味",
+          "isCorrect": false
+        },
+        {
+          "id": "59436a40-388c-4999-8944-8728073197e7_3",
+          "meaning": "正反対の意味",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "id": "27428db9-760c-457b-8dcf-398eb100c7c8",
+      "word": "alter",
+      "reading": "",
+      "partOfSpeech": "verb",
+      "meaningJP": "変える",
+      "exampleSentence": "Don't alter the plan.",
+      "exampleTranslation": "計画を変えないで",
+      "difficulty": 2,
+      "frequency": 4,
+      "eikenLevel": "pre_2nd",
+      "category": "動詞",
+      "choices": [
+        {
+          "id": "27428db9-760c-457b-8dcf-398eb100c7c8_3",
+          "meaning": "正反対の意味",
+          "isCorrect": false
+        },
+        {
+          "id": "27428db9-760c-457b-8dcf-398eb100c7c8_2",
+          "meaning": "関連する概念",
+          "isCorrect": false
+        },
+        {
+          "id": "27428db9-760c-457b-8dcf-398eb100c7c8_1",
+          "meaning": "異なる意味",
+          "isCorrect": false
+        },
+        {
+          "id": "27428db9-760c-457b-8dcf-398eb100c7c8_0",
+          "meaning": "変える",
+          "isCorrect": true
+        }
+      ]
+    },
+    {
+      "id": "6eacf20b-7c2b-4d1e-8bd4-dbf443d91970",
+      "word": "alternative",
+      "reading": "",
+      "partOfSpeech": "noun",
+      "meaningJP": "代替案",
+      "exampleSentence": "Is there an alternative?",
+      "exampleTranslation": "代替案があります",
+      "difficulty": 2,
+      "frequency": 4,
+      "eikenLevel": "pre_2nd",
+      "category": "名詞",
+      "choices": [
+        {
+          "id": "6eacf20b-7c2b-4d1e-8bd4-dbf443d91970_1",
+          "meaning": "異なる意味",
+          "isCorrect": false
+        },
+        {
+          "id": "6eacf20b-7c2b-4d1e-8bd4-dbf443d91970_3",
+          "meaning": "正反対の意味",
+          "isCorrect": false
+        },
+        {
+          "id": "6eacf20b-7c2b-4d1e-8bd4-dbf443d91970_0",
+          "meaning": "代替案",
+          "isCorrect": true
+        },
+        {
+          "id": "6eacf20b-7c2b-4d1e-8bd4-dbf443d91970_2",
+          "meaning": "関連する概念",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "id": "804b9d9a-a527-463b-a4f1-e228ca29a229",
+      "word": "altitude",
+      "reading": "",
+      "partOfSpeech": "noun",
+      "meaningJP": "高度",
+      "exampleSentence": "The altitude is high.",
+      "exampleTranslation": "高度が高いです",
+      "difficulty": 2,
+      "frequency": 3,
+      "eikenLevel": "pre_2nd",
+      "category": "名詞",
+      "choices": [
+        {
+          "id": "804b9d9a-a527-463b-a4f1-e228ca29a229_1",
+          "meaning": "異なる意味",
+          "isCorrect": false
+        },
+        {
+          "id": "804b9d9a-a527-463b-a4f1-e228ca29a229_3",
+          "meaning": "正反対の意味",
+          "isCorrect": false
+        },
+        {
+          "id": "804b9d9a-a527-463b-a4f1-e228ca29a229_2",
+          "meaning": "関連する概念",
+          "isCorrect": false
+        },
+        {
+          "id": "804b9d9a-a527-463b-a4f1-e228ca29a229_0",
+          "meaning": "高度",
+          "isCorrect": true
+        }
+      ]
+    },
+    {
+      "id": "8715d170-dbc3-4507-9524-4fbd7d02593a",
+      "word": "altogether",
+      "reading": "",
+      "partOfSpeech": "adverb",
+      "meaningJP": "合計で",
+      "exampleSentence": "We spent 500 dollars altogether.",
+      "exampleTranslation": "合計で500ドル使いました",
+      "difficulty": 2,
+      "frequency": 3,
+      "eikenLevel": "pre_2nd",
+      "category": "副詞",
+      "choices": [
+        {
+          "id": "8715d170-dbc3-4507-9524-4fbd7d02593a_1",
+          "meaning": "異なる意味",
+          "isCorrect": false
+        },
+        {
+          "id": "8715d170-dbc3-4507-9524-4fbd7d02593a_2",
+          "meaning": "関連する概念",
+          "isCorrect": false
+        },
+        {
+          "id": "8715d170-dbc3-4507-9524-4fbd7d02593a_3",
+          "meaning": "正反対の意味",
+          "isCorrect": false
+        },
+        {
+          "id": "8715d170-dbc3-4507-9524-4fbd7d02593a_0",
+          "meaning": "合計で",
+          "isCorrect": true
+        }
+      ]
+    },
+    {
+      "id": "ac12b675-09ca-43c8-838e-99884d2d6cc0",
+      "word": "always",
+      "reading": "",
+      "partOfSpeech": "adverb",
+      "meaningJP": "いつも",
+      "exampleSentence": "I always eat breakfast.",
+      "exampleTranslation": "いつも朝食を食べます",
+      "difficulty": 1,
+      "frequency": 5,
+      "eikenLevel": "pre_2nd",
+      "category": "副詞",
+      "choices": [
+        {
+          "id": "ac12b675-09ca-43c8-838e-99884d2d6cc0_1",
+          "meaning": "異なる意味",
+          "isCorrect": false
+        },
+        {
+          "id": "ac12b675-09ca-43c8-838e-99884d2d6cc0_0",
+          "meaning": "いつも",
+          "isCorrect": true
+        },
+        {
+          "id": "ac12b675-09ca-43c8-838e-99884d2d6cc0_2",
+          "meaning": "関連する概念",
+          "isCorrect": false
+        },
+        {
+          "id": "ac12b675-09ca-43c8-838e-99884d2d6cc0_3",
+          "meaning": "正反対の意味",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "id": "e04898c0-6d28-409a-9ea9-0e5e02f0eecc",
+      "word": "amateur",
+      "reading": "",
+      "partOfSpeech": "noun",
+      "meaningJP": "素人",
+      "exampleSentence": "He is an amateur.",
+      "exampleTranslation": "彼は素人です",
+      "difficulty": 2,
+      "frequency": 4,
+      "eikenLevel": "pre_2nd",
+      "category": "名詞",
+      "choices": [
+        {
+          "id": "e04898c0-6d28-409a-9ea9-0e5e02f0eecc_0",
+          "meaning": "素人",
+          "isCorrect": true
+        },
+        {
+          "id": "e04898c0-6d28-409a-9ea9-0e5e02f0eecc_1",
+          "meaning": "異なる意味",
+          "isCorrect": false
+        },
+        {
+          "id": "e04898c0-6d28-409a-9ea9-0e5e02f0eecc_3",
+          "meaning": "正反対の意味",
+          "isCorrect": false
+        },
+        {
+          "id": "e04898c0-6d28-409a-9ea9-0e5e02f0eecc_2",
+          "meaning": "関連する概念",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "id": "2ab0c6e3-16d3-40ed-b1ea-aa0660fd9b7a",
+      "word": "amaze",
+      "reading": "",
+      "partOfSpeech": "verb",
+      "meaningJP": "驚かせる",
+      "exampleSentence": "His talent amazed everyone.",
+      "exampleTranslation": "彼の才能は皆を驚かせました",
+      "difficulty": 2,
+      "frequency": 4,
+      "eikenLevel": "pre_2nd",
+      "category": "動詞",
+      "choices": [
+        {
+          "id": "2ab0c6e3-16d3-40ed-b1ea-aa0660fd9b7a_0",
+          "meaning": "驚かせる",
+          "isCorrect": true
+        },
+        {
+          "id": "2ab0c6e3-16d3-40ed-b1ea-aa0660fd9b7a_3",
+          "meaning": "正反対の意味",
+          "isCorrect": false
+        },
+        {
+          "id": "2ab0c6e3-16d3-40ed-b1ea-aa0660fd9b7a_1",
+          "meaning": "異なる意味",
+          "isCorrect": false
+        },
+        {
+          "id": "2ab0c6e3-16d3-40ed-b1ea-aa0660fd9b7a_2",
+          "meaning": "関連する概念",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "id": "fc1b0b73-c1a1-46aa-882d-a24eb1f28374",
+      "word": "ambassador",
+      "reading": "",
+      "partOfSpeech": "noun",
+      "meaningJP": "大使",
+      "exampleSentence": "The ambassador arrived.",
+      "exampleTranslation": "大使が到着しました",
+      "difficulty": 2,
+      "frequency": 3,
+      "eikenLevel": "pre_2nd",
+      "category": "名詞",
+      "choices": [
+        {
+          "id": "fc1b0b73-c1a1-46aa-882d-a24eb1f28374_3",
+          "meaning": "正反対の意味",
+          "isCorrect": false
+        },
+        {
+          "id": "fc1b0b73-c1a1-46aa-882d-a24eb1f28374_1",
+          "meaning": "異なる意味",
+          "isCorrect": false
+        },
+        {
+          "id": "fc1b0b73-c1a1-46aa-882d-a24eb1f28374_2",
+          "meaning": "関連する概念",
+          "isCorrect": false
+        },
+        {
+          "id": "fc1b0b73-c1a1-46aa-882d-a24eb1f28374_0",
+          "meaning": "大使",
+          "isCorrect": true
+        }
+      ]
+    },
+    {
+      "id": "8db9c27e-7bae-4d81-9db5-39eb896ce155",
+      "word": "ambition",
+      "reading": "",
+      "partOfSpeech": "noun",
+      "meaningJP": "野心",
+      "exampleSentence": "She has great ambitions.",
+      "exampleTranslation": "彼女は大きな野心があります",
+      "difficulty": 2,
+      "frequency": 4,
+      "eikenLevel": "pre_2nd",
+      "category": "名詞",
+      "choices": [
+        {
+          "id": "8db9c27e-7bae-4d81-9db5-39eb896ce155_0",
+          "meaning": "野心",
+          "isCorrect": true
+        },
+        {
+          "id": "8db9c27e-7bae-4d81-9db5-39eb896ce155_2",
+          "meaning": "関連する概念",
+          "isCorrect": false
+        },
+        {
+          "id": "8db9c27e-7bae-4d81-9db5-39eb896ce155_1",
+          "meaning": "異なる意味",
+          "isCorrect": false
+        },
+        {
+          "id": "8db9c27e-7bae-4d81-9db5-39eb896ce155_3",
+          "meaning": "正反対の意味",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "id": "cd628495-21bd-4ebe-9021-8c607bec414f",
+      "word": "ambitious",
+      "reading": "",
+      "partOfSpeech": "adjective",
+      "meaningJP": "野心的な",
+      "exampleSentence": "He is very ambitious.",
+      "exampleTranslation": "彼は野心的です",
+      "difficulty": 2,
+      "frequency": 4,
+      "eikenLevel": "pre_2nd",
+      "category": "形容詞",
+      "choices": [
+        {
+          "id": "cd628495-21bd-4ebe-9021-8c607bec414f_0",
+          "meaning": "野心的な",
+          "isCorrect": true
+        },
+        {
+          "id": "cd628495-21bd-4ebe-9021-8c607bec414f_1",
+          "meaning": "異なる意味",
+          "isCorrect": false
+        },
+        {
+          "id": "cd628495-21bd-4ebe-9021-8c607bec414f_2",
+          "meaning": "関連する概念",
+          "isCorrect": false
+        },
+        {
+          "id": "cd628495-21bd-4ebe-9021-8c607bec414f_3",
+          "meaning": "正反対の意味",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "id": "0d38700f-ffea-4fc7-b30c-932051fd8055",
+      "word": "ambulance",
+      "reading": "",
+      "partOfSpeech": "noun",
+      "meaningJP": "救急車",
+      "exampleSentence": "Call an ambulance.",
+      "exampleTranslation": "救急車を呼びなさい",
+      "difficulty": 1,
+      "frequency": 4,
+      "eikenLevel": "pre_2nd",
+      "category": "名詞",
+      "choices": [
+        {
+          "id": "0d38700f-ffea-4fc7-b30c-932051fd8055_1",
+          "meaning": "異なる意味",
+          "isCorrect": false
+        },
+        {
+          "id": "0d38700f-ffea-4fc7-b30c-932051fd8055_0",
+          "meaning": "救急車",
+          "isCorrect": true
+        },
+        {
+          "id": "0d38700f-ffea-4fc7-b30c-932051fd8055_2",
+          "meaning": "関連する概念",
+          "isCorrect": false
+        },
+        {
+          "id": "0d38700f-ffea-4fc7-b30c-932051fd8055_3",
+          "meaning": "正反対の意味",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "id": "b557e16d-a280-4e8c-8e3f-fc1893131f56",
+      "word": "amendment",
+      "reading": "",
+      "partOfSpeech": "noun",
+      "meaningJP": "改正",
+      "exampleSentence": "The amendment passed.",
+      "exampleTranslation": "改正が可決されました",
+      "difficulty": 2,
+      "frequency": 3,
+      "eikenLevel": "pre_2nd",
+      "category": "名詞",
+      "choices": [
+        {
+          "id": "b557e16d-a280-4e8c-8e3f-fc1893131f56_3",
+          "meaning": "正反対の意味",
+          "isCorrect": false
+        },
+        {
+          "id": "b557e16d-a280-4e8c-8e3f-fc1893131f56_0",
+          "meaning": "改正",
+          "isCorrect": true
+        },
+        {
+          "id": "b557e16d-a280-4e8c-8e3f-fc1893131f56_1",
+          "meaning": "異なる意味",
+          "isCorrect": false
+        },
+        {
+          "id": "b557e16d-a280-4e8c-8e3f-fc1893131f56_2",
+          "meaning": "関連する概念",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "id": "e72720aa-1ce0-45da-843b-226587fbb95d",
+      "word": "among",
+      "reading": "",
+      "partOfSpeech": "preposition",
+      "meaningJP": "〜の間に",
+      "exampleSentence": "Among the crowd.",
+      "exampleTranslation": "群衆の中で",
+      "difficulty": 1,
+      "frequency": 5,
+      "eikenLevel": "pre_2nd",
+      "category": "前置詞",
+      "choices": [
+        {
+          "id": "e72720aa-1ce0-45da-843b-226587fbb95d_0",
+          "meaning": "〜の間に",
+          "isCorrect": true
+        },
+        {
+          "id": "e72720aa-1ce0-45da-843b-226587fbb95d_3",
+          "meaning": "正反対の意味",
+          "isCorrect": false
+        },
+        {
+          "id": "e72720aa-1ce0-45da-843b-226587fbb95d_1",
+          "meaning": "異なる意味",
+          "isCorrect": false
+        },
+        {
+          "id": "e72720aa-1ce0-45da-843b-226587fbb95d_2",
+          "meaning": "関連する概念",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "id": "5f6a9088-a88f-4d3f-ba20-01336317e787",
+      "word": "amount",
+      "reading": "",
+      "partOfSpeech": "noun",
+      "meaningJP": "量",
+      "exampleSentence": "What is the amount?",
+      "exampleTranslation": "量はいくら?",
+      "difficulty": 1,
+      "frequency": 5,
+      "eikenLevel": "pre_2nd",
+      "category": "名詞",
+      "choices": [
+        {
+          "id": "5f6a9088-a88f-4d3f-ba20-01336317e787_1",
+          "meaning": "異なる意味",
+          "isCorrect": false
+        },
+        {
+          "id": "5f6a9088-a88f-4d3f-ba20-01336317e787_3",
+          "meaning": "正反対の意味",
+          "isCorrect": false
+        },
+        {
+          "id": "5f6a9088-a88f-4d3f-ba20-01336317e787_0",
+          "meaning": "量",
+          "isCorrect": true
+        },
+        {
+          "id": "5f6a9088-a88f-4d3f-ba20-01336317e787_2",
+          "meaning": "関連する概念",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "id": "5a175e2f-206a-4571-86b8-d6f9235004b0",
+      "word": "analysis",
+      "reading": "",
+      "partOfSpeech": "noun",
+      "meaningJP": "分析",
+      "exampleSentence": "Analysis is important.",
+      "exampleTranslation": "分析は重要です",
+      "difficulty": 2,
+      "frequency": 3,
+      "eikenLevel": "pre_2nd",
+      "category": "名詞",
+      "choices": [
+        {
+          "id": "5a175e2f-206a-4571-86b8-d6f9235004b0_0",
+          "meaning": "分析",
+          "isCorrect": true
+        },
+        {
+          "id": "5a175e2f-206a-4571-86b8-d6f9235004b0_1",
+          "meaning": "異なる意味",
+          "isCorrect": false
+        },
+        {
+          "id": "5a175e2f-206a-4571-86b8-d6f9235004b0_2",
+          "meaning": "関連する概念",
+          "isCorrect": false
+        },
+        {
+          "id": "5a175e2f-206a-4571-86b8-d6f9235004b0_3",
+          "meaning": "正反対の意味",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "id": "1b9a69e2-20ea-4755-82c7-73b93559d95b",
+      "word": "analyze",
+      "reading": "",
+      "partOfSpeech": "verb",
+      "meaningJP": "分析する",
+      "exampleSentence": "Analyze the data.",
+      "exampleTranslation": "データを分析しなさい",
+      "difficulty": 2,
+      "frequency": 3,
+      "eikenLevel": "pre_2nd",
+      "category": "動詞",
+      "choices": [
+        {
+          "id": "1b9a69e2-20ea-4755-82c7-73b93559d95b_2",
+          "meaning": "関連する概念",
+          "isCorrect": false
+        },
+        {
+          "id": "1b9a69e2-20ea-4755-82c7-73b93559d95b_3",
+          "meaning": "正反対の意味",
+          "isCorrect": false
+        },
+        {
+          "id": "1b9a69e2-20ea-4755-82c7-73b93559d95b_1",
+          "meaning": "異なる意味",
+          "isCorrect": false
+        },
+        {
+          "id": "1b9a69e2-20ea-4755-82c7-73b93559d95b_0",
+          "meaning": "分析する",
+          "isCorrect": true
+        }
+      ]
+    },
+    {
+      "id": "ba571c6e-f2f4-48b3-bbec-197dd60011f2",
+      "word": "ancestor",
+      "reading": "",
+      "partOfSpeech": "noun",
+      "meaningJP": "祖先",
+      "exampleSentence": "My ancestors were farmers.",
+      "exampleTranslation": "私の祖先は農民でした",
+      "difficulty": 2,
+      "frequency": 3,
+      "eikenLevel": "pre_2nd",
+      "category": "名詞",
+      "choices": [
+        {
+          "id": "ba571c6e-f2f4-48b3-bbec-197dd60011f2_3",
+          "meaning": "正反対の意味",
+          "isCorrect": false
+        },
+        {
+          "id": "ba571c6e-f2f4-48b3-bbec-197dd60011f2_0",
+          "meaning": "祖先",
+          "isCorrect": true
+        },
+        {
+          "id": "ba571c6e-f2f4-48b3-bbec-197dd60011f2_1",
+          "meaning": "異なる意味",
+          "isCorrect": false
+        },
+        {
+          "id": "ba571c6e-f2f4-48b3-bbec-197dd60011f2_2",
+          "meaning": "関連する概念",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "id": "d80dc65e-cb7d-4000-9b77-c6acac8caf1f",
+      "word": "ancient",
+      "reading": "",
+      "partOfSpeech": "adjective",
+      "meaningJP": "古い",
+      "exampleSentence": "Ancient Rome was powerful.",
+      "exampleTranslation": "古いローマは強力でした",
+      "difficulty": 2,
+      "frequency": 3,
+      "eikenLevel": "pre_2nd",
+      "category": "形容詞",
+      "choices": [
+        {
+          "id": "d80dc65e-cb7d-4000-9b77-c6acac8caf1f_0",
+          "meaning": "古い",
+          "isCorrect": true
+        },
+        {
+          "id": "d80dc65e-cb7d-4000-9b77-c6acac8caf1f_1",
+          "meaning": "異なる意味",
+          "isCorrect": false
+        },
+        {
+          "id": "d80dc65e-cb7d-4000-9b77-c6acac8caf1f_2",
+          "meaning": "関連する概念",
+          "isCorrect": false
+        },
+        {
+          "id": "d80dc65e-cb7d-4000-9b77-c6acac8caf1f_3",
+          "meaning": "正反対の意味",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "id": "49fe4317-d8e4-4e5f-98b2-e4da402cde7a",
+      "word": "and",
+      "reading": "",
+      "partOfSpeech": "conjunction",
+      "meaningJP": "そして",
+      "exampleSentence": "Cats and dogs.",
+      "exampleTranslation": "猫と犬",
+      "difficulty": 1,
+      "frequency": 5,
+      "eikenLevel": "pre_2nd",
+      "category": "接続詞",
+      "choices": [
+        {
+          "id": "49fe4317-d8e4-4e5f-98b2-e4da402cde7a_0",
+          "meaning": "そして",
+          "isCorrect": true
+        },
+        {
+          "id": "49fe4317-d8e4-4e5f-98b2-e4da402cde7a_1",
+          "meaning": "異なる意味",
+          "isCorrect": false
+        },
+        {
+          "id": "49fe4317-d8e4-4e5f-98b2-e4da402cde7a_2",
+          "meaning": "関連する概念",
+          "isCorrect": false
+        },
+        {
+          "id": "49fe4317-d8e4-4e5f-98b2-e4da402cde7a_3",
+          "meaning": "正反対の意味",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "id": "9f94ace9-bfc7-4e1a-8710-f1d2133ddddf",
+      "word": "angle",
+      "reading": "",
+      "partOfSpeech": "noun",
+      "meaningJP": "角度",
+      "exampleSentence": "What is the angle?",
+      "exampleTranslation": "角度は何?",
+      "difficulty": 2,
+      "frequency": 3,
+      "eikenLevel": "pre_2nd",
+      "category": "名詞",
+      "choices": [
+        {
+          "id": "9f94ace9-bfc7-4e1a-8710-f1d2133ddddf_1",
+          "meaning": "異なる意味",
+          "isCorrect": false
+        },
+        {
+          "id": "9f94ace9-bfc7-4e1a-8710-f1d2133ddddf_3",
+          "meaning": "正反対の意味",
+          "isCorrect": false
+        },
+        {
+          "id": "9f94ace9-bfc7-4e1a-8710-f1d2133ddddf_0",
+          "meaning": "角度",
+          "isCorrect": true
+        },
+        {
+          "id": "9f94ace9-bfc7-4e1a-8710-f1d2133ddddf_2",
+          "meaning": "関連する概念",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "id": "480f45b5-b965-42a4-a87a-2a1fd559fc21",
+      "word": "angry",
+      "reading": "",
+      "partOfSpeech": "adjective",
+      "meaningJP": "怒っている",
+      "exampleSentence": "He is angry.",
+      "exampleTranslation": "彼は怒っています",
+      "difficulty": 1,
+      "frequency": 4,
+      "eikenLevel": "pre_2nd",
+      "category": "形容詞",
+      "choices": [
+        {
+          "id": "480f45b5-b965-42a4-a87a-2a1fd559fc21_1",
+          "meaning": "異なる意味",
+          "isCorrect": false
+        },
+        {
+          "id": "480f45b5-b965-42a4-a87a-2a1fd559fc21_2",
+          "meaning": "関連する概念",
+          "isCorrect": false
+        },
+        {
+          "id": "480f45b5-b965-42a4-a87a-2a1fd559fc21_3",
+          "meaning": "正反対の意味",
+          "isCorrect": false
+        },
+        {
+          "id": "480f45b5-b965-42a4-a87a-2a1fd559fc21_0",
+          "meaning": "怒っている",
+          "isCorrect": true
+        }
+      ]
+    },
+    {
+      "id": "a036d3ed-d3d9-4a49-a1d0-34bb42b0b839",
+      "word": "animal",
+      "reading": "",
+      "partOfSpeech": "noun",
+      "meaningJP": "動物",
+      "exampleSentence": "I love animals.",
+      "exampleTranslation": "動物が好きです",
+      "difficulty": 1,
+      "frequency": 5,
+      "eikenLevel": "pre_2nd",
+      "category": "名詞",
+      "choices": [
+        {
+          "id": "a036d3ed-d3d9-4a49-a1d0-34bb42b0b839_3",
+          "meaning": "正反対の意味",
+          "isCorrect": false
+        },
+        {
+          "id": "a036d3ed-d3d9-4a49-a1d0-34bb42b0b839_2",
+          "meaning": "関連する概念",
+          "isCorrect": false
+        },
+        {
+          "id": "a036d3ed-d3d9-4a49-a1d0-34bb42b0b839_0",
+          "meaning": "動物",
+          "isCorrect": true
+        },
+        {
+          "id": "a036d3ed-d3d9-4a49-a1d0-34bb42b0b839_1",
+          "meaning": "異なる意味",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "id": "1683a230-782d-4ec9-b841-efb4f9d6bd6a",
+      "word": "ankle",
+      "reading": "",
+      "partOfSpeech": "noun",
+      "meaningJP": "足首",
+      "exampleSentence": "My ankle hurts.",
+      "exampleTranslation": "足首が痛いです",
+      "difficulty": 1,
+      "frequency": 4,
+      "eikenLevel": "pre_2nd",
+      "category": "名詞",
+      "choices": [
+        {
+          "id": "1683a230-782d-4ec9-b841-efb4f9d6bd6a_0",
+          "meaning": "足首",
+          "isCorrect": true
+        },
+        {
+          "id": "1683a230-782d-4ec9-b841-efb4f9d6bd6a_3",
+          "meaning": "正反対の意味",
+          "isCorrect": false
+        },
+        {
+          "id": "1683a230-782d-4ec9-b841-efb4f9d6bd6a_2",
+          "meaning": "関連する概念",
+          "isCorrect": false
+        },
+        {
+          "id": "1683a230-782d-4ec9-b841-efb4f9d6bd6a_1",
+          "meaning": "異なる意味",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "id": "6b1fd173-92f3-477e-8a41-bf3c9de25827",
+      "word": "anniversary",
+      "reading": "",
+      "partOfSpeech": "noun",
+      "meaningJP": "周年記念",
+      "exampleSentence": "Happy anniversary!",
+      "exampleTranslation": "周年記念おめでとう",
+      "difficulty": 2,
+      "frequency": 3,
+      "eikenLevel": "pre_2nd",
+      "category": "名詞",
+      "choices": [
+        {
+          "id": "6b1fd173-92f3-477e-8a41-bf3c9de25827_1",
+          "meaning": "異なる意味",
+          "isCorrect": false
+        },
+        {
+          "id": "6b1fd173-92f3-477e-8a41-bf3c9de25827_2",
+          "meaning": "関連する概念",
+          "isCorrect": false
+        },
+        {
+          "id": "6b1fd173-92f3-477e-8a41-bf3c9de25827_3",
+          "meaning": "正反対の意味",
+          "isCorrect": false
+        },
+        {
+          "id": "6b1fd173-92f3-477e-8a41-bf3c9de25827_0",
+          "meaning": "周年記念",
+          "isCorrect": true
+        }
+      ]
+    },
+    {
+      "id": "58ca07ae-1c16-459e-903b-0dac3aa28728",
+      "word": "announce",
+      "reading": "",
+      "partOfSpeech": "verb",
+      "meaningJP": "発表する",
+      "exampleSentence": "The school announced new policies.",
+      "exampleTranslation": "学校は新しい方針を発表しました",
+      "difficulty": 2,
+      "frequency": 3,
+      "eikenLevel": "pre_2nd",
+      "category": "動詞",
+      "choices": [
+        {
+          "id": "58ca07ae-1c16-459e-903b-0dac3aa28728_1",
+          "meaning": "異なる意味",
+          "isCorrect": false
+        },
+        {
+          "id": "58ca07ae-1c16-459e-903b-0dac3aa28728_2",
+          "meaning": "関連する概念",
+          "isCorrect": false
+        },
+        {
+          "id": "58ca07ae-1c16-459e-903b-0dac3aa28728_0",
+          "meaning": "発表する",
+          "isCorrect": true
+        },
+        {
+          "id": "58ca07ae-1c16-459e-903b-0dac3aa28728_3",
+          "meaning": "正反対の意味",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "id": "91f2c9ca-3eb6-41a9-bd01-d8e508e4ff58",
+      "word": "annoy",
+      "reading": "",
+      "partOfSpeech": "verb",
+      "meaningJP": "いらいらさせる",
+      "exampleSentence": "This noise annoys me.",
+      "exampleTranslation": "この音は私をいらいらさせます",
+      "difficulty": 2,
+      "frequency": 3,
+      "eikenLevel": "pre_2nd",
+      "category": "動詞",
+      "choices": [
+        {
+          "id": "91f2c9ca-3eb6-41a9-bd01-d8e508e4ff58_3",
+          "meaning": "正反対の意味",
+          "isCorrect": false
+        },
+        {
+          "id": "91f2c9ca-3eb6-41a9-bd01-d8e508e4ff58_1",
+          "meaning": "異なる意味",
+          "isCorrect": false
+        },
+        {
+          "id": "91f2c9ca-3eb6-41a9-bd01-d8e508e4ff58_2",
+          "meaning": "関連する概念",
+          "isCorrect": false
+        },
+        {
+          "id": "91f2c9ca-3eb6-41a9-bd01-d8e508e4ff58_0",
+          "meaning": "いらいらさせる",
+          "isCorrect": true
+        }
+      ]
+    },
+    {
+      "id": "074235ad-b445-42d2-8d17-c0c5c7fce63f",
+      "word": "annual",
+      "reading": "",
+      "partOfSpeech": "adjective",
+      "meaningJP": "年間の",
+      "exampleSentence": "The annual meeting is next week.",
+      "exampleTranslation": "年間会議は来週です",
+      "difficulty": 2,
+      "frequency": 4,
+      "eikenLevel": "pre_2nd",
+      "category": "形容詞",
+      "choices": [
+        {
+          "id": "074235ad-b445-42d2-8d17-c0c5c7fce63f_2",
+          "meaning": "関連する概念",
+          "isCorrect": false
+        },
+        {
+          "id": "074235ad-b445-42d2-8d17-c0c5c7fce63f_3",
+          "meaning": "正反対の意味",
+          "isCorrect": false
+        },
+        {
+          "id": "074235ad-b445-42d2-8d17-c0c5c7fce63f_0",
+          "meaning": "年間の",
+          "isCorrect": true
+        },
+        {
+          "id": "074235ad-b445-42d2-8d17-c0c5c7fce63f_1",
+          "meaning": "異なる意味",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "id": "efd4bb72-9d9f-4687-af08-8be51adb23c6",
+      "word": "another",
+      "reading": "",
+      "partOfSpeech": "determiner",
+      "meaningJP": "別の",
+      "exampleSentence": "Another cup of coffee please.",
+      "exampleTranslation": "別のコーヒーをください",
+      "difficulty": 1,
+      "frequency": 5,
+      "eikenLevel": "pre_2nd",
+      "category": "限定詞",
+      "choices": [
+        {
+          "id": "efd4bb72-9d9f-4687-af08-8be51adb23c6_3",
+          "meaning": "正反対の意味",
+          "isCorrect": false
+        },
+        {
+          "id": "efd4bb72-9d9f-4687-af08-8be51adb23c6_1",
+          "meaning": "異なる意味",
+          "isCorrect": false
+        },
+        {
+          "id": "efd4bb72-9d9f-4687-af08-8be51adb23c6_0",
+          "meaning": "別の",
+          "isCorrect": true
+        },
+        {
+          "id": "efd4bb72-9d9f-4687-af08-8be51adb23c6_2",
+          "meaning": "関連する概念",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "id": "0a9e4aaa-1a61-4f39-a2b2-d5e35261a51f",
+      "word": "answer",
+      "reading": "",
+      "partOfSpeech": "noun/verb",
+      "meaningJP": "答え",
+      "exampleSentence": "What is the answer?",
+      "exampleTranslation": "答えは何?",
+      "difficulty": 1,
+      "frequency": 5,
+      "eikenLevel": "pre_2nd",
+      "category": "その他",
+      "choices": [
+        {
+          "id": "0a9e4aaa-1a61-4f39-a2b2-d5e35261a51f_2",
+          "meaning": "関連する概念",
+          "isCorrect": false
+        },
+        {
+          "id": "0a9e4aaa-1a61-4f39-a2b2-d5e35261a51f_1",
+          "meaning": "異なる意味",
+          "isCorrect": false
+        },
+        {
+          "id": "0a9e4aaa-1a61-4f39-a2b2-d5e35261a51f_0",
+          "meaning": "答え",
+          "isCorrect": true
+        },
+        {
+          "id": "0a9e4aaa-1a61-4f39-a2b2-d5e35261a51f_3",
+          "meaning": "正反対の意味",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "id": "d83dbbb9-bd23-4d74-86b8-4a3589b808e0",
+      "word": "ant",
+      "reading": "",
+      "partOfSpeech": "noun",
+      "meaningJP": "蟻",
+      "exampleSentence": "Ants work together.",
+      "exampleTranslation": "蟻は一緒に働きます",
+      "difficulty": 1,
+      "frequency": 4,
+      "eikenLevel": "pre_2nd",
+      "category": "名詞",
+      "choices": [
+        {
+          "id": "d83dbbb9-bd23-4d74-86b8-4a3589b808e0_1",
+          "meaning": "異なる意味",
+          "isCorrect": false
+        },
+        {
+          "id": "d83dbbb9-bd23-4d74-86b8-4a3589b808e0_0",
+          "meaning": "蟻",
+          "isCorrect": true
+        },
+        {
+          "id": "d83dbbb9-bd23-4d74-86b8-4a3589b808e0_3",
+          "meaning": "正反対の意味",
+          "isCorrect": false
+        },
+        {
+          "id": "d83dbbb9-bd23-4d74-86b8-4a3589b808e0_2",
+          "meaning": "関連する概念",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "id": "5a6110a6-d146-4092-8d4a-b08f4f752ffd",
+      "word": "anticipate",
+      "reading": "",
+      "partOfSpeech": "verb",
+      "meaningJP": "期待する",
+      "exampleSentence": "We anticipate success.",
+      "exampleTranslation": "成功を期待します",
+      "difficulty": 2,
+      "frequency": 3,
+      "eikenLevel": "pre_2nd",
+      "category": "動詞",
+      "choices": [
+        {
+          "id": "5a6110a6-d146-4092-8d4a-b08f4f752ffd_3",
+          "meaning": "正反対の意味",
+          "isCorrect": false
+        },
+        {
+          "id": "5a6110a6-d146-4092-8d4a-b08f4f752ffd_0",
+          "meaning": "期待する",
+          "isCorrect": true
+        },
+        {
+          "id": "5a6110a6-d146-4092-8d4a-b08f4f752ffd_2",
+          "meaning": "関連する概念",
+          "isCorrect": false
+        },
+        {
+          "id": "5a6110a6-d146-4092-8d4a-b08f4f752ffd_1",
+          "meaning": "異なる意味",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "id": "86d33f1f-50cd-4d36-a879-9348096a1b56",
+      "word": "anxiety",
+      "reading": "",
+      "partOfSpeech": "noun",
+      "meaningJP": "不安",
+      "exampleSentence": "He has anxiety.",
+      "exampleTranslation": "彼は不安です",
+      "difficulty": 2,
+      "frequency": 3,
+      "eikenLevel": "pre_2nd",
+      "category": "名詞",
+      "choices": [
+        {
+          "id": "86d33f1f-50cd-4d36-a879-9348096a1b56_2",
+          "meaning": "関連する概念",
+          "isCorrect": false
+        },
+        {
+          "id": "86d33f1f-50cd-4d36-a879-9348096a1b56_1",
+          "meaning": "異なる意味",
+          "isCorrect": false
+        },
+        {
+          "id": "86d33f1f-50cd-4d36-a879-9348096a1b56_0",
+          "meaning": "不安",
+          "isCorrect": true
+        },
+        {
+          "id": "86d33f1f-50cd-4d36-a879-9348096a1b56_3",
+          "meaning": "正反対の意味",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "id": "73c639ec-ec9b-43a5-ab9e-a1b03d5e3eb6",
+      "word": "anxious",
+      "reading": "",
+      "partOfSpeech": "adjective",
+      "meaningJP": "不安な",
+      "exampleSentence": "She is anxious.",
+      "exampleTranslation": "彼女は不安です",
+      "difficulty": 2,
+      "frequency": 3,
+      "eikenLevel": "pre_2nd",
+      "category": "形容詞",
+      "choices": [
+        {
+          "id": "73c639ec-ec9b-43a5-ab9e-a1b03d5e3eb6_0",
+          "meaning": "不安な",
+          "isCorrect": true
+        },
+        {
+          "id": "73c639ec-ec9b-43a5-ab9e-a1b03d5e3eb6_1",
+          "meaning": "異なる意味",
+          "isCorrect": false
+        },
+        {
+          "id": "73c639ec-ec9b-43a5-ab9e-a1b03d5e3eb6_3",
+          "meaning": "正反対の意味",
+          "isCorrect": false
+        },
+        {
+          "id": "73c639ec-ec9b-43a5-ab9e-a1b03d5e3eb6_2",
+          "meaning": "関連する概念",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "id": "14f66190-7b3c-4f16-8f2e-942c52e7b002",
+      "word": "any",
+      "reading": "",
+      "partOfSpeech": "determiner",
+      "meaningJP": "任意の",
+      "exampleSentence": "Do you have any questions?",
+      "exampleTranslation": "何か質問ありますか",
+      "difficulty": 1,
+      "frequency": 5,
+      "eikenLevel": "pre_2nd",
+      "category": "限定詞",
+      "choices": [
+        {
+          "id": "14f66190-7b3c-4f16-8f2e-942c52e7b002_3",
+          "meaning": "正反対の意味",
+          "isCorrect": false
+        },
+        {
+          "id": "14f66190-7b3c-4f16-8f2e-942c52e7b002_0",
+          "meaning": "任意の",
+          "isCorrect": true
+        },
+        {
+          "id": "14f66190-7b3c-4f16-8f2e-942c52e7b002_1",
+          "meaning": "異なる意味",
+          "isCorrect": false
+        },
+        {
+          "id": "14f66190-7b3c-4f16-8f2e-942c52e7b002_2",
+          "meaning": "関連する概念",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "id": "8dfd4afc-372d-4296-801e-b307bed4789b",
+      "word": "anybody",
+      "reading": "",
+      "partOfSpeech": "pronoun",
+      "meaningJP": "誰か",
+      "exampleSentence": "Is anybody there?",
+      "exampleTranslation": "誰かいますか",
+      "difficulty": 1,
+      "frequency": 4,
+      "eikenLevel": "pre_2nd",
+      "category": "代名詞",
+      "choices": [
+        {
+          "id": "8dfd4afc-372d-4296-801e-b307bed4789b_1",
+          "meaning": "異なる意味",
+          "isCorrect": false
+        },
+        {
+          "id": "8dfd4afc-372d-4296-801e-b307bed4789b_0",
+          "meaning": "誰か",
+          "isCorrect": true
+        },
+        {
+          "id": "8dfd4afc-372d-4296-801e-b307bed4789b_2",
+          "meaning": "関連する概念",
+          "isCorrect": false
+        },
+        {
+          "id": "8dfd4afc-372d-4296-801e-b307bed4789b_3",
+          "meaning": "正反対の意味",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "id": "7963e714-0ac7-4dd1-ad78-2ec12061d4b3",
+      "word": "anyhow",
+      "reading": "",
+      "partOfSpeech": "adverb",
+      "meaningJP": "とにかく",
+      "exampleSentence": "Anyhow, we should leave.",
+      "exampleTranslation": "とにかく、我々は去るべき",
+      "difficulty": 2,
+      "frequency": 3,
+      "eikenLevel": "pre_2nd",
+      "category": "副詞",
+      "choices": [
+        {
+          "id": "7963e714-0ac7-4dd1-ad78-2ec12061d4b3_0",
+          "meaning": "とにかく",
+          "isCorrect": true
+        },
+        {
+          "id": "7963e714-0ac7-4dd1-ad78-2ec12061d4b3_1",
+          "meaning": "異なる意味",
+          "isCorrect": false
+        },
+        {
+          "id": "7963e714-0ac7-4dd1-ad78-2ec12061d4b3_3",
+          "meaning": "正反対の意味",
+          "isCorrect": false
+        },
+        {
+          "id": "7963e714-0ac7-4dd1-ad78-2ec12061d4b3_2",
+          "meaning": "関連する概念",
+          "isCorrect": false
+        }
+      ]
+    }
+  ],
+  "metadata": {
+    "total_words": 103,
+    "level": "pre_2nd",
+    "generated_date": "2026-03-20"
+  }
+}

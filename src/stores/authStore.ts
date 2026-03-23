@@ -12,6 +12,7 @@ import type { User, Session } from '@supabase/supabase-js';
 interface AuthState {
   user: User | null;
   session: Session | null;
+  role: 'student' | 'teacher' | 'admin' | null;
   loading: boolean;
   error: string | null;
   lastLoginAt?: number;
@@ -33,6 +34,7 @@ interface AuthState {
 export const useAuthStore = create<AuthState>((set, get) => ({
   user: null,
   session: null,
+  role: null,
   loading: true,
   error: null,
   loginAttempts: 0,
@@ -45,16 +47,20 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       const { data: { session } } = await supabase.auth.getSession();
 
       if (session) {
+        // user_metadata から role を取得（デフォルト: student）
+        const userRole = (session.user.user_metadata?.role as 'student' | 'teacher' | 'admin') || 'student';
+
         // セッションを復元
         await SessionManager.createSession(
           session.user.id,
           session.user.email || '',
-          'student'
+          userRole
         );
 
         set({
           session,
           user: session.user,
+          role: userRole,
           loading: false,
         });
 
@@ -64,6 +70,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
         set({
           session: null,
           user: null,
+          role: null,
           loading: false,
         });
       }
@@ -138,11 +145,14 @@ export const useAuthStore = create<AuthState>((set, get) => ({
         throw new Error('Authentication failed');
       }
 
+      // user_metadata から role を取得
+      const userRole = (data.user.user_metadata?.role as 'student' | 'teacher' | 'admin') || 'student';
+
       // セッションを作成
       await SessionManager.createSession(
         data.user.id,
         data.user.email || '',
-        'student'
+        userRole
       );
 
       // 監査ログを記録
@@ -157,6 +167,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       set({
         user: data.user,
         session: data.session,
+        role: userRole,
         loading: false,
         loginAttempts: 0,
         lastLoginAt: Date.now(),
@@ -193,10 +204,16 @@ export const useAuthStore = create<AuthState>((set, get) => ({
         throw new Error(error);
       }
 
-      // Supabase でサインアップ
+      // Supabase でサインアップ（role を user_metadata に含める）
       const { data, error } = await supabase.auth.signUp({
         email,
         password,
+        options: {
+          data: {
+            name,
+            role,
+          },
+        },
       });
 
       if (error) {
@@ -234,6 +251,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       set({
         user: data.user,
         session: data.session,
+        role: role,
         loading: false,
       });
 
@@ -278,6 +296,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       set({
         user: null,
         session: null,
+        role: null,
         loading: false,
         loginAttempts: 0,
         twoFactorVerified: false,

@@ -1,0 +1,11 @@
+id,word,reading,part_of_speech,meaning_jp,example_sentence,example_translation,difficulty,frequency,choice1_meaning,choice1_is_correct,choice2_meaning,choice2_is_correct,choice3_meaning,choice3_is_correct,choice4_meaning,choice4_is_correct
+0f54d821-cf5e-43e9-9467-05dbf13249ab,ability,əˈbɪləti,noun,能力、才能,She has the ability to speak three languages.,彼女は3言語を話す能力があります。,1,5,能力、才能,True,可能性、見込み,False,責任、義務,False,知識、学問,False
+aab7b2fc-5d6c-444b-9bea-86593ddc4efc,accommodate,əˈkɑmədeɪt,verb,宿泊させる、対応する,The hotel can accommodate 500 guests.,ホテルは500人の客を受け入れることができます。,2,3,宿泊させる、対応する,True,装備する、備える,False,見守る、監視する,False,飾る、装飾する,False
+a168365b-dd73-408c-be63-85fd93cd6dce,achievement,əˈtʃiːvmənt,noun,成果、達成,His academic achievement was impressive.,彼の学業成果は印象的でした。,1,4,成果、達成,True,努力、試み,False,富、資産,False,計画、構想,False
+b7c43c3c-faa3-4ef4-9ff7-516e7c76ac5d,acquire,əˈkwaɪər,verb,取得する、習得する,You can acquire new skills through practice.,練習を通じて新しいスキルを習得できます。,2,4,取得する、習得する,True,求める、要求する,False,応じる、答える,False,認める、承認する,False
+6316da9a-be8d-40ae-b6ec-1e32f5a3ec32,adapt,əˈdæpt,verb,適応する、順応する,People adapt to new environments over time.,人々は時間とともに新しい環境に適応します。,1,4,適応する、順応する,True,採用する、取り入れる,False,装着する、取り付ける,False,調整する、修正する,False
+431f81e9-712a-49a4-a521-b317b160aaa6,adequate,ˈædɪkwət,adjective,十分な、妥当な,The budget is adequate for the project., 予算はプロジェクトに十分です。,2,3,十分な、妥当な,True,適切な、ふさわしい,False,完全な、完璧な,False,素晴らしい、素敵な,False
+e69a4667-24bc-4608-931e-eb2803addb64,advantage,ədˈvæntɪdʒ,noun,利点、有利な立場,Technology gives us many advantages.,技術は私たちに多くの利点をもたらします。,1,4,利点、有利な立場,True,進歩、改善,False,許可、同意,False,進展、発展,False
+5517c6d3-410b-41d1-b625-c3986c36f6ca,advise,ədˈvaɪz,verb,忠告する、助言する,I advise you to study harder.,もっと一生懸命勉強することをお勧めします。,1,4,忠告する、助言する,True,宣伝する、告知する,False,激励する、勇気付ける,False,推奨する、提案する,False
+04b8bddf-2749-4061-a0d0-c1fb8812f49d,afford,əˈfɔrd,verb,余裕がある、負担できる,Can you afford this car?,この車を買う余裕がありますか？,1,3,余裕がある、負担できる,True,提供する、与える,False,得る、獲得する,False,見つける、発見する,False
+056e7353-dc65-477d-93a0-008a789af8a9,agreement,əˈɡriːmənt,noun,同意、合意,They reached an agreement on the contract.,彼らは契約について合意に達しました。,1,4,同意、合意,True,議論、討論,False,不満、不平,False,確認、検証,False

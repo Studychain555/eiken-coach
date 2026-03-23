@@ -4,32 +4,38 @@ import { Platform } from 'react-native';
 
 import { HapticTab } from '@/components/haptic-tab';
 import { IconSymbol } from '@/components/ui/icon-symbol';
-import { Colors, Spacing, Shadows } from '@/constants/theme';
+import { Colors, Spacing, Shadows, ShadotenColors } from '@/constants/theme';
 import { useColorScheme } from '@/hooks/use-color-scheme';
+import { useAuthStore } from '@/src/stores/authStore';
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
+  const role = useAuthStore(state => state.role);
+
+  // teacher/admin のみ teacher タブを表示
+  const isTeacher = role === 'teacher' || role === 'admin';
 
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: Colors.light.primary,
-        tabBarInactiveTintColor: Colors.light.textTertiary,
+        tabBarActiveTintColor: ShadotenColors.headerTeal,
+        tabBarInactiveTintColor: '#999',
         headerShown: false,
         tabBarButton: HapticTab,
         tabBarStyle: {
-          backgroundColor: Colors.light.surfaceCard,
-          borderTopColor: Colors.light.border,
+          backgroundColor: '#FFFFFF',
+          borderTopColor: '#E0E0E0',
           borderTopWidth: 1,
-          paddingBottom: Platform.OS === 'ios' ? Spacing.lg : Spacing.md,
-          paddingTop: Spacing.md,
-          height: Platform.OS === 'ios' ? 88 : 70,
+          paddingBottom: Platform.OS === 'ios' ? 12 : 8,
+          paddingTop: 8,
+          height: Platform.OS === 'ios' ? 80 : 75,
           ...Shadows.md,
         },
         tabBarLabelStyle: {
-          fontSize: 11,
+          fontSize: 12,
           fontWeight: '600',
-          marginTop: Spacing.xs,
+          marginTop: 4,
+          marginBottom: 2,
         },
       }}>
       <Tabs.Screen
@@ -60,13 +66,16 @@ export default function TabLayout() {
           tabBarIcon: ({ color }) => <IconSymbol size={28} name="pencil" color={color} />,
         }}
       />
-      <Tabs.Screen
-        name="teacher"
-        options={{
-          title: '講師',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="person.fill" color={color} />,
-        }}
-      />
+      {/* 講師タブは teacher/admin のみ表示 */}
+      {isTeacher && (
+        <Tabs.Screen
+          name="teacher"
+          options={{
+            title: '講師',
+            tabBarIcon: ({ color }) => <IconSymbol size={28} name="person.fill" color={color} />,
+          }}
+        />
+      )}
       <Tabs.Screen
         name="settings"
         options={{

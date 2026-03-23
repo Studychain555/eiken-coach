@@ -249,7 +249,7 @@ export class EnhancedWebAudioManager {
   /**
    * メトリクスを取得
    */
-  getMetrics(): typeof this.metrics {
+  getMetrics() {
     return {
       ...this.metrics,
       cacheSize: this.cache.size,

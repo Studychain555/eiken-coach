@@ -410,7 +410,7 @@ test.describe('Visual Regression Tests', () => {
     // プレイヤーのスクリーンショット
     const player = await page.$('[data-testid="audio-player"]');
     if (player) {
-      await expect(player).toHaveScreenshot('audio-player.png');
+      await (expect(player) as any).toHaveScreenshot('audio-player.png');
     }
   });
 
@@ -420,7 +420,7 @@ test.describe('Visual Regression Tests', () => {
 
     const speedControls = await page.$('[data-testid="speed-controls"]');
     if (speedControls) {
-      await expect(speedControls).toHaveScreenshot('speed-controls.png');
+      await (expect(speedControls) as any).toHaveScreenshot('speed-controls.png');
     }
   });
 });

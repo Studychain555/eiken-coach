@@ -1,0 +1,16 @@
+id,word,reading,part_of_speech,meaning_jp,example_sentence,example_translation,difficulty,frequency,choice1_meaning,choice1_is_correct,choice2_meaning,choice2_is_correct,choice3_meaning,choice3_is_correct,choice4_meaning,choice4_is_correct,eiken_level
+b928888c-4866-4ba6-9ea0-94e55ffeac72,ability,əˈbɪləti,noun,能力,She has the ability to speak three languages.,彼女は3言語を話す能力があります。,1,5,能力,True,可能性,False,責任,False,知識,False,pre_2nd
+cb084159-5a40-427c-86bf-f0fb3f080ca5,absent,ˈæbsənt,adjective,不在の,He was absent from school yesterday.,彼は昨日学校に不在でした。,1,4,不在の,True,無視する,False,失敗する,False,誤解する,False,pre_2nd
+d7652923-1f19-470d-8e24-ce1dc83cd3da,accept,əkˈsept,verb,受け入れる,I accept your apology.,あなたの謝罪を受け入れます。,1,5,受け入れる,True,拒否する,False,制限する,False,延期する,False,pre_2nd
+21ad08ec-94cb-41f1-b95f-045cac4c66ea,accident,ˈæksɪdənt,noun,事故,There was a car accident on the highway.,高速道路で自動車事故がありました。,1,4,事故,True,計画,False,方法,False,原因,False,pre_2nd
+7bdaf42e-6c81-43b5-8b80-7a34b42d2931,accommodate,əˈkɑmədeɪt,verb,宿泊させる,The hotel can accommodate 500 guests.,ホテルは500人の客を受け入れることができます。,2,3,宿泊させる,True,装備する,False,見守る,False,飾る,False,pre_2nd
+d627988c-3716-407d-87ef-69ea41017afb,achievement,əˈtʃiːvmənt,noun,成果,His academic achievement was impressive.,彼の学業成果は印象的でした。,1,4,成果,True,努力,False,富,False,計画,False,pre_2nd
+7797ea1f-7439-472b-afed-db98d3485ee9,acquire,əˈkwaɪər,verb,取得する,You can acquire new skills through practice.,練習を通じて新しいスキルを習得できます。,2,4,取得する,True,求める,False,応じる,False,認める,False,pre_2nd
+c96a8a2c-7410-4e33-8de8-12fe29f4c2e8,adapt,əˈdæpt,verb,適応する,People adapt to new environments over time.,人々は時間とともに新しい環境に適応します。,1,4,適応する,True,採用する,False,装着する,False,調整する,False,pre_2nd
+705836a8-43dc-4d89-b659-f11ef5af2ef5,adequate,ˈædɪkwət,adjective,十分な,The budget is adequate for the project.,予算はプロジェクトに十分です。,2,3,十分な,True,適切な,False,完全な,False,素晴らしい,False,pre_2nd
+0aa67254-da57-4a45-a328-b944837168ff,advantage,ədˈvæntɪdʒ,noun,利点,Technology gives us many advantages.,技術は私たちに多くの利点をもたらします。,1,4,利点,True,進歩,False,許可,False,進展,False,pre_2nd
+36af326c-7a26-45bd-bc34-057627190096,advise,ədˈvaɪz,verb,忠告する,I advise you to study harder.,もっと一生懸命勉強することをお勧めします。,1,4,忠告する,True,宣伝する,False,激励する,False,推奨する,False,pre_2nd
+a05ce823-c860-4e3d-994e-f71a9090286a,afford,əˈfɔrd,verb,余裕がある,Can you afford this car?,この車を買う余裕がありますか？,1,3,余裕がある,True,提供する,False,得る,False,見つける,False,pre_2nd
+304d64c7-aacd-4d88-866e-40045dfdd4d3,agreement,əˈɡriːmənt,noun,同意,They reached an agreement on the contract.,彼らは契約について合意に達しました。,1,4,同意,True,議論,False,不満,False,確認,False,pre_2nd
+2fabe98f-aeb2-49fb-93b9-650d263d2b5a,agriculture,ˈæɡrɪkʌltʃər,noun,農業,Agriculture is important for the economy.,農業は経済にとって重要です。,2,3,農業,True,製造業,False,運輸業,False,漁業,False,pre_2nd
+f56a75a9-c934-4ede-8e39-e9d604490714,alarm,əˈlɑrm,noun,アラーム,The alarm went off at 6 AM.,アラームは午前6時に鳴りました。,1,3,アラーム,True,計画,False,武器,False,謝罪,False,pre_2nd

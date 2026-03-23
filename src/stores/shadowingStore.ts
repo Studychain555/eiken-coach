@@ -2,6 +2,7 @@ import { create } from 'zustand';
 import { supabase } from '@/src/lib/supabase';
 import { realtimeSyncManager } from '@/src/lib/realtimeSyncManager';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { PhraseFeedback, WordFeedback } from '@/src/lib/aiScoringService';
 
 export interface ShadowingRecord {
   id: string;
@@ -13,6 +14,8 @@ export interface ShadowingRecord {
   rhythmScore: number | null; // 0-10
   pronunciationScore: number | null; // 0-10
   feedback: string | null;
+  phraseFeedbacks?: PhraseFeedback[]; // フレーズ単位の詳細分析
+  wordFeedbacks?: WordFeedback[]; // ワード単位の分析
   createdAt: Date;
 }
 
@@ -97,7 +100,7 @@ export const useShadowingStore = create<ShadowingState>((set, get) => ({
           completedAt: new Date(),
         },
       });
-      get().syncToSupabase();
+      setTimeout(() => { get().syncToSupabase().catch(err => console.error("Sync error:", err)); }, 500);
     }
   },
 
@@ -189,6 +192,8 @@ export const useShadowingStore = create<ShadowingState>((set, get) => ({
         rhythm_score: record.rhythmScore,
         pronunciation_score: record.pronunciationScore,
         feedback: record.feedback,
+        phrase_feedbacks: record.phraseFeedbacks ? JSON.stringify(record.phraseFeedbacks) : null,
+        word_feedbacks: record.wordFeedbacks ? JSON.stringify(record.wordFeedbacks) : null,
         created_at: record.createdAt.toISOString(),
       }));
 
@@ -224,18 +229,45 @@ export const useShadowingStore = create<ShadowingState>((set, get) => ({
         .order('created_at', { ascending: true });
 
       if (data && data.length > 0) {
-        const records: ShadowingRecord[] = data.map((item: any) => ({
-          id: item.id,
-          attemptId: item.attempt_id,
-          roundNumber: item.round_number,
-          audioUrl: item.audio_url,
-          transcript: item.transcript,
-          accuracyScore: item.accuracy_score,
-          rhythmScore: item.rhythm_score,
-          pronunciationScore: item.pronunciation_score,
-          feedback: item.feedback,
-          createdAt: new Date(item.created_at),
-        }));
+        const records: ShadowingRecord[] = data.map((item: any) => {
+          let phraseFeedbacks: PhraseFeedback[] | undefined;
+          let wordFeedbacks: WordFeedback[] | undefined;
+
+          try {
+            if (item.phrase_feedbacks && typeof item.phrase_feedbacks === 'string') {
+              phraseFeedbacks = JSON.parse(item.phrase_feedbacks);
+            } else if (item.phrase_feedbacks) {
+              phraseFeedbacks = item.phrase_feedbacks;
+            }
+          } catch (e) {
+            console.error('Failed to parse phrase_feedbacks:', e);
+          }
+
+          try {
+            if (item.word_feedbacks && typeof item.word_feedbacks === 'string') {
+              wordFeedbacks = JSON.parse(item.word_feedbacks);
+            } else if (item.word_feedbacks) {
+              wordFeedbacks = item.word_feedbacks;
+            }
+          } catch (e) {
+            console.error('Failed to parse word_feedbacks:', e);
+          }
+
+          return {
+            id: item.id,
+            attemptId: item.attempt_id,
+            roundNumber: item.round_number,
+            audioUrl: item.audio_url,
+            transcript: item.transcript,
+            accuracyScore: item.accuracy_score,
+            rhythmScore: item.rhythm_score,
+            pronunciationScore: item.pronunciation_score,
+            feedback: item.feedback,
+            phraseFeedbacks,
+            wordFeedbacks,
+            createdAt: new Date(item.created_at),
+          };
+        });
 
         if (records.length > 0) {
           const lastAttemptId = records[records.length - 1].attemptId;
@@ -282,6 +314,30 @@ export const useShadowingStore = create<ShadowingState>((set, get) => ({
       onUpdate: (data) => {
         if (data) {
           const { currentSession } = get();
+
+          let phraseFeedbacks: PhraseFeedback[] | undefined;
+          let wordFeedbacks: WordFeedback[] | undefined;
+
+          try {
+            if (data.phrase_feedbacks && typeof data.phrase_feedbacks === 'string') {
+              phraseFeedbacks = JSON.parse(data.phrase_feedbacks);
+            } else if (data.phrase_feedbacks) {
+              phraseFeedbacks = data.phrase_feedbacks;
+            }
+          } catch (e) {
+            console.error('Failed to parse phrase_feedbacks:', e);
+          }
+
+          try {
+            if (data.word_feedbacks && typeof data.word_feedbacks === 'string') {
+              wordFeedbacks = JSON.parse(data.word_feedbacks);
+            } else if (data.word_feedbacks) {
+              wordFeedbacks = data.word_feedbacks;
+            }
+          } catch (e) {
+            console.error('Failed to parse word_feedbacks:', e);
+          }
+
           const newRecord: ShadowingRecord = {
             id: data.id,
             attemptId: data.attempt_id,
@@ -292,6 +348,8 @@ export const useShadowingStore = create<ShadowingState>((set, get) => ({
             rhythmScore: data.rhythm_score,
             pronunciationScore: data.pronunciation_score,
             feedback: data.feedback,
+            phraseFeedbacks,
+            wordFeedbacks,
             createdAt: new Date(data.created_at),
           };
 

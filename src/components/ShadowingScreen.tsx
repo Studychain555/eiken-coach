@@ -69,9 +69,10 @@ export default function ShadowingScreen({
   // タイマー管理
   useEffect(() => {
     if (isRecording) {
-      timerRef.current = setInterval(() => {
-        setRecordingTime((prev) => prev + 1);
+      const timerId = setInterval(() => {
+        setRecordingTime(recordingTime + 1);
       }, 1000);
+      timerRef.current = timerId as any;
     } else {
       if (timerRef.current) clearInterval(timerRef.current);
       setRecordingTime(0);
@@ -79,7 +80,7 @@ export default function ShadowingScreen({
     return () => {
       if (timerRef.current) clearInterval(timerRef.current);
     };
-  }, [isRecording]);
+  }, [isRecording, recordingTime]);
 
   const playOriginalAudio = async () => {
     try {
@@ -155,9 +156,11 @@ export default function ShadowingScreen({
       debugLog(TAG, 'Stopping recording', { round: currentRound });
 
       setIsRecording(false);
-      await recordingRef.current.stopAsync();
+      if (recordingRef.current) {
+        await (recordingRef.current as any).stopAndUnloadAsync();
+      }
 
-      const uri = recordingRef.current.getURI();
+      const uri = recordingRef.current?.getURI();
       if (!uri) {
         throw new Error('Failed to get recording URI');
       }
@@ -181,7 +184,7 @@ export default function ShadowingScreen({
         apiKey
       );
 
-      // レコードを追加
+      // レコードを追加（phraseFeedbacks を含める）
       addRecord({
         id: `record_${currentRound}_${Date.now()}`,
         attemptId,
@@ -192,8 +195,10 @@ export default function ShadowingScreen({
         rhythmScore: Math.round(result.rhythmScore * 10) / 10,
         pronunciationScore: Math.round(result.pronunciationScore * 10) / 10,
         feedback: result.feedback,
+        phraseFeedbacks: result.phraseFeedbacks,
+        wordFeedbacks: result.wordFeedbacks,
         createdAt: new Date(),
-      });
+      } as any);
 
       setIsScoringRound(null);
 
@@ -250,9 +255,11 @@ export default function ShadowingScreen({
         </View>
 
         {/* Script */}
-        <View style={styles.scriptContainer}>
-          <Text style={styles.scriptLabel}>スクリプト</Text>
-          <Text style={styles.scriptText}>{script}</Text>
+        <View style={[styles.scriptContainer, isRecording && styles.scriptContainerExpanded]}>
+          {!isRecording && <Text style={styles.scriptLabel}>スクリプト</Text>}
+          <Text style={[styles.scriptText, isRecording && styles.scriptTextExpanded]}>
+            {script}
+          </Text>
         </View>
 
         {/* Audio Controls */}
@@ -408,6 +415,23 @@ const styles = StyleSheet.create({
     fontSize: 15,
     color: '#333',
     lineHeight: 22,
+  },
+  scriptContainerExpanded: {
+    flex: 1,
+    marginHorizontal: 16,
+    marginVertical: 24,
+    paddingHorizontal: 20,
+    paddingVertical: 28,
+    backgroundColor: '#f9f9f9',
+    borderRadius: 12,
+    borderWidth: 2,
+    borderColor: '#0099ff',
+  },
+  scriptTextExpanded: {
+    fontSize: 24,
+    fontWeight: '500',
+    color: '#111',
+    lineHeight: 36,
   },
   audioControlsContainer: {
     marginHorizontal: 24,
