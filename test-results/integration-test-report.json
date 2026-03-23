@@ -1,0 +1,221 @@
+{
+  "summary": {
+    "totalTests": 25,
+    "passed": 18,
+    "failed": 7,
+    "duration": "0.14秒",
+    "timestamp": "2026-03-18T18:30:52.451Z"
+  },
+  "testResults": [
+    {
+      "testId": "ENV-001",
+      "passed": false,
+      "duration": "0ms",
+      "details": {
+        "nodeVersion": "v25.6.0"
+      }
+    },
+    {
+      "testId": "ENV-002",
+      "passed": true,
+      "duration": "0ms",
+      "details": {
+        "typeScriptVersion": "~5.9.2"
+      }
+    },
+    {
+      "testId": "ENV-003",
+      "passed": true,
+      "duration": "0ms",
+      "details": {
+        "checkedDirs": [
+          "/Users/80dr/eigomaster/app",
+          "/Users/80dr/eigomaster/src",
+          "/Users/80dr/eigomaster/components",
+          "/Users/80dr/eigomaster/hooks",
+          "/Users/80dr/eigomaster/supabase"
+        ],
+        "allFound": true
+      }
+    },
+    {
+      "testId": "ENV-004",
+      "passed": true,
+      "duration": "0ms",
+      "details": {
+        "checkedPackages": [
+          "expo",
+          "react",
+          "react-native",
+          "@supabase/supabase-js",
+          "zustand",
+          "axios"
+        ],
+        "allPresent": true
+      }
+    },
+    {
+      "testId": "E2E-001",
+      "passed": true,
+      "duration": "0ms",
+      "details": {
+        "homeScreenExists": true
+      }
+    },
+    {
+      "testId": "E2E-002",
+      "passed": true,
+      "duration": "0ms",
+      "details": {
+        "loginScreenExists": true
+      }
+    },
+    {
+      "testId": "E2E-003",
+      "passed": true,
+      "duration": "0ms",
+      "details": {
+        "registerScreenExists": true
+      }
+    },
+    {
+      "testId": "F-LISTENING-001",
+      "passed": true,
+      "duration": "1ms",
+      "details": {
+        "audioManagerExists": true
+      }
+    },
+    {
+      "testId": "F-LISTENING-002",
+      "passed": true,
+      "duration": "0ms",
+      "details": {
+        "listeningScreenExists": true
+      }
+    },
+    {
+      "testId": "F-VOCABULARY-001",
+      "passed": true,
+      "duration": "0ms",
+      "details": {
+        "vocabularyScreenExists": true
+      }
+    },
+    {
+      "testId": "F-WRITING-001",
+      "passed": true,
+      "duration": "0ms",
+      "details": {
+        "writingScreenExists": true
+      }
+    },
+    {
+      "testId": "F-DASHBOARD-001",
+      "passed": true,
+      "duration": "0ms",
+      "details": {
+        "statsImplemented": true
+      }
+    },
+    {
+      "testId": "F-TEACHER-001",
+      "passed": true,
+      "duration": "0ms",
+      "details": {
+        "teacherFeaturesImplemented": true
+      }
+    },
+    {
+      "testId": "CROSS-001",
+      "passed": "EigoMaster",
+      "duration": "0ms",
+      "details": {
+        "webConfigPresent": "EigoMaster"
+      }
+    },
+    {
+      "testId": "CROSS-002",
+      "duration": "0ms",
+      "details": {}
+    },
+    {
+      "testId": "CROSS-003",
+      "duration": "0ms",
+      "details": {}
+    },
+    {
+      "testId": "CROSS-004",
+      "passed": false,
+      "duration": "0ms",
+      "details": {
+        "responsiveDesignImplemented": false
+      }
+    },
+    {
+      "testId": "PERF-001",
+      "passed": false,
+      "duration": "138ms",
+      "details": {
+        "nodeModulesSize": "430M"
+      }
+    },
+    {
+      "testId": "PERF-002",
+      "passed": true,
+      "duration": "1ms",
+      "details": {
+        "apiCachingImplemented": true
+      }
+    },
+    {
+      "testId": "PERF-003",
+      "passed": true,
+      "duration": "1ms",
+      "details": {
+        "memoizedComponents": 3
+      }
+    },
+    {
+      "testId": "PERF-004",
+      "passed": false,
+      "duration": "1ms",
+      "details": {
+        "storesWithCleanup": 0
+      }
+    },
+    {
+      "testId": "SEC-001",
+      "passed": true,
+      "duration": "0ms",
+      "details": {
+        "authImplemented": true
+      }
+    },
+    {
+      "testId": "SEC-002",
+      "passed": false,
+      "duration": "0ms",
+      "details": {
+        "rlsImplemented": false
+      }
+    },
+    {
+      "testId": "SEC-003",
+      "passed": true,
+      "duration": "0ms",
+      "details": {
+        "xssCsrfProtected": true
+      }
+    },
+    {
+      "testId": "SEC-004",
+      "passed": true,
+      "duration": "0ms",
+      "details": {
+        "errorHandlingImplemented": true
+      }
+    }
+  ],
+  "conclusion": "本番導入不可"
+}

@@ -1,0 +1,148 @@
+name: Build & Deploy Android
+
+on:
+  push:
+    branches: [ main, develop ]
+    paths:
+      - 'app/**'
+      - 'components/**'
+      - 'package.json'
+      - 'eas.json'
+      - '.github/workflows/build-android.yml'
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Build environment'
+        required: true
+        default: 'preview'
+        type: choice
+        options:
+          - development
+          - preview
+          - production
+      submit:
+        description: 'Submit to Google Play after build'
+        required: false
+        type: boolean
+        default: false
+
+jobs:
+  build-android:
+    runs-on: ubuntu-latest
+    name: Build Android
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Setup Expo
+        run: |
+          npm install -g eas-cli@latest
+          npm install -g expo-cli@latest
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Determine environment
+        id: env
+        run: |
+          if [[ "${{ github.ref }}" == "refs/heads/main" ]]; then
+            echo "profile=production" >> $GITHUB_OUTPUT
+            echo "env_file=.env.production" >> $GITHUB_OUTPUT
+          elif [[ "${{ github.ref }}" == "refs/heads/develop" ]]; then
+            echo "profile=preview" >> $GITHUB_OUTPUT
+            echo "env_file=.env.staging" >> $GITHUB_OUTPUT
+          else
+            echo "profile=development" >> $GITHUB_OUTPUT
+            echo "env_file=.env.development" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Load environment variables
+        run: cp ${{ steps.env.outputs.env_file }} .env.local
+
+      - name: Authenticate with EAS
+        run: eas login --non-interactive
+        env:
+          EAS_TOKEN: ${{ secrets.EAS_TOKEN }}
+
+      - name: Build Android app
+        run: |
+          eas build \
+            --platform android \
+            --profile ${{ steps.env.outputs.profile }} \
+            --non-interactive \
+            --wait
+        env:
+          GRADLE_BUILD_HEAP_SIZE: 2048m
+
+      - name: Get build artifacts
+        id: build
+        run: |
+          # Get the latest build information
+          BUILD_ID=$(eas build list --platform android --limit 1 --json | jq -r '.[0].id')
+          echo "build_id=$BUILD_ID" >> $GITHUB_OUTPUT
+
+      - name: Deploy to Google Play Internal Testing
+        if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop'
+        run: |
+          eas submit \
+            --platform android \
+            --profile production \
+            --non-interactive \
+            --build-id ${{ steps.build.outputs.build_id }}
+        env:
+          GOOGLE_PLAY_API_KEY: ${{ secrets.GOOGLE_PLAY_API_KEY }}
+
+      - name: Notify Slack (Success)
+        if: success()
+        uses: slackapi/slack-github-action@v1.24.0
+        with:
+          payload: |
+            {
+              "text": "Android Build Successful",
+              "blocks": [
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "*Android Build Successful*\nBuild ID: ${{ steps.build.outputs.build_id }}\nEnvironment: ${{ steps.env.outputs.profile }}\nRepo: ${{ github.repository }}\nBranch: ${{ github.ref_name }}"
+                  }
+                }
+              ]
+            }
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
+
+      - name: Notify Slack (Failure)
+        if: failure()
+        uses: slackapi/slack-github-action@v1.24.0
+        with:
+          payload: |
+            {
+              "text": "Android Build Failed",
+              "blocks": [
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "*Android Build Failed* :x:\nEnvironment: ${{ steps.env.outputs.profile }}\nRepo: ${{ github.repository }}\nBranch: ${{ github.ref_name }}\nCommit: ${{ github.sha }}"
+                  }
+                }
+              ]
+            }
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK

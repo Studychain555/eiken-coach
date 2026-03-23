@@ -1,0 +1,16 @@
+id,word,reading,part_of_speech,meaning_jp,example_sentence,example_translation,difficulty,frequency,choice1_meaning,choice1_is_correct,choice2_meaning,choice2_is_correct,choice3_meaning,choice3_is_correct,choice4_meaning,choice4_is_correct
+84dc8e76-6c02-405e-9992-038a1d17230c,ability,əˈbɪləti,noun,能力、才能,She has the ability to speak three languages.,彼女は3言語を話す能力があります。,1,5,能力、才能,True,可能性、見込み,False,責任、義務,False,知識、学問,False
+ea86a974-b1b9-45ea-9256-ea3e82d33c7b,accommodate,əˈkɑmədeɪt,verb,宿泊させる、対応する,The hotel can accommodate 500 guests.,ホテルは500人の客を受け入れることができます。,2,3,宿泊させる、対応する,True,装備する、備える,False,見守る、監視する,False,飾る、装飾する,False
+9a551c10-957f-4126-9c80-34a1b39d4202,achievement,əˈtʃiːvmənt,noun,成果、達成,His academic achievement was impressive.,彼の学業成果は印象的でした。,1,4,成果、達成,True,努力、試み,False,富、資産,False,計画、構想,False
+f8b219b5-f3c1-49d6-945e-6cd65e6fadc1,acquire,əˈkwaɪər,verb,取得する、習得する,You can acquire new skills through practice.,練習を通じて新しいスキルを習得できます。,2,4,取得する、習得する,True,求める、要求する,False,応じる、答える,False,認める、承認する,False
+3ab2a669-ab83-4a2e-886e-136b1aec9507,adapt,əˈdæpt,verb,適応する、順応する,People adapt to new environments over time.,人々は時間とともに新しい環境に適応します。,1,4,適応する、順応する,True,採用する、取り入れる,False,装着する、取り付ける,False,調整する、修正する,False
+2e5df61b-e1d2-48f7-b833-4e7433784061,adequate,ˈædɪkwət,adjective,十分な、妥当な,The budget is adequate for the project., 予算はプロジェクトに十分です。,2,3,十分な、妥当な,True,適切な、ふさわしい,False,完全な、完璧な,False,素晴らしい、素敵な,False
+c315f58b-70f2-4ad0-9907-a9063319a35a,advantage,ədˈvæntɪdʒ,noun,利点、有利な立場,Technology gives us many advantages.,技術は私たちに多くの利点をもたらします。,1,4,利点、有利な立場,True,進歩、改善,False,許可、同意,False,進展、発展,False
+c6b38c4a-a416-49ab-b885-e9634459d7d3,advise,ədˈvaɪz,verb,忠告する、助言する,I advise you to study harder.,もっと一生懸命勉強することをお勧めします。,1,4,忠告する、助言する,True,宣伝する、告知する,False,激励する、勇気付ける,False,推奨する、提案する,False
+6000e2f8-3a73-4088-88db-305bb76dbdd7,afford,əˈfɔrd,verb,余裕がある、負担できる,Can you afford this car?,この車を買う余裕がありますか？,1,3,余裕がある、負担できる,True,提供する、与える,False,得る、獲得する,False,見つける、発見する,False
+72761fa3-3dfb-4dc4-afc0-b8609fceefb2,agreement,əˈɡriːmənt,noun,同意、合意,They reached an agreement on the contract.,彼らは契約について合意に達しました。,1,4,同意、合意,True,議論、討論,False,不満、不平,False,確認、検証,False
+bfe3d9e2-9859-429d-b4d8-fa53c843ae2b,abundance,əˈbʌndəns,noun,豊富、大量,The abundance of resources in the region is remarkable.,その地域の豊富なリソースは注目に値します。,2,3,豊富、大量,True,増加、上昇,False,富、財産,False,存在、存在物,False
+367fc83e-c254-49be-a690-272992ce250b,abstract,ˈæbstrækt,adjective,抽象的な、理論的な,Mathematics deals with abstract concepts.,数学は抽象的な概念を扱っています。,2,3,抽象的な、理論的な,True,漠然とした、曖昧な,False,難しい、複雑な,False,簡潔な、要約した,False
+905e7632-5025-40cc-839c-d73d6fac7db8,accelerate,ækˈseləreɪt,verb,加速する、速める,The car accelerated on the highway.,車は高速道路で加速しました。,2,3,加速する、速める,True,上昇する、登る,False,始まる、開始する,False,完了する、終わる,False
+24038ec1-78b4-4dc9-897d-c47a435d5b77,accommodate,əˈkɑmədeɪt,verb,宿泊させる、対応する,The hotel accommodates 500 guests per night.,ホテルは1晩に500人の客を受け入れます。,2,3,宿泊させる、対応する,True,一致する、合致する,False,補足する、付け加える,False,逆らう、反対する,False
+669efd17-be77-453f-83b7-ca7e7e18b34e,accomplish,əˈkɑmplɪʃ,verb,成し遂げる、達成する,He accomplished his goals through hard work.,彼は懸命な努力を通じて目標を達成しました。,2,3,成し遂げる、達成する,True,補完する、補う,False,計算する、算出する,True,伴う、付き添う,False

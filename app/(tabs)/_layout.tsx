@@ -1,33 +1,86 @@
 import { Tabs } from 'expo-router';
 import React from 'react';
+import { Platform } from 'react-native';
 
 import { HapticTab } from '@/components/haptic-tab';
 import { IconSymbol } from '@/components/ui/icon-symbol';
-import { Colors } from '@/constants/theme';
+import { Colors, Spacing, Shadows, ShadotenColors } from '@/constants/theme';
 import { useColorScheme } from '@/hooks/use-color-scheme';
+import { useAuthStore } from '@/src/stores/authStore';
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
+  const role = useAuthStore(state => state.role);
+
+  // teacher/admin のみ teacher タブを表示
+  const isTeacher = role === 'teacher' || role === 'admin';
 
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
+        tabBarActiveTintColor: ShadotenColors.headerTeal,
+        tabBarInactiveTintColor: '#999',
         headerShown: false,
         tabBarButton: HapticTab,
+        tabBarStyle: {
+          backgroundColor: '#FFFFFF',
+          borderTopColor: '#E0E0E0',
+          borderTopWidth: 1,
+          paddingBottom: Platform.OS === 'ios' ? 12 : 8,
+          paddingTop: 8,
+          height: Platform.OS === 'ios' ? 80 : 75,
+          ...Shadows.md,
+        },
+        tabBarLabelStyle: {
+          fontSize: 12,
+          fontWeight: '600',
+          marginTop: 4,
+          marginBottom: 2,
+        },
       }}>
       <Tabs.Screen
         name="index"
         options={{
-          title: 'Home',
+          title: 'ホーム',
           tabBarIcon: ({ color }) => <IconSymbol size={28} name="house.fill" color={color} />,
         }}
       />
       <Tabs.Screen
-        name="explore"
+        name="listening"
         options={{
-          title: 'Explore',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="paperplane.fill" color={color} />,
+          title: 'リスニング',
+          tabBarIcon: ({ color }) => <IconSymbol size={28} name="headphones" color={color} />,
+        }}
+      />
+      <Tabs.Screen
+        name="vocabulary"
+        options={{
+          title: '単語',
+          tabBarIcon: ({ color }) => <IconSymbol size={28} name="book.fill" color={color} />,
+        }}
+      />
+      <Tabs.Screen
+        name="writing"
+        options={{
+          title: 'ライティング',
+          tabBarIcon: ({ color }) => <IconSymbol size={28} name="pencil" color={color} />,
+        }}
+      />
+      {/* 講師タブは teacher/admin のみ表示 */}
+      {isTeacher && (
+        <Tabs.Screen
+          name="teacher"
+          options={{
+            title: '講師',
+            tabBarIcon: ({ color }) => <IconSymbol size={28} name="person.fill" color={color} />,
+          }}
+        />
+      )}
+      <Tabs.Screen
+        name="settings"
+        options={{
+          title: '設定',
+          tabBarIcon: ({ color }) => <IconSymbol size={28} name="gearshape.fill" color={color} />,
         }}
       />
     </Tabs>
