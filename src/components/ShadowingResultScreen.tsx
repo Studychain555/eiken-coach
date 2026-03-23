@@ -3,237 +3,252 @@ import {
   View,
   Text,
   StyleSheet,
-  SafeAreaView,
-  TouchableOpacity,
   ScrollView,
-  Dimensions,
+  TouchableOpacity,
+  SafeAreaView,
 } from 'react-native';
-import { useShadowingStore } from '@/src/stores/shadowingStore';
-import { LineChart } from 'react-native-chart-kit';
-import DetailedShadowingFeedback from './DetailedShadowingFeedback';
-import { NaturalColors, Spacing, BorderRadius } from '@/constants/theme';
+import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/theme';
 
-interface Props {
-  onBack: () => void;
-  onComplete: () => void;
+interface FeedbackItem {
+  phrase: string;
+  tags: string[];
+  explanation: string;
 }
 
-const { width } = Dimensions.get('window');
-
-export default function ShadowingResultScreen({ onBack, onComplete }: Props) {
-  const { currentSession, getAverageScores, getRecords, getImprovement } =
-    useShadowingStore();
-  const [expandedRound, setExpandedRound] = useState<number | null>(null);
-  const [showDetailedModal, setShowDetailedModal] = useState<number | null>(null);
-
-  if (!currentSession) {
-    return (
-      <SafeAreaView style={styles.container}>
-        <Text style={styles.errorText}>データが見つかりません</Text>
-      </SafeAreaView>
-    );
-  }
-
-  const records = getRecords();
-  const scores = getAverageScores();
-  const improvement = getImprovement();
-
-  // グラフ用データ
-  const accuracyData = records
-    .map((r) => r.accuracyScore || 0);
-  const rhythmData = records
-    .map((r) => r.rhythmScore || 0);
-  const pronunciationData = records
-    .map((r) => r.pronunciationScore || 0);
-
-  const chartData = {
-    labels: records.map((_, i) => `R${i + 1}`),
-    datasets: [
-      {
-        data: accuracyData.length > 0 ? accuracyData : [0],
-        color: () => '#0066cc',
-        strokeWidth: 2,
-      },
-    ],
+interface FeedbackData {
+  material: string;
+  taskNumber: number;
+  reviewDate: string;
+  reviewer: string;
+  greeting: string;
+  round: {
+    number: number;
+    accuracy: number;
+    pronunciation: number;
   };
+  goodPoints: FeedbackItem[];
+  developmentPoints: FeedbackItem[];
+}
+
+interface ShadowingResultScreenProps {
+  feedback?: FeedbackData;
+  onNext?: () => void;
+  onBack?: () => void;
+}
+
+const getScoreColor = (score: number) => {
+  if (score >= 8.0) return '#2BBCB3';
+  if (score >= 6.0) return '#F5A623';
+  return '#E74C3C';
+};
+
+const SAMPLE_FEEDBACK: FeedbackData = {
+  material: 'TOEIC® : Part3-2',
+  taskNumber: 1,
+  reviewDate: '2024/01/04',
+  reviewer: 'AI',
+  greeting:
+    '日々のシャドーイングお疲れ様です！以下、TOEIC® : Part3-2 課題1のラウンド1の添削です✨',
+  round: {
+    number: 1,
+    accuracy: 7.3,
+    pronunciation: 7.4,
+  },
+  goodPoints: [
+    {
+      phrase: '流暢で自然なリズム',
+      tags: ['改善されていました！'],
+      explanation:
+        '全体的に流暢で自然なリズムで発話できています。この調子で続けましょう！',
+    },
+    {
+      phrase: '個々の単語の発音',
+      tags: ['改善されていました！'],
+      explanation: '個々の単語の発音が正確です。基礎がしっかりしています。',
+    },
+  ],
+  developmentPoints: [
+    {
+      phrase: 'スクリプト全体の発話',
+      tags: ['再確認しましょう！'],
+      explanation:
+        'スクリプトは89語ですが、発話は62語でした。スクリプト全体を発話するように心がけてください。まずは全文を通して読む練習から始めましょう。',
+    },
+    {
+      phrase: '細部の正確性',
+      tags: ['再確認しましょう！'],
+      explanation:
+        '正確性は73%です。特に「全体」の部分を確認してください。もう少し細部に注意を払うとさらに良くなります。',
+    },
+  ],
+};
+
+export default function ShadowingResultScreen({
+  feedback = SAMPLE_FEEDBACK,
+  onNext,
+  onBack,
+}: ShadowingResultScreenProps) {
+  const [expandedGood, setExpandedGood] = useState(true);
+  const [expandedDevelopment, setExpandedDevelopment] = useState(true);
+
+  const accuracyColor = getScoreColor(feedback.round.accuracy);
+  const pronunciationColor = getScoreColor(feedback.round.pronunciation);
 
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView showsVerticalScrollIndicator={false}>
-        {/* Header */}
-        <View style={styles.header}>
-          <Text style={styles.title}>🎉 シャドーイング完了！</Text>
-        </View>
+      {/* Header */}
+      <View style={styles.header}>
+        <Text style={styles.headerTitle}>🎤 添削結果</Text>
+        <Text style={styles.headerSubtitle}>Round {feedback.round.number}</Text>
+      </View>
 
-        {/* Overall Scores */}
-        <View style={styles.scoresContainer}>
-          <View style={styles.scoreCard}>
-            <Text style={styles.scoreLabel}>正確性</Text>
-            <Text style={styles.scoreValue}>
-              {scores.accuracy.toFixed(1)}/10
-            </Text>
-          </View>
-          <View style={styles.scoreCard}>
-            <Text style={styles.scoreLabel}>リズム</Text>
-            <Text style={styles.scoreValue}>
-              {scores.rhythm.toFixed(1)}/10
-            </Text>
-          </View>
-          <View style={styles.scoreCard}>
-            <Text style={styles.scoreLabel}>発音</Text>
-            <Text style={styles.scoreValue}>
-              {scores.pronunciation.toFixed(1)}/10
-            </Text>
-          </View>
-        </View>
+      {/* Main Content - Scrollable */}
+      <ScrollView
+        style={styles.mainContent}
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ paddingBottom: 120 }}
+      >
+        {/* Summary Card */}
+        <View style={styles.summaryCard}>
+          {/* Material Info */}
+          <Text style={styles.materialName}>{feedback.material}</Text>
+          <Text style={styles.metaInfo}>
+            課題番号 {feedback.taskNumber} ｜ 添削日 {feedback.reviewDate} ｜ 添削者{' '}
+            {feedback.reviewer}
+          </Text>
 
-        {/* Overall Score */}
-        <View style={styles.overallScoreContainer}>
-          <View style={styles.overallScoreCircle}>
-            <Text style={styles.overallScoreValue}>
-              {scores.overall.toFixed(1)}
-            </Text>
-            <Text style={styles.overallScoreLabel}>/10</Text>
-          </View>
-          <View style={styles.overallScoreInfo}>
-            <Text style={styles.improvementText}>
-              📈 改善度: {improvement > 0 ? '+' : ''}{improvement.toFixed(1)}
-            </Text>
-            <Text style={styles.feedbackText}>
-              {scores.overall >= 8
-                ? '🌟 素晴らしい！'
-                : scores.overall >= 6
-                ? '👍 よくできました！'
-                : '💪 もう少し練習しましょう'}
-            </Text>
-          </View>
-        </View>
-
-        {/* Chart */}
-        {records.length > 1 && (
-          <View style={styles.chartContainer}>
-            <Text style={styles.chartTitle}>正確性の推移</Text>
-            <LineChart
-              data={chartData}
-              width={width - 48}
-              height={200}
-              chartConfig={{
-                backgroundColor: '#fff',
-                backgroundGradientFrom: '#fff',
-                backgroundGradientTo: '#fff',
-                color: () => '#0066cc',
-                labelColor: () => '#999',
-                style: {
-                  borderRadius: 8,
-                },
-                propsForDots: {
-                  r: '5',
-                  strokeWidth: '2',
-                  stroke: '#0066cc',
-                },
-              }}
-              bezier
-            />
-          </View>
-        )}
-
-        {/* Round Details - Summary View */}
-        <View style={styles.detailsContainer}>
-          <Text style={styles.detailsTitle}>📊 各ラウンドの評価</Text>
-          {records.map((record) => (
-            <TouchableOpacity
-              key={record.id}
-              style={[
-                styles.roundDetail,
-                expandedRound === record.roundNumber && styles.roundDetailExpanded,
-              ]}
-              onPress={() =>
-                setExpandedRound(
-                  expandedRound === record.roundNumber ? null : record.roundNumber
-                )
-              }
-            >
-              <View style={styles.roundDetailHeader}>
-                <View>
-                  <Text style={styles.roundDetailRound}>
-                    ラウンド {record.roundNumber}
-                  </Text>
-                  <View style={styles.roundDetailScoresRow}>
-                    <Text style={styles.detailScore}>
-                      正確性: <Text style={{ color: '#52A876', fontWeight: '700' }}>
-                        {(record.accuracyScore ?? 0).toFixed(1)}
-                      </Text>
-                    </Text>
-                    <Text style={styles.detailScore}>
-                      リズム: <Text style={{ color: '#D4A574', fontWeight: '700' }}>
-                        {(record.rhythmScore ?? 0).toFixed(1)}
-                      </Text>
-                    </Text>
-                  </View>
-                </View>
-                <View style={styles.expandIcon}>
-                  <Text style={styles.expandIconText}>
-                    {expandedRound === record.roundNumber ? '▼' : '▶'}
-                  </Text>
-                </View>
+          {/* Score Section */}
+          <View style={styles.scoreSection}>
+            <View style={styles.scoreBox}>
+              <Text style={styles.scoreLabel}>正確性</Text>
+              <Text style={[styles.scoreValue, { color: accuracyColor }]}>
+                {feedback.round.accuracy.toFixed(1)}
+              </Text>
+              <Text style={styles.scoreMax}>/10</Text>
+              <View style={styles.scoreBar}>
+                <View
+                  style={[
+                    styles.scoreBarFill,
+                    {
+                      width: `${(feedback.round.accuracy / 10) * 100}%`,
+                      backgroundColor: accuracyColor,
+                    },
+                  ]}
+                />
               </View>
+            </View>
+            <View style={styles.scoreBox}>
+              <Text style={styles.scoreLabel}>発音</Text>
+              <Text style={[styles.scoreValue, { color: pronunciationColor }]}>
+                {feedback.round.pronunciation.toFixed(1)}
+              </Text>
+              <Text style={styles.scoreMax}>/10</Text>
+              <View style={styles.scoreBar}>
+                <View
+                  style={[
+                    styles.scoreBarFill,
+                    {
+                      width: `${(feedback.round.pronunciation / 10) * 100}%`,
+                      backgroundColor: pronunciationColor,
+                    },
+                  ]}
+                />
+              </View>
+            </View>
+          </View>
 
-              {expandedRound === record.roundNumber && (
-                <View style={styles.expandedContent}>
-                  {record.feedback && (
-                    <View style={styles.feedbackBox}>
-                      <Text style={styles.feedbackBoxTitle}>💡 詳細コメント</Text>
-                      <Text style={styles.feedbackBoxText}>
-                        {record.feedback}
-                      </Text>
-                    </View>
-                  )}
-                  <TouchableOpacity
-                    style={styles.detailedButton}
-                    onPress={() => setShowDetailedModal(record.roundNumber)}
-                  >
-                    <Text style={styles.detailedButtonText}>
-                      📝 詳細な分析を見る
-                    </Text>
-                  </TouchableOpacity>
-                </View>
-              )}
-            </TouchableOpacity>
-          ))}
+          {/* Greeting Message */}
+          <View style={styles.greetingBox}>
+            <Text style={styles.greetingText}>{feedback.greeting}</Text>
+          </View>
         </View>
 
-        {/* Detailed Feedback Modal - Fullscreen DetailedShadowingFeedback */}
-        {showDetailedModal !== null && (
-          <View style={styles.modalOverlay}>
-            <DetailedShadowingFeedback
-              script={currentSession.script}
-              pronunciationScore={records[showDetailedModal - 1]?.pronunciationScore ?? 0}
-              rhythmScore={records[showDetailedModal - 1]?.rhythmScore ?? 0}
-              accuracyScore={records[showDetailedModal - 1]?.accuracyScore ?? 0}
-              overallFeedback={records[showDetailedModal - 1]?.feedback ?? ''}
-              roundNumber={showDetailedModal}
-              phraseFeedbacks={(records[showDetailedModal - 1] as any)?.phraseFeedbacks}
-              wordFeedbacks={(records[showDetailedModal - 1] as any)?.wordFeedbacks}
-            />
-          </View>
-        )}
+        {/* Good Points Section */}
+        <View style={styles.feedbackSection}>
+          <TouchableOpacity
+            style={styles.sectionHeader}
+            onPress={() => setExpandedGood(!expandedGood)}
+            activeOpacity={0.7}
+          >
+            <View style={styles.sectionTitleContainer}>
+              <View style={styles.sectionBorder} />
+              <Text style={[styles.sectionTitle, { color: '#2BBCB3' }]}>
+                ✓ Good Points
+              </Text>
+            </View>
+            <Text style={styles.toggleIcon}>{expandedGood ? '▲' : '▼'}</Text>
+          </TouchableOpacity>
 
-        {/* Action Buttons */}
-        <View style={styles.buttonContainer}>
+          {expandedGood && (
+            <View style={styles.sectionContent}>
+              {feedback.goodPoints.map((item, index) => (
+                <View key={index} style={styles.feedbackItem}>
+                  <View style={styles.tagRow}>
+                    <View style={styles.badgeGood}>
+                      <Text style={styles.badgeText}>✓ Good</Text>
+                    </View>
+                    {item.tags.map((tag, tagIdx) => (
+                      <View key={tagIdx} style={styles.tagGood}>
+                        <Text style={styles.tagText}>{tag}</Text>
+                      </View>
+                    ))}
+                  </View>
+                  <Text style={styles.phrase}>{item.phrase}</Text>
+                  <Text style={styles.explanation}>{item.explanation}</Text>
+                </View>
+              ))}
+            </View>
+          )}
+        </View>
+
+        {/* Development Points Section */}
+        <View style={styles.feedbackSection}>
           <TouchableOpacity
-            style={styles.secondaryButton}
-            onPress={onBack}
+            style={styles.sectionHeader}
+            onPress={() => setExpandedDevelopment(!expandedDevelopment)}
+            activeOpacity={0.7}
           >
-            <Text style={styles.secondaryButtonText}>← リスニングに戻る</Text>
+            <View style={styles.sectionTitleContainer}>
+              <View style={[styles.sectionBorder, { backgroundColor: '#E8553A' }]} />
+              <Text style={[styles.sectionTitle, { color: '#E8553A' }]}>
+                🔥 Development Points
+              </Text>
+            </View>
+            <Text style={styles.toggleIcon}>{expandedDevelopment ? '▲' : '▼'}</Text>
           </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.primaryButton}
-            onPress={onComplete}
-          >
-            <Text style={styles.primaryButtonText}>完了</Text>
-          </TouchableOpacity>
+
+          {expandedDevelopment && (
+            <View style={[styles.sectionContent, styles.developmentBg]}>
+              {feedback.developmentPoints.map((item, index) => (
+                <View key={index} style={styles.feedbackItem}>
+                  <View style={styles.tagRow}>
+                    <View style={styles.badgeDevelopment}>
+                      <Text style={styles.badgeTextDev}>🔥 Development</Text>
+                    </View>
+                    {item.tags.map((tag, tagIdx) => (
+                      <View key={tagIdx} style={styles.tagDevelopment}>
+                        <Text style={styles.tagTextDev}>{tag}</Text>
+                      </View>
+                    ))}
+                  </View>
+                  <Text style={styles.phrase}>{item.phrase}</Text>
+                  <Text style={styles.explanation}>{item.explanation}</Text>
+                </View>
+              ))}
+            </View>
+          )}
         </View>
       </ScrollView>
+
+      {/* Footer */}
+      <View style={styles.footer}>
+        <TouchableOpacity style={styles.buttonSecondary} onPress={onBack}>
+          <Text style={styles.buttonSecondaryText}>← 戻る</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.buttonPrimary} onPress={onNext}>
+          <Text style={styles.buttonPrimaryText}>次のラウンドへ →</Text>
+        </TouchableOpacity>
+      </View>
     </SafeAreaView>
   );
 }
@@ -241,249 +256,251 @@ export default function ShadowingResultScreen({ onBack, onComplete }: Props) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: NaturalColors.background,
-  },
-  errorText: {
-    fontSize: 16,
-    color: NaturalColors.textMedium,
-    textAlign: 'center',
-    marginTop: 40,
+    backgroundColor: '#F5F5F5',
   },
   header: {
-    paddingHorizontal: Spacing.xl,
-    paddingTop: Spacing.lg,
-    paddingBottom: Spacing.md,
+    paddingHorizontal: Spacing.lg,
+    paddingVertical: Spacing.md,
+    backgroundColor: '#FFFFFF',
+    borderBottomWidth: 1,
+    borderBottomColor: Colors.light.border,
   },
-  title: {
-    fontSize: 28,
-    fontWeight: 'bold',
-    color: NaturalColors.textDark,
+  headerTitle: {
+    fontSize: 22,
+    fontWeight: '800',
+    color: Colors.light.text,
   },
-  scoresContainer: {
-    flexDirection: 'row',
-    marginHorizontal: Spacing.xl,
-    marginTop: Spacing.lg,
-    gap: Spacing.md,
+  headerSubtitle: {
+    fontSize: 13,
+    color: Colors.light.textSecondary,
+    fontWeight: '500',
+    marginTop: 4,
   },
-  scoreCard: {
+  mainContent: {
     flex: 1,
-    paddingVertical: Spacing.lg,
-    backgroundColor: NaturalColors.cardBg,
+  },
+  summaryCard: {
+    marginHorizontal: Spacing.lg,
+    marginTop: Spacing.lg,
+    marginBottom: Spacing.md,
+    backgroundColor: '#FFFFFF',
     borderRadius: BorderRadius.lg,
+    padding: Spacing.lg,
+    ...Shadows.sm,
+  },
+  materialName: {
+    fontSize: 16,
+    fontWeight: '700',
+    color: Colors.light.text,
+    marginBottom: 4,
+  },
+  metaInfo: {
+    fontSize: 13,
+    color: Colors.light.textSecondary,
+    fontWeight: '400',
+    marginBottom: Spacing.md,
+  },
+  scoreSection: {
+    flexDirection: 'row',
+    gap: Spacing.md,
+    marginBottom: Spacing.md,
+  },
+  scoreBox: {
+    flex: 1,
+    backgroundColor: '#F9F9F9',
+    borderRadius: BorderRadius.md,
+    padding: Spacing.md,
     alignItems: 'center',
-    borderWidth: 1,
-    borderColor: '#E8E6E1',
   },
   scoreLabel: {
     fontSize: 12,
-    color: NaturalColors.textMedium,
-    marginBottom: Spacing.sm,
+    color: Colors.light.textSecondary,
+    fontWeight: '500',
+    marginBottom: 4,
   },
   scoreValue: {
     fontSize: 24,
-    fontWeight: 'bold',
-    color: NaturalColors.primary,
+    fontWeight: '800',
+    marginBottom: 2,
   },
-  overallScoreContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginHorizontal: Spacing.xl,
-    marginTop: Spacing.lg,
-    paddingHorizontal: Spacing.lg,
-    paddingVertical: Spacing.xl,
-    backgroundColor: NaturalColors.cardBg,
-    borderRadius: BorderRadius.lg,
-    gap: Spacing.lg,
-    borderWidth: 1,
-    borderColor: '#E8E6E1',
-  },
-  overallScoreCircle: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
-    backgroundColor: 'rgba(27, 155, 164, 0.1)',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  overallScoreValue: {
-    fontSize: 36,
-    fontWeight: 'bold',
-    color: NaturalColors.primary,
-  },
-  overallScoreLabel: {
-    fontSize: 14,
-    color: NaturalColors.textMedium,
-  },
-  overallScoreInfo: {
-    flex: 1,
-  },
-  improvementText: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: NaturalColors.textDark,
+  scoreMax: {
+    fontSize: 11,
+    color: Colors.light.textSecondary,
+    fontWeight: '500',
     marginBottom: Spacing.sm,
   },
-  feedbackText: {
-    fontSize: 13,
-    color: NaturalColors.textMedium,
+  scoreBar: {
+    width: '100%',
+    height: 6,
+    borderRadius: 3,
+    backgroundColor: Colors.light.border,
+    overflow: 'hidden',
   },
-  chartContainer: {
-    marginHorizontal: Spacing.xl,
-    marginTop: Spacing.xl,
-    paddingHorizontal: Spacing.md,
-    paddingVertical: Spacing.lg,
-    backgroundColor: NaturalColors.cardBg,
-    borderRadius: BorderRadius.lg,
-    borderWidth: 1,
-    borderColor: '#E8E6E1',
+  scoreBarFill: {
+    height: '100%',
+    borderRadius: 3,
   },
-  chartTitle: {
+  greetingBox: {
+    backgroundColor: '#F5F5F5',
+    borderRadius: BorderRadius.md,
+    padding: Spacing.md,
+    marginTop: Spacing.md,
+  },
+  greetingText: {
     fontSize: 14,
-    fontWeight: '600',
-    color: NaturalColors.textDark,
+    color: Colors.light.text,
+    fontWeight: '500',
+    lineHeight: 20,
+  },
+  feedbackSection: {
+    marginHorizontal: Spacing.lg,
     marginBottom: Spacing.lg,
-  },
-  detailsContainer: {
-    marginHorizontal: Spacing.xl,
-    marginTop: Spacing.xl,
-    marginBottom: Spacing.xl,
-  },
-  detailsTitle: {
-    fontSize: 16,
-    fontWeight: '700',
-    color: NaturalColors.textDark,
-    marginBottom: Spacing.lg,
-  },
-  roundDetail: {
-    paddingHorizontal: 14,
-    paddingVertical: 12,
-    backgroundColor: NaturalColors.cardBg,
+    backgroundColor: '#FFFFFF',
     borderRadius: BorderRadius.lg,
-    marginBottom: 10,
-    borderWidth: 1,
-    borderColor: '#E8E6E1',
+    overflow: 'hidden',
+    ...Shadows.xs,
   },
-  roundDetailExpanded: {
-    backgroundColor: 'rgba(27, 155, 164, 0.05)',
-    borderColor: NaturalColors.primary,
-  },
-  roundDetailHeader: {
+  sectionHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 0,
-  },
-  roundDetailRound: {
-    fontSize: 15,
-    fontWeight: '700',
-    color: NaturalColors.textDark,
-    marginBottom: Spacing.sm,
-  },
-  roundDetailScoresRow: {
-    flexDirection: 'row',
-    gap: Spacing.lg,
-  },
-  roundDetailScore: {
-    fontSize: 13,
-    color: NaturalColors.primary,
-    fontWeight: '600',
-  },
-  roundDetailScores: {
-    gap: 4,
-    marginBottom: 8,
-  },
-  detailScore: {
-    fontSize: 13,
-    color: NaturalColors.textMedium,
-    fontWeight: '500',
-  },
-  roundDetailFeedback: {
-    fontSize: 12,
-    color: NaturalColors.textDark,
-    lineHeight: 16,
-    marginTop: Spacing.md,
-  },
-  expandIcon: {
-    width: 30,
-    height: 30,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  expandIconText: {
-    fontSize: 14,
-    color: NaturalColors.textMedium,
-    fontWeight: '600',
-  },
-  expandedContent: {
-    marginTop: Spacing.lg,
-    paddingTop: Spacing.lg,
-    borderTopWidth: 1,
-    borderTopColor: '#E8E6E1',
-  },
-  feedbackBox: {
-    padding: Spacing.lg,
-    backgroundColor: 'rgba(82, 168, 118, 0.08)',
-    borderRadius: BorderRadius.lg,
-    marginBottom: Spacing.md,
-    borderLeftWidth: 4,
-    borderLeftColor: '#52A876',
-  },
-  feedbackBoxTitle: {
-    fontSize: 12,
-    fontWeight: '700',
-    color: NaturalColors.textMedium,
-    marginBottom: Spacing.sm,
-  },
-  feedbackBoxText: {
-    fontSize: 13,
-    color: NaturalColors.textDark,
-    lineHeight: 18,
-  },
-  detailedButton: {
-    paddingVertical: Spacing.md,
     paddingHorizontal: Spacing.lg,
-    backgroundColor: NaturalColors.primary,
-    borderRadius: BorderRadius.lg,
+    paddingVertical: Spacing.md,
+    borderBottomWidth: 1,
+    borderBottomColor: Colors.light.border,
+  },
+  sectionTitleContainer: {
+    flexDirection: 'row',
     alignItems: 'center',
+    gap: Spacing.sm,
   },
-  detailedButtonText: {
-    fontSize: 13,
-    fontWeight: '600',
-    color: '#FFFFFF',
+  sectionBorder: {
+    width: 4,
+    height: 28,
+    backgroundColor: '#2BBCB3',
+    borderRadius: 2,
   },
-  buttonContainer: {
-    marginHorizontal: Spacing.xl,
-    marginTop: Spacing.xxl,
-    marginBottom: 40,
-    gap: Spacing.md,
+  sectionTitle: {
+    fontSize: 18,
+    fontWeight: '700',
   },
-  primaryButton: {
-    paddingVertical: Spacing.lg,
-    backgroundColor: NaturalColors.primary,
-    borderRadius: BorderRadius.lg,
-    alignItems: 'center',
-  },
-  primaryButtonText: {
+  toggleIcon: {
     fontSize: 16,
-    fontWeight: '600',
-    color: '#fff',
+    fontWeight: '700',
+    color: Colors.light.textSecondary,
   },
-  secondaryButton: {
-    paddingVertical: Spacing.lg,
-    backgroundColor: NaturalColors.lightBg,
-    borderRadius: BorderRadius.lg,
+  sectionContent: {
+    paddingHorizontal: Spacing.lg,
+    paddingVertical: Spacing.md,
+  },
+  developmentBg: {
+    backgroundColor: '#FFF0F0',
+  },
+  feedbackItem: {
+    marginBottom: Spacing.lg,
+  },
+  tagRow: {
+    flexDirection: 'row',
     alignItems: 'center',
-    borderWidth: 1,
-    borderColor: '#E8E6E1',
+    gap: Spacing.sm,
+    marginBottom: Spacing.sm,
   },
-  secondaryButtonText: {
+  badgeGood: {
+    backgroundColor: '#2BBCB3',
+    paddingHorizontal: Spacing.sm,
+    paddingVertical: 4,
+    borderRadius: BorderRadius.md,
+  },
+  badgeText: {
+    fontSize: 11,
+    color: '#FFFFFF',
+    fontWeight: '700',
+  },
+  badgeDevelopment: {
+    backgroundColor: '#E8553A',
+    paddingHorizontal: Spacing.sm,
+    paddingVertical: 4,
+    borderRadius: BorderRadius.md,
+  },
+  badgeTextDev: {
+    fontSize: 11,
+    color: '#FFFFFF',
+    fontWeight: '700',
+  },
+  tagGood: {
+    backgroundColor: '#E6FAF8',
+    paddingHorizontal: Spacing.sm,
+    paddingVertical: 4,
+    borderRadius: 12,
+  },
+  tagText: {
+    fontSize: 11,
+    color: '#2BBCB3',
+    fontWeight: '600',
+  },
+  tagDevelopment: {
+    backgroundColor: '#FFF0F0',
+    paddingHorizontal: Spacing.sm,
+    paddingVertical: 4,
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: '#E8553A',
+  },
+  tagTextDev: {
+    fontSize: 11,
+    color: '#E8553A',
+    fontWeight: '600',
+  },
+  phrase: {
+    fontSize: 15,
+    fontWeight: '600',
+    color: Colors.light.text,
+    marginBottom: Spacing.sm,
+  },
+  explanation: {
+    fontSize: 14,
+    color: Colors.light.text,
+    fontWeight: '400',
+    lineHeight: 22,
+  },
+  footer: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    flexDirection: 'row',
+    gap: Spacing.md,
+    paddingHorizontal: Spacing.lg,
+    paddingVertical: Spacing.md,
+    paddingBottom: Spacing.lg,
+    backgroundColor: '#FFFFFF',
+    borderTopWidth: 1,
+    borderTopColor: Colors.light.border,
+  },
+  buttonSecondary: {
+    flex: 1,
+    paddingVertical: Spacing.md,
+    backgroundColor: '#F5F5F5',
+    borderRadius: BorderRadius.md,
+    borderWidth: 1,
+    borderColor: Colors.light.border,
+    alignItems: 'center',
+  },
+  buttonSecondaryText: {
     fontSize: 14,
     fontWeight: '600',
-    color: NaturalColors.textDark,
+    color: Colors.light.text,
   },
-  modalOverlay: {
-    ...StyleSheet.absoluteFillObject,
-    backgroundColor: NaturalColors.background,
-    zIndex: 999,
+  buttonPrimary: {
+    flex: 1,
+    paddingVertical: Spacing.md,
+    backgroundColor: Colors.light.primary,
+    borderRadius: BorderRadius.md,
+    alignItems: 'center',
+  },
+  buttonPrimaryText: {
+    fontSize: 14,
+    fontWeight: '700',
+    color: '#FFFFFF',
   },
 });
