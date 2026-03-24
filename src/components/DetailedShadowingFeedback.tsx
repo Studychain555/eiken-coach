@@ -41,6 +41,17 @@ export default function DetailedShadowingFeedback({
   const [phraseModalVisible, setPhraseModalVisible] = useState(false);
   const [wordModalVisible, setWordModalVisible] = useState(false);
 
+  const getStatusColor = (status: string): string => {
+    switch (status) {
+      case 'correct':
+        return '#52A876';
+      case 'incorrect':
+        return '#C85C5C';
+      default:
+        return '#888888';
+    }
+  };
+
   const handlePhrasePress = (phrase: PhraseFeedback) => {
     setSelectedPhrase(phrase);
     setPhraseModalVisible(true);
@@ -384,7 +395,7 @@ export default function DetailedShadowingFeedback({
         <SafeAreaView style={styles.modalContainer}>
           <View style={styles.modalHeader}>
             <TouchableOpacity
-              onPress={() => setModalVisible(false)}
+              onPress={() => setWordModalVisible(false)}
               style={styles.closeButton}
             >
               <Text style={styles.closeButtonText}>✕</Text>

@@ -56,7 +56,7 @@ export default function SocialProof({ testimonials }: SocialProofProps) {
       >
         {items.map((testimonial, idx) => (
           <View key={`testimonial-${idx}`} style={styles.card}>
-            <Text style={styles.quote}>"{testimonial.text}"</Text>
+            <Text style={styles.quote}>&quot;{testimonial.text}&quot;</Text>
             <View style={styles.footer}>
               <View>
                 <Text style={styles.author}>{testimonial.author}</Text>

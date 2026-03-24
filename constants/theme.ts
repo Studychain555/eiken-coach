@@ -25,7 +25,7 @@ const infoBlue = '#0ea5e9';
 const tintColorLight = primaryBlue;
 const tintColorDark = '#e0e7ff';
 
-export const Colors = {
+export const Colors: any = {
   light: {
     // Core
     text: '#1f2937',

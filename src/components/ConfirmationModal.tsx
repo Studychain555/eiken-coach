@@ -145,6 +145,7 @@ const styles = StyleSheet.create({
     marginBottom: Spacing.xl,
     textAlign: 'center',
     lineHeight: 20,
+    fontWeight: '400' as any,
   },
   buttonContainer: {
     flexDirection: 'row',
