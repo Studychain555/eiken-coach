@@ -42,7 +42,7 @@ jobs:
           cache: 'npm'
 
       - name: Install dependencies
-        run: npm ci
+        run: npm install --legacy-peer-deps
 
       - name: Load environment variables
         run: |
@@ -55,7 +55,7 @@ jobs:
           fi
 
       - name: Build web
-        run: npm run web
+        run: npm run build:web
         env:
           NODE_ENV: production
           EXPO_PUBLIC_ENV: ${{ github.ref == 'refs/heads/main' && 'production' || 'staging' }}
