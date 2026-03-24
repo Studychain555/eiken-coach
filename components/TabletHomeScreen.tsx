@@ -4,7 +4,7 @@
  * Designed for tablet viewing (768px+) - fits on screen without scrolling
  */
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   StyleSheet,
@@ -12,9 +12,12 @@ import {
   ScrollView,
   SafeAreaView,
   TouchableOpacity,
+  ActivityIndicator,
 } from 'react-native';
 import { useRouter } from 'expo-router';
 import { Colors, Spacing, Typography, BorderRadius, DuolingoColors } from '@/constants/theme';
+import { useLearningStore } from '@/src/stores/learningStore';
+import { useAuthStore } from '@/src/stores/authStore';
 
 interface TabletHomeScreenProps {
   onRefresh?: () => void;
@@ -22,6 +25,33 @@ interface TabletHomeScreenProps {
 
 export default function TabletHomeScreen({ onRefresh }: TabletHomeScreenProps) {
   const router = useRouter();
+  const [isLoading, setIsLoading] = useState(true);
+
+  // Get learning progress from store
+  const listeningProgress = useLearningStore(state => state.listeningProgress);
+  const vocabularyProgress = useLearningStore(state => state.vocabularyProgress);
+  const writingProgress = useLearningStore(state => state.writingProgress);
+  const streakDays = useLearningStore(state => state.streakDays);
+  const userId = useAuthStore(state => state.userId);
+  const loadFromSupabase = useLearningStore(state => state.loadFromSupabase);
+
+  // Load data on component mount
+  useEffect(() => {
+    const loadData = async () => {
+      try {
+        setIsLoading(true);
+        if (userId) {
+          await loadFromSupabase();
+        }
+      } catch (err) {
+        console.error('Failed to load learning data:', err);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    loadData();
+  }, [userId, loadFromSupabase]);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -40,9 +70,9 @@ export default function TabletHomeScreen({ onRefresh }: TabletHomeScreenProps) {
 
         {/* Status Bar */}
         <View style={styles.statusBar}>
-          <Text style={styles.statusItem}>🔥 7日</Text>
+          <Text style={styles.statusItem}>🔥 {streakDays}日</Text>
           <Text style={styles.statusItem}>❤️ x3</Text>
-          <Text style={styles.statusItem}>⭐ 1250XP</Text>
+          <Text style={styles.statusItem}>⭐ {streakDays * 100}XP</Text>
         </View>
 
         {/* Daily Goals */}
@@ -96,15 +126,15 @@ export default function TabletHomeScreen({ onRefresh }: TabletHomeScreenProps) {
             <View style={styles.statsItems}>
               <View style={styles.statRow}>
                 <Text>🎧 リスニング</Text>
-                <Text>0/10</Text>
+                <Text>{listeningProgress.completedQuestions}/{listeningProgress.totalQuestions || 10}</Text>
               </View>
               <View style={styles.statRow}>
                 <Text>📚 英単語</Text>
-                <Text>145/250</Text>
+                <Text>{vocabularyProgress.masteredWords}/{vocabularyProgress.totalWords}</Text>
               </View>
               <View style={styles.statRow}>
                 <Text>✏️ ライティング</Text>
-                <Text>12/20</Text>
+                <Text>{writingProgress.submissions}/{Math.max(20, writingProgress.submissions)}</Text>
               </View>
             </View>
           </View>
