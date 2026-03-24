@@ -55,8 +55,7 @@ jobs:
           fi
 
       - name: Build web
-        run: |
-          npm run web -- --mode=production
+        run: npm run web
         env:
           NODE_ENV: production
           EXPO_PUBLIC_ENV: ${{ github.ref == 'refs/heads/main' && 'production' || 'staging' }}
