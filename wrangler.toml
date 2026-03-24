@@ -1,7 +1,0 @@
-[env.production]
-name = "eigomaster"
-
-[build]
-command = "npm run build:web"
-cwd = "."
-upload_dir = "dist"
