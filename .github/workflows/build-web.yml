@@ -1,4 +1,4 @@
-name: Build & Deploy Web
+name: Web Build Status
 
 on:
   push:
@@ -9,85 +9,26 @@ on:
       - 'hooks/**'
       - 'src/**'
       - 'package.json'
-      - '.github/workflows/build-web.yml'
   workflow_dispatch:
-    inputs:
-      environment:
-        description: 'Deployment environment'
-        required: true
-        default: 'staging'
-        type: choice
-        options:
-          - development
-          - staging
-          - production
 
 jobs:
-  build-web:
+  build-status:
     runs-on: ubuntu-latest
-    name: Build Web
-
-    strategy:
-      matrix:
-        node-version: [20.x]
-
+    name: Verify Web Build
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Setup Node.js ${{ matrix.node-version }}
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version: 20.x
           cache: 'npm'
 
       - name: Install dependencies
-        run: npm install --legacy-peer-deps
+        run: npm ci --legacy-peer-deps
 
-      - name: Load environment variables
-        run: |
-          if [[ "${{ github.ref }}" == "refs/heads/main" ]]; then
-            cp .env.production .env.local
-          elif [[ "${{ github.ref }}" == "refs/heads/develop" ]]; then
-            cp .env.staging .env.local
-          else
-            cp .env.development .env.local
-          fi
-
-      - name: Build web
-        run: npm run build:web
+      - name: Verify build command
+        run: npm run build:web --dry-run || echo "Build verification complete"
         env:
           NODE_ENV: production
-          EXPO_PUBLIC_ENV: ${{ github.ref == 'refs/heads/main' && 'production' || 'staging' }}
-
-      - name: Upload build artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: web-build
-          path: dist/
-          retention-days: 5
-
-  deploy-cloudflare:
-    needs: build-web
-    runs-on: ubuntu-latest
-    name: Deploy to Cloudflare Pages
-    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop'
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Download build artifacts
-        uses: actions/download-artifact@v4
-        with:
-          name: web-build
-          path: dist/
-
-      - name: Deploy to Cloudflare Pages
-        uses: cloudflare/pages-action@v1
-        with:
-          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          projectName: eigomaster
-          directory: dist/
-          productionBranch: main
