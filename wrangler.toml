@@ -2,6 +2,6 @@
 name = "eigomaster"
 
 [build]
-command = "npm install --legacy-peer-deps && npm run build:web"
+command = "npm run build:web"
 cwd = "."
 upload_dir = "dist"
