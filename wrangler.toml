@@ -1,0 +1,10 @@
+[env.production]
+name = "eigomaster"
+
+[build]
+command = "npm install && npm run build:web"
+cwd = "."
+watch_paths = []
+
+[build.upload]
+dir = "dist"
