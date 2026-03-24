@@ -1,0 +1,17 @@
+{
+  "build": {
+    "command": "",
+    "cwd": ".",
+    "watch_paths": []
+  },
+  "env": {
+    "production": {
+      "routes": [
+        {
+          "pattern": "eigomaster.pages.dev",
+          "custom_domain": true
+        }
+      ]
+    }
+  }
+}

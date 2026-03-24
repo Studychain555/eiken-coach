@@ -2,9 +2,6 @@
 name = "eigomaster"
 
 [build]
-command = "npm install && npm run build:web"
+command = ""
 cwd = "."
-watch_paths = []
-
-[build.upload]
-dir = "dist"
+upload_dir = "dist"
