@@ -1,0 +1,41 @@
+
+> eigomaster@1.0.0 build:web
+> expo export --platform web
+
+env: load .env.local .env.production
+env: export EXPO_PUBLIC_SUPABASE_URL EXPO_PUBLIC_SUPABASE_ANON_KEY EXPO_PUBLIC_GA_MEASUREMENT_ID EXPO_PUBLIC_ENV EXPO_PUBLIC_DEBUG_MODE EAS_BUILD_PLATFORM EAS_BUILD_PROFILE
+React Compiler enabled
+Starting Metro Bundler
+Static rendering is enabled. Learn more: https://docs.expo.dev/router/reference/static-rendering/
+λ Bundled 637ms node_modules/expo-router/node/render.js (1007 modules)
+Web Bundled 814ms node_modules/expo-router/entry.js (1208 modules)
+[expo-av]: Expo AV has been deprecated and will be removed in SDK 54. Use the `expo-audio` and `expo-video` packages to replace the required functionality.
+
+› web bundles (1):
+_expo/static/js/web/entry-3066b65735fb77e58931118ebd198a8f.js (2.69 MB)
+
+› Static routes (22):
+/demo (49.8 kB)
+/login (51 kB)
+/ (index) (47.7 kB)
+/teacher (45.2 kB)
+/writing (45.1 kB)
+/_sitemap (32.5 kB)
+/register (52.3 kB)
+/settings (47.9 kB)
+/listening (45.7 kB)
+/+not-found (32.5 kB)
+/vocabulary (45.1 kB)
+/(auth)/login (51 kB)
+/(tabs) (47.7 kB)
+/(tabs)/teacher (45.2 kB)
+/(tabs)/writing (45.1 kB)
+/(auth)/register (52.3 kB)
+/(tabs)/settings (47.9 kB)
+/(tabs)/listening (45.7 kB)
+/(tabs)/vocabulary (45.1 kB)
+/shadowing-tutorial (52.1 kB)
+/onboarding/shadowing (54.1 kB)
+/shadowing-result-test (57.1 kB)
+
+Exported: dist

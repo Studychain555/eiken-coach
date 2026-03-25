@@ -41,8 +41,8 @@ jobs:
           NODE_ENV: production
           EXPO_PUBLIC_ENV: production
 
-      - name: Setup GitHub Pages SPA routing
-        run: cp dist/index.html dist/404.html
+      - name: Fix GitHub Pages subpath routing
+        run: bash scripts/fix-github-pages-paths.sh
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
