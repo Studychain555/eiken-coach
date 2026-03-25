@@ -56,7 +56,12 @@ export default function VocabularyScreen() {
   useEffect(() => {
     // 初期化：単語データをロード
     if (words.length === 0) {
-      setWords(VOCABULARY_SAMPLE_DATA);
+      try {
+        setWords(VOCABULARY_SAMPLE_DATA);
+      } catch (error) {
+        console.error('Failed to set words:', error);
+        setSyncError('単語データの読み込みに失敗しました');
+      }
     }
   }, []);
 
