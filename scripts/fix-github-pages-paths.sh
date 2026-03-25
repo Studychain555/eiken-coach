@@ -11,21 +11,27 @@ echo "GitHub Pages サブパス修正を実行中..."
 echo "Target: $DIST_DIR"
 echo "Base URL: $BASE_URL"
 
+# sed コマンドをプラットフォーム別に判定
+SED_CMD="sed -i"
+if [[ "$OSTYPE" == "darwin"* ]]; then
+  SED_CMD="sed -i ''"
+fi
+
 # すべての HTML ファイルを処理
 find "$DIST_DIR" -name "*.html" -type f | while read -r file; do
   echo "修正中: $file"
 
   # /_expo で始まるパスを修正
-  sed -i '' "s|src=\"/_expo|src=\"$BASE_URL/_expo|g" "$file"
+  $SED_CMD "s|src=\"/_expo|src=\"$BASE_URL/_expo|g" "$file"
 
   # /favicon で始まるパスを修正
-  sed -i '' "s|href=\"/favicon|href=\"$BASE_URL/favicon|g" "$file"
+  $SED_CMD "s|href=\"/favicon|href=\"$BASE_URL/favicon|g" "$file"
 
   # /audio で始まるパスを修正
-  sed -i '' "s|href=\"/audio|href=\"$BASE_URL/audio|g" "$file"
+  $SED_CMD "s|href=\"/audio|href=\"$BASE_URL/audio|g" "$file"
 
   # 二重修正を防ぐ
-  sed -i '' "s|\"$BASE_URL$BASE_URL|\"$BASE_URL|g" "$file"
+  $SED_CMD "s|\"$BASE_URL$BASE_URL|\"$BASE_URL|g" "$file"
 done
 
 # 404.html を SPA ルーティング用に作成
