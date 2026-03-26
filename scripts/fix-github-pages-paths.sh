@@ -21,6 +21,11 @@ fi
 find "$DIST_DIR" -name "*.html" -type f | while read -r file; do
   echo "修正中: $file"
 
+  # <base> タグを <head> に追加（既に存在する場合はスキップ）
+  if ! grep -q '<base href=' "$file"; then
+    $SED_CMD "s|</head>|<base href=\"$BASE_URL/\" /></head>|" "$file"
+  fi
+
   # /_expo で始まるパスを修正
   $SED_CMD "s|src=\"/_expo|src=\"$BASE_URL/_expo|g" "$file"
 
