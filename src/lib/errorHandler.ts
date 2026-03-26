@@ -7,10 +7,41 @@
 import { debugError } from './debugUtils';
 
 /**
- * エラータイプの定義
+ * エラータイプの定義（拡張版）
  */
 export enum ErrorType {
+  // ネットワーク
   NETWORK = 'NETWORK',
+  NETWORK_OFFLINE = 'NETWORK_OFFLINE',
+  NETWORK_TIMEOUT = 'NETWORK_TIMEOUT',
+  NETWORK_DNS_FAILED = 'NETWORK_DNS_FAILED',
+  NETWORK_CONNECTION_RESET = 'NETWORK_CONNECTION_RESET',
+  NETWORK_CORS = 'NETWORK_CORS',
+
+  // リソース
+  RESOURCE_NOT_FOUND = 'RESOURCE_NOT_FOUND',
+  RESOURCE_LOAD_FAILED = 'RESOURCE_LOAD_FAILED',
+  AUDIO_PLAY_FAILED = 'AUDIO_PLAY_FAILED',
+  IMAGE_LOAD_FAILED = 'IMAGE_LOAD_FAILED',
+
+  // 認証
+  AUTH_INVALID = 'AUTH_INVALID',
+  AUTH_SESSION_EXPIRED = 'AUTH_SESSION_EXPIRED',
+  AUTH_UNAUTHORIZED = 'AUTH_UNAUTHORIZED',
+  AUTH_2FA_FAILED = 'AUTH_2FA_FAILED',
+
+  // DB
+  DB_QUERY_FAILED = 'DB_QUERY_FAILED',
+  DB_CONNECTION_FAILED = 'DB_CONNECTION_FAILED',
+  DB_RLS_VIOLATION = 'DB_RLS_VIOLATION',
+  DB_RATE_LIMIT = 'DB_RATE_LIMIT',
+
+  // UI
+  INVALID_ROUTE = 'INVALID_ROUTE',
+  FORM_VALIDATION_FAILED = 'FORM_VALIDATION_FAILED',
+  STATE_SYNC_FAILED = 'STATE_SYNC_FAILED',
+
+  // 従来のタイプ（後方互換性）
   TIMEOUT = 'TIMEOUT',
   JSON_PARSE = 'JSON_PARSE',
   API_ERROR = 'API_ERROR',
@@ -24,6 +55,7 @@ export enum ErrorType {
  * 標準化されたエラーオブジェクト
  */
 export interface AppError {
+  id?: string; // エラーの一意識別子
   type: ErrorType;
   message: string; // ユーザー向けメッセージ
   originalError?: Error | any; // デバッグ用の原始エラー
@@ -112,20 +144,66 @@ export function getHttpErrorType(
  */
 export function getUserFriendlyMessage(error: AppError): string {
   switch (error.type) {
+    // ネットワーク関連
     case ErrorType.NETWORK:
-      return 'ネットワークに接続できません。インターネット接続を確認してください。';
+    case ErrorType.NETWORK_OFFLINE:
+      return 'インターネット接続を確認してください。';
+    case ErrorType.NETWORK_TIMEOUT:
+      return 'リクエストがタイムアウトしました。ネットワークの接続を確認して、もう一度お試しください。';
+    case ErrorType.NETWORK_DNS_FAILED:
+      return 'サーバーに接続できません。後でもう一度お試しください。';
+    case ErrorType.NETWORK_CONNECTION_RESET:
+      return 'サーバーとの接続が切断されました。もう一度お試しください。';
+    case ErrorType.NETWORK_CORS:
+      return 'リクエストが拒否されました。技術サポートにお問い合わせください。';
+
+    // リソース関連
+    case ErrorType.RESOURCE_NOT_FOUND:
+    case ErrorType.NOT_FOUND:
+      return 'リソースが見つかりません。';
+    case ErrorType.RESOURCE_LOAD_FAILED:
+      return 'リソースを読み込めませんでした。もう一度お試しください。';
+    case ErrorType.AUDIO_PLAY_FAILED:
+      return '音声を再生できません。デバイスの設定を確認してください。';
+    case ErrorType.IMAGE_LOAD_FAILED:
+      return '画像を読み込めませんでした。';
+
+    // 認証関連
+    case ErrorType.AUTH_INVALID:
+    case ErrorType.AUTH_UNAUTHORIZED:
+      return 'ログインが必要です。ログインしてからもう一度お試しください。';
+    case ErrorType.AUTH_SESSION_EXPIRED:
+      return 'セッションが期限切れです。ログインし直してください。';
+    case ErrorType.AUTH_2FA_FAILED:
+      return '2段階認証に失敗しました。もう一度お試しください。';
+
+    // DB関連
+    case ErrorType.DB_QUERY_FAILED:
+      return 'データベースエラーが発生しました。後でもう一度お試しください。';
+    case ErrorType.DB_CONNECTION_FAILED:
+      return 'データベースに接続できません。後でもう一度お試しください。';
+    case ErrorType.DB_RLS_VIOLATION:
+    case ErrorType.PERMISSION:
+      return 'このアクションを実行する権限がありません。';
+    case ErrorType.DB_RATE_LIMIT:
+      return 'リクエストが多すぎます。少し待ってから再度お試しください。';
+
+    // UI関連
+    case ErrorType.INVALID_ROUTE:
+      return 'ページが見つかりません。';
+    case ErrorType.FORM_VALIDATION_FAILED:
+    case ErrorType.VALIDATION:
+      return 'フォーム入力に問題があります。内容を確認して再度お試しください。';
+    case ErrorType.STATE_SYNC_FAILED:
+      return 'データの同期に失敗しました。ページをリロードしてください。';
+
+    // その他
     case ErrorType.TIMEOUT:
       return 'リクエストがタイムアウトしました。もう一度お試しください。';
     case ErrorType.JSON_PARSE:
       return 'データの処理に失敗しました。もう一度お試しください。';
     case ErrorType.API_ERROR:
       return 'サーバーエラーが発生しました。しばらく経ってからお試しください。';
-    case ErrorType.PERMISSION:
-      return 'このアクションを実行する権限がありません。ログインしてからお試しください。';
-    case ErrorType.NOT_FOUND:
-      return 'リソースが見つかりません。';
-    case ErrorType.VALIDATION:
-      return 'データが無効です。入力内容を確認してください。';
     case ErrorType.UNKNOWN:
     default:
       return 'エラーが発生しました。もう一度お試しください。';
