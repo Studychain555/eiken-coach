@@ -1,4 +1,12 @@
-<!DOCTYPE html><html  lang="en"><head><title data-rh="true"></title><meta charSet="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><style id="expo-reset">#root,body,html{height:100%}body{overflow:hidden}#root{display:flex}</style><style id="react-native-stylesheet">[stylesheet-group="0"]{}
+<!DOCTYPE html><html lang="en"><head><title data-rh="true"></title><meta charSet="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><script>
+// GitHub Pages SPA support - redirect to index.html with query parameter
+if (window.location.pathname !== '/eiken-coach/') {
+  const pathSegments = window.location.pathname.split('/').filter(Boolean);
+  const redirect = pathSegments.length > 1 ? '/' + pathSegments.slice(1).join('/') : '/';
+  sessionStorage.redirect = redirect;
+  window.location.replace('/eiken-coach/');
+}
+</script><style id="expo-reset">#root,body,html{height:100%}body{overflow:hidden}#root{display:flex}</style><style id="react-native-stylesheet">[stylesheet-group="0"]{}
 body{margin:0;}
 button::-moz-focus-inner,input::-moz-focus-inner{border:0;padding:0;}
 html{-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%;-webkit-tap-highlight-color:rgba(0,0,0,0);}
