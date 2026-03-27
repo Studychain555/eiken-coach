@@ -39,8 +39,30 @@ find "$DIST_DIR" -name "*.html" -type f | while read -r file; do
   $SED_CMD "s|\"$BASE_URL$BASE_URL|\"$BASE_URL|g" "$file"
 done
 
-# 404.html を SPA ルーティング用に作成
+# 404.html を SPA ルーティング用に作成（リダイレクト機能付き）
 echo "404.html を作成中..."
-cp "$DIST_DIR/index.html" "$DIST_DIR/404.html"
+cat > "$DIST_DIR/404.html" << 'EOF'
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Redirecting...</title>
+    <script>
+        // GitHub Pages SPA redirect
+        const pathname = window.location.pathname;
+        const redirect = pathname.replace(/^\/eiken-coach/, '') || '/';
+        sessionStorage.redirect = redirect;
+        window.location.replace('/eiken-coach/');
+    </script>
+</head>
+<body></body>
+</html>
+EOF
+
+# index.html にリダイレクト処理を追加
+if ! grep -q "sessionStorage.redirect" "$DIST_DIR/index.html"; then
+  # リダイレクト処理を<head>内に注入
+  $SED_CMD '/<\/head>/i\
+    <script>if(sessionStorage.redirect){const redirect=sessionStorage.redirect;delete sessionStorage.redirect;window.history.replaceState(null,null,"/eiken-coach"+redirect);}</script>' "$DIST_DIR/index.html"
+fi
 
 echo "✓ 修正完了"
