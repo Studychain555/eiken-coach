@@ -1,0 +1,40 @@
+{
+  "timestamp": "2026-03-26T15:18:24.572Z",
+  "environment": "production",
+  "errors": [
+    {
+      "type": "MISSING_ENV_VAR",
+      "description": "必須環境変数が定義されていません: EXPO_PUBLIC_SUPABASE_URL",
+      "severity": "critical",
+      "suggestion": ".env.production ファイルに EXPO_PUBLIC_SUPABASE_URL を設定してください"
+    },
+    {
+      "type": "MISSING_ENV_VAR",
+      "description": "必須環境変数が定義されていません: EXPO_PUBLIC_SUPABASE_ANON_KEY",
+      "severity": "critical",
+      "suggestion": ".env.production ファイルに EXPO_PUBLIC_SUPABASE_ANON_KEY を設定してください"
+    },
+    {
+      "type": "MISSING_ENV_VAR",
+      "description": "必須環境変数が定義されていません: EXPO_PUBLIC_SENTRY_DSN",
+      "severity": "critical",
+      "suggestion": ".env.production ファイルに EXPO_PUBLIC_SENTRY_DSN を設定してください"
+    },
+    {
+      "type": "SUPABASE_CONFIG_MISSING",
+      "description": "Supabaseの設定が不完全です",
+      "severity": "critical",
+      "suggestion": "Supabase プロジェクトの URL と公開キーを確認してください"
+    }
+  ],
+  "warnings": [
+    "Sentry DSN が設定されていません。エラー追跡が無効です。"
+  ],
+  "checks": {
+    "supabaseConfig": false,
+    "sentryConfig": false,
+    "envVariables": false,
+    "buildFiles": true,
+    "networkConnectivity": false
+  }
+}
