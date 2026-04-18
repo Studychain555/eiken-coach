@@ -57,7 +57,10 @@ export default function ListeningScreen() {
     }
 
     // デモモード: ゲーミフィケーション画面用のダミーデータ投入
-    const demoUser = localStorage.getItem('eigomaster_demo_user');
+    const demoUser =
+      typeof localStorage !== 'undefined'
+        ? localStorage.getItem('eigomaster_demo_user')
+        : null;
     if (demoUser) {
       // ストア内のゲーミフィケーション状態を初期化（デモ用）
       try {
@@ -68,7 +71,7 @@ export default function ListeningScreen() {
         console.error('デモモード初期化エラー:', error);
       }
     }
-  }, []);
+  }, [questions.length, setQuestions]);
 
   const handleStartQuestion = (questionId: string) => {
     const question = questions.find((q) => q.id === questionId);

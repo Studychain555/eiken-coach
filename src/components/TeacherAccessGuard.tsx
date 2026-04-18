@@ -5,10 +5,10 @@
  */
 
 import React, { useEffect } from 'react';
-import { View, Text, StyleSheet, SafeAreaView } from 'react-native';
+import { View, Text, StyleSheet, SafeAreaView, TouchableOpacity } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useAuthStore } from '@/src/stores/authStore';
-import { NaturalColors, Spacing, BorderRadius } from '@/constants/theme';
+import { NaturalColors, Spacing } from '@/constants/theme';
 
 interface TeacherAccessGuardProps {
   children: React.ReactNode;
@@ -25,34 +25,30 @@ export default function TeacherAccessGuard({
 }: TeacherAccessGuardProps) {
   const role = useAuthStore(state => state.role);
   const router = useRouter();
+  const allowedRoles = requiredRole === 'admin' ? ['admin'] : ['teacher', 'admin'];
+  const hasAccess = role ? allowedRoles.includes(role) : false;
 
   useEffect(() => {
-    // ロール確認：student の場合はホームにリダイレクト
-    if (role && role === 'student') {
-      console.warn('[TeacherAccessGuard] Access denied: insufficient role');
-      router.replace('/(tabs)/');
+    if (!hasAccess) {
+      console.warn('[TeacherAccessGuard] Access denied');
+      router.replace('/(tabs)');
     }
-  }, [role, router]);
+  }, [hasAccess, router]);
 
-  // ロール確認中（loading）
-  if (!role) {
-    return (
-      <SafeAreaView style={styles.container}>
-        <View style={styles.content}>
-          <Text style={styles.text}>読み込み中...</Text>
-        </View>
-      </SafeAreaView>
-    );
-  }
-
-  // 権限がない場合（student）
-  if (role === 'student') {
+  if (!hasAccess) {
     return (
       <SafeAreaView style={styles.container}>
         <View style={styles.content}>
           <Text style={styles.title}>🔒 アクセス制限</Text>
-          <Text style={styles.text}>このページにアクセスする権限がありません</Text>
-          <Text style={styles.subText}>講師のみがアクセス可能です</Text>
+          <Text style={styles.text}>このページは講師向け管理画面です</Text>
+          <Text style={styles.subText}>公開版では学習画面から利用してください</Text>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => router.replace('/(tabs)')}
+            activeOpacity={0.8}
+          >
+            <Text style={styles.buttonText}>ホームへ戻る</Text>
+          </TouchableOpacity>
         </View>
       </SafeAreaView>
     );
@@ -90,5 +86,17 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: NaturalColors.textMedium,
     textAlign: 'center',
+    marginBottom: Spacing.lg,
+  },
+  button: {
+    backgroundColor: NaturalColors.primary,
+    paddingHorizontal: Spacing.xl,
+    paddingVertical: Spacing.md,
+    borderRadius: 999,
+  },
+  buttonText: {
+    color: '#fff',
+    fontSize: 14,
+    fontWeight: '700',
   },
 });

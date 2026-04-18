@@ -3,7 +3,7 @@
  * Modern, colorful, gamified learning experience (Duolingo-inspired)
  */
 
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   StyleSheet,
@@ -13,8 +13,8 @@ import {
   TouchableOpacity,
   ActivityIndicator,
 } from 'react-native';
-import { useRouter } from 'expo-router';
-import { Colors, Spacing, Typography, BorderRadius } from '@/constants/theme';
+import { type Href, useRouter } from 'expo-router';
+import { Colors } from '@/constants/theme';
 import { useLearningStore } from '@/src/stores/learningStore';
 import { useAuthStore } from '@/src/stores/authStore';
 
@@ -50,7 +50,7 @@ export default function HomeScreenV2({ onRefresh }: HomeScreenV2Props) {
     loadData();
   }, [userId, loadFromSupabase]);
 
-  const handleNavigation = (path: string) => {
+  const handleNavigation = (path: Href) => {
     router.push(path);
   };
 

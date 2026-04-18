@@ -94,7 +94,7 @@ export const ErrorScreen: React.FC<ErrorScreenProps> = ({
         {showHomeButton && (
           <TouchableOpacity
             style={[styles.button, styles.secondaryButton]}
-            onPress={() => router.push('/(tabs)/')}
+            onPress={() => router.push('/(tabs)')}
             disabled={isLoading || isRetrying}
             activeOpacity={0.7}
           >

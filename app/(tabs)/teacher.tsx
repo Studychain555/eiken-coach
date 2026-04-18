@@ -11,14 +11,12 @@ import {
   ActivityIndicator,
   Alert,
 } from 'react-native';
-import { useAuthStore } from '@/src/stores/authStore';
 import TeacherAccessGuard from '@/src/components/TeacherAccessGuard';
 import { useTeacherStore } from '@/src/stores/teacherStore';
 import { TeacherAnalytics } from '@/src/components/TeacherAnalytics';
 import { TeacherLayout, type TabType } from '@/src/components/TeacherLayout';
 
 export default function TeacherDashboard() {
-  const { user } = useAuthStore();
   const {
     students,
     classStats,
@@ -121,12 +119,14 @@ export default function TeacherDashboard() {
 
   if (loading && students.length === 0) {
     return (
-      <SafeAreaView style={styles.container}>
-        <View style={styles.loadingContainer}>
-          <ActivityIndicator size="large" color="#0066cc" />
-          <Text style={styles.loadingText}>データを読み込み中...</Text>
-        </View>
-      </SafeAreaView>
+      <TeacherAccessGuard>
+        <SafeAreaView style={styles.container}>
+          <View style={styles.loadingContainer}>
+            <ActivityIndicator size="large" color="#0066cc" />
+            <Text style={styles.loadingText}>データを読み込み中...</Text>
+          </View>
+        </SafeAreaView>
+      </TeacherAccessGuard>
     );
   }
 
@@ -376,39 +376,40 @@ export default function TeacherDashboard() {
   };
 
   return (
-    <TeacherLayout
-      activeTab={activeTab}
-      onTabChange={setActiveTab}
-      classStats={classStats}
-    >
-      {renderContent()}
+    <TeacherAccessGuard>
+      <TeacherLayout
+        activeTab={activeTab}
+        onTabChange={setActiveTab}
+        classStats={classStats}
+      >
+        {renderContent()}
 
-      {/* Assignment Modal */}
-      <Modal visible={showAssignmentModal} animationType="slide" transparent={true}>
-        <SafeAreaView style={styles.modalOverlay}>
-          <View style={styles.modalContent}>
-            <View style={styles.modalHeader}>
-              <Text style={styles.modalTitle}>課題を作成</Text>
-              <TouchableOpacity onPress={() => setShowAssignmentModal(false)}>
-                <Text style={styles.modalClose}>✕</Text>
-              </TouchableOpacity>
-            </View>
-
-            <ScrollView
-              style={styles.modalForm}
-              contentContainerStyle={{ paddingBottom: 20 }}
-            >
-              <View style={styles.formGroup}>
-                <Text style={styles.formLabel}>タイトル</Text>
-                <TextInput
-                  style={styles.textInput}
-                  placeholder="課題のタイトルを入力"
-                  value={assignmentForm.title}
-                  onChangeText={(text) =>
-                    setAssignmentForm({ ...assignmentForm, title: text })
-                  }
-                />
+        {/* Assignment Modal */}
+        <Modal visible={showAssignmentModal} animationType="slide" transparent={true}>
+          <SafeAreaView style={styles.modalOverlay}>
+            <View style={styles.modalContent}>
+              <View style={styles.modalHeader}>
+                <Text style={styles.modalTitle}>課題を作成</Text>
+                <TouchableOpacity onPress={() => setShowAssignmentModal(false)}>
+                  <Text style={styles.modalClose}>✕</Text>
+                </TouchableOpacity>
               </View>
+
+              <ScrollView
+                style={styles.modalForm}
+                contentContainerStyle={{ paddingBottom: 20 }}
+              >
+                <View style={styles.formGroup}>
+                  <Text style={styles.formLabel}>タイトル</Text>
+                  <TextInput
+                    style={styles.textInput}
+                    placeholder="課題のタイトルを入力"
+                    value={assignmentForm.title}
+                    onChangeText={(text) =>
+                      setAssignmentForm({ ...assignmentForm, title: text })
+                    }
+                  />
+                </View>
 
               <View style={styles.formGroup}>
                 <Text style={styles.formLabel}>説明</Text>
@@ -467,68 +468,69 @@ export default function TeacherDashboard() {
               >
                 <Text style={styles.submitButtonText}>課題を作成</Text>
               </TouchableOpacity>
-            </ScrollView>
-          </View>
-        </SafeAreaView>
-      </Modal>
-
-      {/* Feedback Modal */}
-      {selectedStudent && (
-        <Modal visible={showFeedbackModal} animationType="slide" transparent={true}>
-          <SafeAreaView style={styles.modalOverlay}>
-            <View style={styles.modalContent}>
-              <View style={styles.modalHeader}>
-                <Text style={styles.modalTitle}>
-                  {selectedStudent.studentName}へのフィードバック
-                </Text>
-                <TouchableOpacity onPress={() => setShowFeedbackModal(false)}>
-                  <Text style={styles.modalClose}>✕</Text>
-                </TouchableOpacity>
-              </View>
-
-              <ScrollView
-              style={styles.modalForm}
-              contentContainerStyle={{ paddingBottom: 20 }}
-            >
-                <View style={styles.studentDetailCard}>
-                  <View style={styles.detailRow}>
-                    <Text style={styles.detailLabel}>リスニング:</Text>
-                    <Text style={styles.detailValue}>{selectedStudent.listeningAccuracy}%</Text>
-                  </View>
-                  <View style={styles.detailRow}>
-                    <Text style={styles.detailLabel}>単語習熟度:</Text>
-                    <Text style={styles.detailValue}>{selectedStudent.vocabularyProgress}%</Text>
-                  </View>
-                  <View style={styles.detailRow}>
-                    <Text style={styles.detailLabel}>ライティング:</Text>
-                    <Text style={styles.detailValue}>{selectedStudent.writingAverageScore}</Text>
-                  </View>
-                </View>
-
-                <View style={styles.formGroup}>
-                  <Text style={styles.formLabel}>フィードバック</Text>
-                  <TextInput
-                    style={[styles.textInput, styles.textInputMultiline]}
-                    placeholder="生徒へのフィードバックを入力"
-                    value={feedbackForm}
-                    onChangeText={setFeedbackForm}
-                    multiline
-                    numberOfLines={6}
-                  />
-                </View>
-
-                <TouchableOpacity
-                  style={styles.submitButton}
-                  onPress={handleSubmitFeedback}
-                >
-                  <Text style={styles.submitButtonText}>フィードバックを送信</Text>
-                </TouchableOpacity>
               </ScrollView>
             </View>
           </SafeAreaView>
         </Modal>
-      )}
-    </TeacherLayout>
+
+        {/* Feedback Modal */}
+        {selectedStudent && (
+          <Modal visible={showFeedbackModal} animationType="slide" transparent={true}>
+            <SafeAreaView style={styles.modalOverlay}>
+              <View style={styles.modalContent}>
+                <View style={styles.modalHeader}>
+                  <Text style={styles.modalTitle}>
+                    {selectedStudent.studentName}へのフィードバック
+                  </Text>
+                  <TouchableOpacity onPress={() => setShowFeedbackModal(false)}>
+                    <Text style={styles.modalClose}>✕</Text>
+                  </TouchableOpacity>
+                </View>
+
+                <ScrollView
+                  style={styles.modalForm}
+                  contentContainerStyle={{ paddingBottom: 20 }}
+                >
+                  <View style={styles.studentDetailCard}>
+                    <View style={styles.detailRow}>
+                      <Text style={styles.detailLabel}>リスニング:</Text>
+                      <Text style={styles.detailValue}>{selectedStudent.listeningAccuracy}%</Text>
+                    </View>
+                    <View style={styles.detailRow}>
+                      <Text style={styles.detailLabel}>単語習熟度:</Text>
+                      <Text style={styles.detailValue}>{selectedStudent.vocabularyProgress}%</Text>
+                    </View>
+                    <View style={styles.detailRow}>
+                      <Text style={styles.detailLabel}>ライティング:</Text>
+                      <Text style={styles.detailValue}>{selectedStudent.writingAverageScore}</Text>
+                    </View>
+                  </View>
+
+                  <View style={styles.formGroup}>
+                    <Text style={styles.formLabel}>フィードバック</Text>
+                    <TextInput
+                      style={[styles.textInput, styles.textInputMultiline]}
+                      placeholder="生徒へのフィードバックを入力"
+                      value={feedbackForm}
+                      onChangeText={setFeedbackForm}
+                      multiline
+                      numberOfLines={6}
+                    />
+                  </View>
+
+                  <TouchableOpacity
+                    style={styles.submitButton}
+                    onPress={handleSubmitFeedback}
+                  >
+                    <Text style={styles.submitButtonText}>フィードバックを送信</Text>
+                  </TouchableOpacity>
+                </ScrollView>
+              </View>
+            </SafeAreaView>
+          </Modal>
+        )}
+      </TeacherLayout>
+    </TeacherAccessGuard>
   );
 }
 
