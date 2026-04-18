@@ -12,6 +12,7 @@ import type { User, Session } from '@supabase/supabase-js';
 interface AuthState {
   user: User | null;
   session: Session | null;
+  userId: string | null;
   role: 'student' | 'teacher' | 'admin' | null;
   loading: boolean;
   error: string | null;
@@ -34,6 +35,7 @@ interface AuthState {
 export const useAuthStore = create<AuthState>((set, get) => ({
   user: null,
   session: null,
+  userId: null,
   role: null,
   loading: true,
   error: null,
@@ -60,6 +62,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
         set({
           session,
           user: session.user,
+          userId: session.user.id,
           role: userRole,
           loading: false,
         });
@@ -70,6 +73,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
         set({
           session: null,
           user: null,
+          userId: null,
           role: null,
           loading: false,
         });
@@ -167,6 +171,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       set({
         user: data.user,
         session: data.session,
+        userId: data.user.id,
         role: userRole,
         loading: false,
         loginAttempts: 0,
@@ -251,6 +256,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       set({
         user: data.user,
         session: data.session,
+        userId: data.user.id,
         role: role,
         loading: false,
       });
@@ -296,6 +302,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       set({
         user: null,
         session: null,
+        userId: null,
         role: null,
         loading: false,
         loginAttempts: 0,
@@ -321,6 +328,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       set({
         session: data.session,
         user: data.session.user,
+        userId: data.session.user.id,
         loading: false,
       });
     } catch (error) {

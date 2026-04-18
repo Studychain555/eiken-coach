@@ -4,7 +4,7 @@
  * Sentry統合、ユーザー通知、リトライロジックなど
  */
 
-import { useAppStore } from '@/stores/appStore';
+import { useAppStore } from '@/src/stores/appStore';
 import { captureException, setSentryUser } from './sentry.config';
 import { ErrorType, AppError, getUserFriendlyMessage } from './errorHandler';
 import { debugError } from './debugUtils';

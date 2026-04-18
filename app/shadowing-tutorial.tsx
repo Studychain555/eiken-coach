@@ -107,8 +107,8 @@ export default function ShadowingTutorial() {
     }
   };
 
-  const handleRegister = () => {
-    router.push('/(auth)/register');
+  const handleStartLearning = () => {
+    router.push('/(tabs)/listening');
   };
 
   return (
@@ -190,17 +190,17 @@ export default function ShadowingTutorial() {
           <View style={styles.registerSection}>
             <TouchableOpacity
               style={styles.registerBtn}
-              onPress={handleRegister}
+              onPress={handleStartLearning}
               activeOpacity={0.8}
             >
-              <Text style={styles.registerBtnText}>登録する</Text>
+              <Text style={styles.registerBtnText}>学習を始める</Text>
             </TouchableOpacity>
             <TouchableOpacity
               style={styles.skipBtn}
-              onPress={() => router.push('/(auth)/login')}
+              onPress={() => router.push('/(tabs)')}
               activeOpacity={0.8}
             >
-              <Text style={styles.skipBtnText}>ログイン</Text>
+              <Text style={styles.skipBtnText}>ホームへ戻る</Text>
             </TouchableOpacity>
           </View>
         ) : (

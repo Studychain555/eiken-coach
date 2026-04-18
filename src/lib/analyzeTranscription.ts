@@ -3,8 +3,6 @@
  * ユーザー像・使用目的・センチメント を抽出
  */
 
-import Anthropic from '@anthropic-ai/sdk';
-
 interface PersonaAnalysis {
   age_group?: string;
   goal?: string;
@@ -34,9 +32,11 @@ async function analyzeTranscription(
   transcriptText: string,
   modelId: string = 'claude-opus-4-6'
 ): Promise<AnalysisResult> {
-  const client = new Anthropic({
-    apiKey: process.env.ANTHROPIC_API_KEY,
-  });
+  const apiKey = process.env.EXPO_PUBLIC_CLAUDE_API_KEY || process.env.ANTHROPIC_API_KEY;
+
+  if (!apiKey) {
+    throw new Error('Claude API key is not configured');
+  }
 
   // 分析プロンプト
   const systemPrompt = `You are an expert in language analysis and user intent extraction.
@@ -77,20 +77,36 @@ ${transcriptText}
 Extract user persona, usage purpose, sentiment, and key phrases. Return only valid JSON.`;
 
   try {
-    const response = await client.messages.create({
-      model: modelId,
-      max_tokens: 1024,
-      system: systemPrompt,
-      messages: [
-        {
-          role: 'user',
-          content: userPrompt,
-        },
-      ],
+    const response = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'content-type': 'application/json',
+        'x-api-key': apiKey,
+        'anthropic-version': '2023-06-01',
+      },
+      body: JSON.stringify({
+        model: modelId,
+        max_tokens: 1024,
+        system: systemPrompt,
+        messages: [
+          {
+            role: 'user',
+            content: userPrompt,
+          },
+        ],
+      }),
     });
 
+    if (!response.ok) {
+      throw new Error(`Claude API request failed: ${response.status}`);
+    }
+
+    const payload = await response.json() as {
+      content?: Array<{ type: string; text?: string }>;
+    };
+
     // テキストレスポンスを抽出
-    const textContent = response.content.find((block) => block.type === 'text');
+    const textContent = payload.content?.find((block) => block.type === 'text');
     if (!textContent || textContent.type !== 'text') {
       throw new Error('No text response from Claude');
     }

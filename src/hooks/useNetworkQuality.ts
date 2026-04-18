@@ -9,7 +9,7 @@
  */
 
 import { useEffect, useState } from 'react';
-import { debugError } from '@/lib/debugUtils';
+import { debugError } from '@/src/lib/debugUtils';
 
 export interface NetworkQuality {
   type: '5g' | '4g' | '3g' | '2g' | 'unknown';

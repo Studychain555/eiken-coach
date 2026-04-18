@@ -3,7 +3,7 @@
  * すべてのエラー型に対して、ユーザーフレンドリーなメッセージを統一定義
  */
 
-import { ErrorType } from '@/lib/errorHandler';
+import { ErrorType } from '@/src/lib/errorHandler';
 
 export interface UserMessage {
   title: string;

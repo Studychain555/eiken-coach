@@ -7,23 +7,12 @@ import {
   TouchableOpacity,
   ScrollView,
 } from 'react-native';
-import { useRouter } from 'expo-router';
 import { useAuthStore } from '@/src/stores/authStore';
-import { Colors, Spacing, BorderRadius, Shadows, Typography } from '@/constants/theme';
-import { OptimizedButton } from '@/components/OptimizedButton';
+import { Colors, Spacing, BorderRadius, Shadows } from '@/constants/theme';
 
 export default function SettingsScreen() {
-  const router = useRouter();
-  const { user, signOut } = useAuthStore();
-
-  const handleLogout = async () => {
-    try {
-      await signOut();
-      router.replace('/(auth)/login');
-    } catch (error) {
-      console.error('Logout error:', error);
-    }
-  };
+  const { user } = useAuthStore();
+  const isGuestMode = !user;
 
   return (
     <SafeAreaView style={styles.container}>
@@ -37,16 +26,18 @@ export default function SettingsScreen() {
 
         {/* User Info */}
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>アカウント情報</Text>
+          <Text style={styles.sectionTitle}>利用モード</Text>
           <View style={styles.settingCard}>
             <View style={styles.settingItem}>
-              <Text style={styles.settingLabel}>メールアドレス</Text>
-              <Text style={styles.settingValue}>{user?.email || 'ログインしていません'}</Text>
+              <Text style={styles.settingLabel}>アクセス方式</Text>
+              <Text style={styles.settingValue}>
+                {isGuestMode ? 'ログイン不要の公開版' : 'サインイン済み'}
+              </Text>
             </View>
             <View style={styles.settingDivider} />
             <View style={styles.settingItem}>
-              <Text style={styles.settingLabel}>ユーザーID</Text>
-              <Text style={styles.settingValue}>{user?.id?.substring(0, 8) || '-'}</Text>
+              <Text style={styles.settingLabel}>アカウント</Text>
+              <Text style={styles.settingValue}>{user?.email || 'ゲスト利用中'}</Text>
             </View>
           </View>
         </View>
@@ -104,23 +95,10 @@ export default function SettingsScreen() {
           </View>
         </View>
 
-        {/* Logout Button */}
-        <View style={styles.section}>
-          <OptimizedButton
-            label="ログアウト"
-            onPress={handleLogout}
-            variant="danger"
-            size="lg"
-            fullWidth
-            icon="🚪"
-            iconPosition="left"
-          />
-        </View>
-
         {/* Support */}
         <View style={styles.supportSection}>
           <Text style={styles.supportText}>
-            問題が発生した場合は、サポートまでお問い合わせください。
+            問題が発生した場合は、サポートまでお問い合わせください。公開版ではログインなしで学習を始められます。
           </Text>
           <TouchableOpacity style={styles.supportButton}>
             <Text style={styles.supportButtonText}>お問い合わせ</Text>

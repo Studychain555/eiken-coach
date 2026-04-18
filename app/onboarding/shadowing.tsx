@@ -12,13 +12,13 @@ export default function ShadowingOnboardingPage() {
   const router = useRouter();
 
   const handleSkip = () => {
-    // スキップボタンが押された場合、登録画面へ遷移
-    router.push('/(auth)/register');
+    // スキップ後はそのまま学習画面へ移動
+    router.push('/(tabs)');
   };
 
   const handleComplete = () => {
-    // 「始める」ボタンが押された場合、登録画面へ遷移
-    router.push('/(auth)/register');
+    // 「始める」後はそのまま学習画面へ移動
+    router.push('/(tabs)');
   };
 
   return (

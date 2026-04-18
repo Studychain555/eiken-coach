@@ -4,17 +4,9 @@ import { Platform } from 'react-native';
 
 import { HapticTab } from '@/components/haptic-tab';
 import { IconSymbol } from '@/components/ui/icon-symbol';
-import { Colors, Spacing, Shadows, ShadotenColors } from '@/constants/theme';
-import { useColorScheme } from '@/hooks/use-color-scheme';
-import { useAuthStore } from '@/src/stores/authStore';
+import { Shadows, ShadotenColors } from '@/constants/theme';
 
 export default function TabLayout() {
-  const colorScheme = useColorScheme();
-  const role = useAuthStore(state => state.role);
-
-  // teacher/admin のみ teacher タブを表示
-  const isTeacher = role === 'teacher' || role === 'admin';
-
   return (
     <Tabs
       screenOptions={{
