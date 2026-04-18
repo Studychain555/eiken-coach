@@ -5,13 +5,10 @@
 set -e
 
 DIST_DIR="dist"
-CNAME_FILE="public/CNAME"
 DEFAULT_PROJECT_BASE_URL="/eiken-coach"
 
 if [ -n "${GITHUB_PAGES_BASE_URL:-}" ]; then
   BASE_URL="$GITHUB_PAGES_BASE_URL"
-elif [ -f "$CNAME_FILE" ]; then
-  BASE_URL=""
 else
   BASE_URL="$DEFAULT_PROJECT_BASE_URL"
 fi
