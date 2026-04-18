@@ -1,22 +1,32 @@
 #!/bin/bash
-# GitHub Pages サブパス修正スクリプト
-# app.json で定義された baseUrl を dist フォルダのすべての HTML に適用
+# GitHub Pages 配信用のパス修正スクリプト
+# カスタムドメインがある場合はルート配信、それ以外は project pages のサブパスを適用する。
 
 set -e
 
 DIST_DIR="dist"
-BASE_URL="/eiken-coach"
+CNAME_FILE="public/CNAME"
+DEFAULT_PROJECT_BASE_URL="/eiken-coach"
+
+if [ -n "${GITHUB_PAGES_BASE_URL:-}" ]; then
+  BASE_URL="$GITHUB_PAGES_BASE_URL"
+elif [ -f "$CNAME_FILE" ]; then
+  BASE_URL=""
+else
+  BASE_URL="$DEFAULT_PROJECT_BASE_URL"
+fi
 
 echo "GitHub Pages サブパス修正を実行中..."
 echo "Target: $DIST_DIR"
-echo "Base URL: $BASE_URL"
+echo "Base URL: ${BASE_URL:-/}"
 
 # Node.js を使ってファイル処理（クロスプラットフォーム対応）
-node --eval '
+BASE_URL="$BASE_URL" node --eval '
 const fs = require("fs");
 const path = require("path");
 const distDir = "dist";
-const baseUrl = "/eiken-coach";
+const baseUrl = process.env.BASE_URL || "";
+const normalizedBaseHref = baseUrl ? `${baseUrl}/` : "/";
 const files = [];
 
 function walkDir(dir) {
@@ -40,7 +50,7 @@ files.forEach(file => {
   let content = fs.readFileSync(file, "utf8");
 
   if (!content.includes("<base href=")) {
-    content = content.replace("</head>", `<base href="${baseUrl}/" /></head>`);
+    content = content.replace("</head>", `<base href="${normalizedBaseHref}" /></head>`);
   }
 
   content = content.replace(/src="\/\_expo/g, `src="${baseUrl}/_expo`);
@@ -54,17 +64,18 @@ console.log("✓ HTML 修正完了");
 
 # 404.html を SPA ルーティング用に作成（リダイレクト機能付き）
 echo "404.html を作成中..."
-cat > "$DIST_DIR/404.html" << 'EOF'
+BASE_URL="$BASE_URL" cat > "$DIST_DIR/404.html" << EOF
 <!DOCTYPE html>
 <html>
 <head>
     <title>Redirecting...</title>
     <script>
         // GitHub Pages SPA redirect
+        const baseUrl = "${BASE_URL}";
         const pathname = window.location.pathname;
-        const redirect = pathname.replace(/^\/eiken-coach/, '') || '/';
+        const redirect = baseUrl ? pathname.replace(new RegExp("^" + baseUrl), "") || "/" : pathname || "/";
         sessionStorage.redirect = redirect;
-        window.location.replace('/eiken-coach/');
+        window.location.replace(baseUrl ? baseUrl + "/" : "/");
     </script>
 </head>
 <body></body>
