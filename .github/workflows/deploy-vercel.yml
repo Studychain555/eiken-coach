@@ -7,23 +7,35 @@ on:
 
 jobs:
   deploy:
-    if: ${{ secrets.VERCEL_TOKEN != '' && secrets.VERCEL_ORG_ID != '' && secrets.VERCEL_PROJECT_ID != '' }}
     runs-on: ubuntu-latest
     environment: production
 
     steps:
       - uses: actions/checkout@v4
 
+      - name: Check Vercel secrets
+        id: vercel_secrets
+        run: |
+          if [ -z "${{ secrets.VERCEL_TOKEN }}" ] || [ -z "${{ secrets.VERCEL_ORG_ID }}" ] || [ -z "${{ secrets.VERCEL_PROJECT_ID }}" ]; then
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+            echo "Vercel secrets are missing. Skipping deployment."
+          else
+            echo "skip=false" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Setup Node.js
+        if: steps.vercel_secrets.outputs.skip != 'true'
         uses: actions/setup-node@v4
         with:
           node-version: '24.x'
           cache: 'npm'
 
       - name: Install dependencies
+        if: steps.vercel_secrets.outputs.skip != 'true'
         run: npm ci --legacy-peer-deps
 
       - name: Build web
+        if: steps.vercel_secrets.outputs.skip != 'true'
         run: npm run build:web
         env:
           EXPO_PUBLIC_SUPABASE_URL: ${{ secrets.EXPO_PUBLIC_SUPABASE_URL }}
@@ -31,6 +43,7 @@ jobs:
           EXPO_PUBLIC_ENV: production
 
       - name: Deploy to Vercel
+        if: steps.vercel_secrets.outputs.skip != 'true'
         uses: amondnet/vercel-action@v25
         with:
           vercel-token: ${{ secrets.VERCEL_TOKEN }}
